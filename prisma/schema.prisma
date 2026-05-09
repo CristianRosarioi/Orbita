@@ -1,0 +1,13 @@
+// Esquema de Prisma para Órbita RD
+// Prisma 7 — el URL de conexión se configura en prisma.config.ts
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Los modelos se definen en el siguiente prompt (Fase 1)
