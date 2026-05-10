@@ -1,5 +1,5 @@
-// Esquema de Prisma para Órbita RD
-// Prisma 7 — el URL de conexión se configura en prisma.config.ts
+// Schema de Prisma para Órbita RD — Fase 1
+// Prisma 7: la URL de conexión está en prisma.config.ts, NO aquí
 
 generator client {
   provider = "prisma-client"
@@ -10,4 +10,199 @@ datasource db {
   provider = "postgresql"
 }
 
-// Los modelos se definen en el siguiente prompt (Fase 1)
+// ============================================================
+// ENUMS
+// ============================================================
+
+// Industrias soportadas por Órbita
+enum Industria {
+  RESTAURANTE
+  COLMADO
+  CARWASH
+  REPUESTOS
+  TALLER_MECANICO
+  FERRETERIA
+  SALON_BARBERIA
+  CLINICA
+  INMOBILIARIA
+  FARMACIA
+  TIENDA_ROPA
+  TIENDA_ONLINE
+  JOYERIA
+  OTRO
+
+  @@map("industria")
+}
+
+// Modo de operación fiscal — Simple (sin NCF) o Fiscal (cumplimiento DGII completo)
+enum ModoFiscal {
+  SIMPLE
+  FISCAL
+
+  @@map("modo_fiscal")
+}
+
+// Roles dentro de una empresa — determina los permisos del miembro
+enum RolEmpresa {
+  OWNER    // Dueño — acceso total, único que puede eliminar la empresa
+  ADMIN    // Administrador — acceso casi total, gestión de usuarios
+  VENDEDOR // Puede crear facturas y cotizaciones
+  CONTADOR // Acceso a contabilidad, reportes fiscales, sin poder crear facturas
+  CAJERO   // Solo POS y cobros
+  VIEWER   // Solo lectura
+
+  @@map("rol_empresa")
+}
+
+// Estado de la suscripción al SaaS
+enum EstadoSuscripcion {
+  TRIAL      // Período de prueba gratuito (14 días)
+  ACTIVA     // Suscripción activa y pagada
+  SUSPENDIDA // Pago pendiente — acceso restringido
+  CANCELADA  // Cancelada — solo lectura de datos históricos
+
+  @@map("estado_suscripcion")
+}
+
+// Plan de suscripción
+enum PlanSuscripcion {
+  BASICO  // Facturación + inventario básico
+  PRO     // Todo lo anterior + e-CF + nómina básica
+  EMPRESA // Todo + multi-sucursal + API + soporte prioritario
+
+  @@map("plan_suscripcion")
+}
+
+// ============================================================
+// MODELO: Usuario
+// Sincronizado con Clerk via webhook — fuente de verdad: Clerk
+// ============================================================
+model Usuario {
+  id        String    @id @default(cuid())
+  clerkId   String    @unique @map("clerk_id") // ID de Clerk — nunca cambia
+  email     String    @unique
+  nombre    String?
+  apellido  String?
+  avatar    String?   // URL del avatar (viene de Clerk)
+  telefono  String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at") // Soft delete cuando Clerk borra el usuario
+
+  // Relaciones
+  membresias     MiembroEmpresa[]
+  sesionActual   SesionUsuarioEmpresa?
+
+  @@index([clerkId])
+  @@index([email])
+  @@index([deletedAt])
+  @@map("usuarios")
+}
+
+// ============================================================
+// MODELO: Empresa
+// Tenant principal del sistema — todo dato de negocio pertenece a una empresa
+// ============================================================
+model Empresa {
+  id              String             @id @default(cuid())
+  nombre          String             // Razón social
+  nombreComercial String?            @map("nombre_comercial") // Nombre con el que opera
+  rnc             String?            // RNC de 9 dígitos — único si modoFiscal=FISCAL
+  industria       Industria
+  modoFiscal      ModoFiscal         @default(SIMPLE) @map("modo_fiscal")
+  direccion       String?
+  telefono        String?
+  email           String?
+  logoUrl         String?            @map("logo_url")
+  moneda          String             @default("DOP") // Moneda principal (ISO 4217)
+  timezone        String             @default("America/Santo_Domingo")
+  planSuscripcion PlanSuscripcion    @default(BASICO) @map("plan_suscripcion")
+  estadoSusc      EstadoSuscripcion  @default(TRIAL) @map("estado_suscripcion")
+  trialFinaliza   DateTime?          @map("trial_finaliza") // 14 días desde creación
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+  deletedAt       DateTime?          @map("deleted_at")
+
+  // Relaciones
+  miembros        MiembroEmpresa[]
+  sucursales      Sucursal[]
+  sesionesActivas SesionUsuarioEmpresa[]
+
+  @@index([rnc])
+  @@index([deletedAt])
+  @@map("empresas")
+}
+
+// ============================================================
+// MODELO: MiembroEmpresa
+// Relación many-to-many Usuario <-> Empresa con rol asignado
+// Un usuario puede estar en múltiples empresas con distintos roles
+// ============================================================
+model MiembroEmpresa {
+  id          String     @id @default(cuid())
+  usuarioId   String     @map("usuario_id")
+  empresaId   String     @map("empresa_id")
+  rol         RolEmpresa
+  activo      Boolean    @default(true) // false = invitación pendiente o acceso revocado
+  invitadoPor String?    @map("invitado_por") // clerkId del usuario que lo invitó
+  aceptadoEn  DateTime?  @map("aceptado_en") // null = invitación aún no aceptada
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  // Relaciones
+  usuario     Usuario    @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  empresa     Empresa    @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, empresaId]) // Un usuario solo tiene un rol por empresa
+  @@index([empresaId])
+  @@index([usuarioId])
+  @@map("miembros_empresa")
+}
+
+// ============================================================
+// MODELO: Sucursal
+// Cada empresa puede operar en múltiples ubicaciones físicas
+// ============================================================
+model Sucursal {
+  id          String    @id @default(cuid())
+  empresaId   String    @map("empresa_id")
+  nombre      String
+  codigo      String    // Código corto único dentro de la empresa (ej: "PRI", "SUC1")
+  direccion   String?
+  telefono    String?
+  esPrincipal Boolean   @default(false) @map("es_principal") // Solo una puede ser principal
+  activa      Boolean   @default(true)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  // Relaciones
+  empresa           Empresa                @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  sesionesActivas   SesionUsuarioEmpresa[]
+
+  @@unique([empresaId, codigo]) // Código único por empresa
+  @@index([empresaId])
+  @@index([empresaId, deletedAt])
+  @@map("sucursales")
+}
+
+// ============================================================
+// MODELO: SesionUsuarioEmpresa
+// Rastrea en qué empresa y sucursal está trabajando el usuario ahora mismo
+// Permite "cambiar de empresa" sin cerrar sesión (como Slack workspaces)
+// ============================================================
+model SesionUsuarioEmpresa {
+  id               String    @id @default(cuid())
+  usuarioId        String    @unique @map("usuario_id") // Un usuario, una empresa activa
+  empresaActivaId  String    @map("empresa_activa_id")
+  sucursalActivaId String?   @map("sucursal_activa_id") // null = sin sucursal específica
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  // Relaciones
+  usuario        Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  empresaActiva  Empresa   @relation(fields: [empresaActivaId], references: [id])
+  sucursalActiva Sucursal? @relation(fields: [sucursalActivaId], references: [id])
+
+  @@index([empresaActivaId])
+  @@map("sesiones_usuario_empresa")
+}
