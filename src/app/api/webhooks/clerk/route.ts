@@ -31,9 +31,7 @@ interface ClerkWebhookEvent {
 }
 
 function getPrimaryEmail(data: ClerkUserData): string {
-  const primary = data.email_addresses.find(
-    (e) => e.id === data.primary_email_address_id,
-  );
+  const primary = data.email_addresses.find((e) => e.id === data.primary_email_address_id);
   return primary?.email_address ?? data.email_addresses[0]?.email_address ?? '';
 }
 
@@ -42,10 +40,7 @@ export async function POST(req: NextRequest) {
 
   if (!webhookSecret) {
     console.error('[Webhook Clerk] CLERK_WEBHOOK_SECRET no está configurado');
-    return NextResponse.json(
-      { error: 'Webhook no configurado correctamente' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Webhook no configurado correctamente' }, { status: 500 });
   }
 
   // Verificar la firma del webhook usando svix

@@ -18,7 +18,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const sesion = await prisma.sesionUsuarioEmpresa.findUnique({
     where: { usuarioId: usuario.id },
     include: {
-      empresaActiva: { select: { id: true, nombre: true, nombreComercial: true, estadoSusc: true, trialFinaliza: true } },
+      empresaActiva: {
+        select: {
+          id: true,
+          nombre: true,
+          nombreComercial: true,
+          estadoSusc: true,
+          trialFinaliza: true,
+        },
+      },
       sucursalActiva: { select: { id: true, nombre: true } },
     },
   });
@@ -39,9 +47,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         rol={membresia?.rol ?? 'VIEWER'}
         usuario={usuario}
       />
-      <main className="flex-1 overflow-y-auto">
-        {children}
-      </main>
+      <main className="flex-1 overflow-y-auto">{children}</main>
     </div>
   );
 }

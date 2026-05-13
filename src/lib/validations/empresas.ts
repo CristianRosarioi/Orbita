@@ -30,10 +30,7 @@ export const CreateEmpresaSchema = z
 
     telefono: z.string().max(20, 'El teléfono no puede tener más de 20 caracteres.').optional(),
 
-    direccion: z
-      .string()
-      .max(300, 'La dirección no puede tener más de 300 caracteres.')
-      .optional(),
+    direccion: z.string().max(300, 'La dirección no puede tener más de 300 caracteres.').optional(),
   })
   .refine(
     (data) => {

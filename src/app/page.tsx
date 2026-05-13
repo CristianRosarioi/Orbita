@@ -34,16 +34,17 @@ export default async function Home() {
         </div>
 
         <div className="space-y-3">
-          <h1 className="text-2xl font-semibold text-slate-900">
-            Sistema de Gestión Empresarial
-          </h1>
+          <h1 className="text-2xl font-semibold text-slate-900">Sistema de Gestión Empresarial</h1>
           <p className="text-slate-500">
             Facturación, inventario y cumplimiento DGII para negocios dominicanos.
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/sign-in" className={buttonVariants({ className: 'bg-slate-900 hover:bg-slate-700' })}>
+          <Link
+            href="/sign-in"
+            className={buttonVariants({ className: 'bg-slate-900 hover:bg-slate-700' })}
+          >
             Iniciar sesión
           </Link>
           <Link href="/sign-up" className={buttonVariants({ variant: 'outline' })}>
@@ -52,9 +53,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <footer className="absolute bottom-6 text-slate-400 text-xs">
-        © 2026 Órbita RD
-      </footer>
+      <footer className="absolute bottom-6 text-slate-400 text-xs">© 2026 Órbita RD</footer>
     </main>
   );
 }

@@ -9,13 +9,14 @@ import {
   Industria as PrismaIndustria,
   ModoFiscal as PrismaModoFiscal,
 } from '@/generated/prisma/client';
+import { UNIDADES_BASE } from '@/lib/seed-data';
 
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await auth();
-    if (!userId) return err('UNAUTHORIZED', 'Tu sesión expiró. Por favor inicia sesión de nuevo.', 401);
+    if (!userId)
+      return err('UNAUTHORIZED', 'Tu sesión expiró. Por favor inicia sesión de nuevo.', 401);
 
-    // Parsear y validar el body
     const body = await req.json().catch(() => null);
     if (!body) return err('INVALID_BODY', 'El formato de los datos enviados no es válido.', 400);
 
@@ -26,13 +27,11 @@ export async function POST(req: NextRequest) {
 
     const data = parsed.data;
 
-    // Buscar o crear el usuario en la BD (el webhook puede llegar tarde)
     const usuario = await getOrCreateDbUser();
     if (!usuario) {
       return err('USER_NOT_FOUND', 'No pudimos identificar tu cuenta. Por favor inténtalo de nuevo.', 400);
     }
 
-    // Verificar RNC único (excluyendo eliminados)
     if (data.rnc) {
       const rncExistente = await prisma.empresa.findFirst({
         where: { rnc: data.rnc, deletedAt: null },
@@ -43,25 +42,22 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Validación adicional: FISCAL requiere RNC
     if (data.modoFiscal === ModoFiscal.FISCAL && !data.rnc) {
       return err('VALIDATION_ERROR', 'El RNC es requerido para el modo fiscal.', 422);
     }
 
-    // Crear todo en una sola transacción: Empresa + Membresía + Sucursal + Sesión
     const resultado = await prisma.$transaction(async (tx) => {
       // 1. Crear la empresa
       const empresa = await tx.empresa.create({
         data: {
           nombre: data.nombre,
           nombreComercial: data.nombreComercial,
-          // Cast seguro: Zod ya validó que son valores del enum
           industria: data.industria as PrismaIndustria,
           modoFiscal: data.modoFiscal as PrismaModoFiscal,
           rnc: data.rnc,
           telefono: data.telefono,
           direccion: data.direccion,
-          trialFinaliza: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // +14 días
+          trialFinaliza: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
         },
       });
 
@@ -90,15 +86,18 @@ export async function POST(req: NextRequest) {
       // 4. Crear o actualizar la sesión activa del usuario
       await tx.sesionUsuarioEmpresa.upsert({
         where: { usuarioId: usuario.id },
-        create: {
-          usuarioId: usuario.id,
-          empresaActivaId: empresa.id,
-          sucursalActivaId: sucursal.id,
-        },
-        update: {
-          empresaActivaId: empresa.id,
-          sucursalActivaId: sucursal.id,
-        },
+        create: { usuarioId: usuario.id, empresaActivaId: empresa.id, sucursalActivaId: sucursal.id },
+        update: { empresaActivaId: empresa.id, sucursalActivaId: sucursal.id },
+      });
+
+      // 5. Crear las 20 unidades de medida base
+      await tx.unidadMedida.createMany({
+        data: UNIDADES_BASE.map((u) => ({
+          empresaId: empresa.id,
+          nombre: u.nombre,
+          abreviatura: u.abreviatura,
+          esBase: true,
+        })),
       });
 
       return { empresa, sucursal };

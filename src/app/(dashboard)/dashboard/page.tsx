@@ -56,15 +56,22 @@ export default async function DashboardPage() {
 
       {/* Banner de trial */}
       {empresa.estadoSusc === 'TRIAL' && trial !== null && (
-        <div className={`rounded-lg px-4 py-3 text-sm flex items-center justify-between ${
-          trial <= 3 ? 'bg-red-50 border border-red-200 text-red-800' : 'bg-blue-50 border border-blue-200 text-blue-800'
-        }`}>
+        <div
+          className={`rounded-lg px-4 py-3 text-sm flex items-center justify-between ${
+            trial <= 3
+              ? 'bg-red-50 border border-red-200 text-red-800'
+              : 'bg-blue-50 border border-blue-200 text-blue-800'
+          }`}
+        >
           <span>
             {trial === 0
               ? 'Tu período de prueba terminó hoy.'
               : `Tu período de prueba vence en ${trial} día${trial === 1 ? '' : 's'}.`}
           </span>
-          <a href="/configuracion/suscripcion" className="font-semibold underline hover:no-underline">
+          <a
+            href="/configuracion/suscripcion"
+            className="font-semibold underline hover:no-underline"
+          >
             Activar plan
           </a>
         </div>
@@ -72,14 +79,22 @@ export default async function DashboardPage() {
 
       {/* Modo fiscal */}
       <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 flex items-center gap-3 text-sm">
-        <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${
-          empresa.modoFiscal === 'FISCAL' ? 'bg-green-500' : 'bg-slate-400'
-        }`} />
+        <div
+          className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+            empresa.modoFiscal === 'FISCAL' ? 'bg-green-500' : 'bg-slate-400'
+          }`}
+        />
         <span className="text-slate-600">
-          Modo {empresa.modoFiscal === 'FISCAL' ? 'Fiscal — cumplimiento DGII activo' : 'Simple — sin comprobantes fiscales'}
+          Modo{' '}
+          {empresa.modoFiscal === 'FISCAL'
+            ? 'Fiscal — cumplimiento DGII activo'
+            : 'Simple — sin comprobantes fiscales'}
         </span>
         {empresa.modoFiscal === 'SIMPLE' && (
-          <a href="/configuracion/fiscal" className="ml-auto text-slate-900 font-medium hover:underline">
+          <a
+            href="/configuracion/fiscal"
+            className="ml-auto text-slate-900 font-medium hover:underline"
+          >
             Activar modo fiscal
           </a>
         )}

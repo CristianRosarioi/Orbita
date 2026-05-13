@@ -17,14 +17,12 @@ export const Industria = {
   JOYERIA: 'JOYERIA',
   OTRO: 'OTRO',
 } as const;
-
 export type Industria = (typeof Industria)[keyof typeof Industria];
 
 export const ModoFiscal = {
   SIMPLE: 'SIMPLE',
   FISCAL: 'FISCAL',
 } as const;
-
 export type ModoFiscal = (typeof ModoFiscal)[keyof typeof ModoFiscal];
 
 export const RolEmpresa = {
@@ -35,7 +33,6 @@ export const RolEmpresa = {
   CAJERO: 'CAJERO',
   VIEWER: 'VIEWER',
 } as const;
-
 export type RolEmpresa = (typeof RolEmpresa)[keyof typeof RolEmpresa];
 
 export const EstadoSuscripcion = {
@@ -44,7 +41,6 @@ export const EstadoSuscripcion = {
   SUSPENDIDA: 'SUSPENDIDA',
   CANCELADA: 'CANCELADA',
 } as const;
-
 export type EstadoSuscripcion = (typeof EstadoSuscripcion)[keyof typeof EstadoSuscripcion];
 
 export const PlanSuscripcion = {
@@ -52,5 +48,32 @@ export const PlanSuscripcion = {
   PRO: 'PRO',
   EMPRESA: 'EMPRESA',
 } as const;
-
 export type PlanSuscripcion = (typeof PlanSuscripcion)[keyof typeof PlanSuscripcion];
+
+export const TipoProducto = {
+  BIEN: 'BIEN',
+  SERVICIO: 'SERVICIO',
+} as const;
+export type TipoProducto = (typeof TipoProducto)[keyof typeof TipoProducto];
+
+export const TipoCliente = {
+  PERSONA: 'PERSONA',
+  EMPRESA: 'EMPRESA',
+} as const;
+export type TipoCliente = (typeof TipoCliente)[keyof typeof TipoCliente];
+
+export const TipoIdentificacion = {
+  CEDULA: 'CEDULA',
+  RNC: 'RNC',
+  PASAPORTE: 'PASAPORTE',
+  SIN_IDENTIFICACION: 'SIN_IDENTIFICACION',
+} as const;
+export type TipoIdentificacion = (typeof TipoIdentificacion)[keyof typeof TipoIdentificacion];
+
+export const NivelPrecio = {
+  CONTADO: 'CONTADO',
+  CREDITO: 'CREDITO',
+  MAYORISTA: 'MAYORISTA',
+  ESPECIAL: 'ESPECIAL',
+} as const;
+export type NivelPrecio = (typeof NivelPrecio)[keyof typeof NivelPrecio];

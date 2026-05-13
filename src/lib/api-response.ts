@@ -32,12 +32,24 @@ function handlePrismaError(error: Prisma.PrismaClientKnownRequestError) {
     case 'P2025':
       return err('NOT_FOUND', 'El registro que intentas modificar no existe o fue eliminado.', 404);
     case 'P2003':
-      return err('CONFLICT', 'No se puede completar la operación porque tiene datos relacionados.', 409);
+      return err(
+        'CONFLICT',
+        'No se puede completar la operación porque tiene datos relacionados.',
+        409,
+      );
     case 'P2034':
-      return err('CONFLICT', 'Hubo un conflicto al procesar la solicitud. Por favor inténtalo de nuevo.', 409);
+      return err(
+        'CONFLICT',
+        'Hubo un conflicto al procesar la solicitud. Por favor inténtalo de nuevo.',
+        409,
+      );
     case 'P1001':
       console.error('[DB] Base de datos no disponible', { code: error.code });
-      return err('SERVICE_UNAVAILABLE', 'El servicio no está disponible en este momento. Por favor inténtalo en unos minutos.', 503);
+      return err(
+        'SERVICE_UNAVAILABLE',
+        'El servicio no está disponible en este momento. Por favor inténtalo en unos minutos.',
+        503,
+      );
     default:
       console.error('[DB] Error de Prisma no manejado', { code: error.code });
       return err('INTERNAL_ERROR', 'Ocurrió un error al procesar tu solicitud.', 500);
@@ -64,5 +76,9 @@ export function handleApiError(error: unknown, contexto = 'endpoint'): NextRespo
     message: error instanceof Error ? error.message : 'Desconocido',
   });
 
-  return err('INTERNAL_ERROR', 'Ocurrió un problema inesperado. Por favor inténtalo de nuevo.', 500);
+  return err(
+    'INTERNAL_ERROR',
+    'Ocurrió un problema inesperado. Por favor inténtalo de nuevo.',
+    500,
+  );
 }

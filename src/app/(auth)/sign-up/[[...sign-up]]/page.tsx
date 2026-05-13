@@ -21,8 +21,8 @@ export default function SignUpPage() {
             Crea tu cuenta y empieza a gestionar tu negocio
           </h1>
           <p className="text-slate-400 text-lg leading-relaxed">
-            14 días de prueba gratis — sin tarjeta de crédito. Facturas con NCF,
-            inventario, reportes DGII y mucho más.
+            14 días de prueba gratis — sin tarjeta de crédito. Facturas con NCF, inventario,
+            reportes DGII y mucho más.
           </p>
           <ul className="space-y-3 text-slate-300">
             <li className="flex items-center gap-2">

@@ -17,12 +17,10 @@ export default function SignInPage() {
         </div>
 
         <div className="space-y-4">
-          <h1 className="text-3xl font-bold leading-tight">
-            Gestiona tu negocio con claridad
-          </h1>
+          <h1 className="text-3xl font-bold leading-tight">Gestiona tu negocio con claridad</h1>
           <p className="text-slate-400 text-lg leading-relaxed">
-            Facturación, inventario, reportes DGII y más — todo en un solo lugar,
-            diseñado para la realidad dominicana.
+            Facturación, inventario, reportes DGII y más — todo en un solo lugar, diseñado para la
+            realidad dominicana.
           </p>
         </div>
 

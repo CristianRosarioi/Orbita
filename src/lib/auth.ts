@@ -118,8 +118,8 @@ export async function getOrCreateDbUser() {
   if (!clerkUser) return null;
 
   const email =
-    clerkUser.emailAddresses.find((e) => e.id === clerkUser.primaryEmailAddressId)
-      ?.emailAddress ?? clerkUser.emailAddresses[0]?.emailAddress;
+    clerkUser.emailAddresses.find((e) => e.id === clerkUser.primaryEmailAddressId)?.emailAddress ??
+    clerkUser.emailAddresses[0]?.emailAddress;
 
   if (!email) return null;
 

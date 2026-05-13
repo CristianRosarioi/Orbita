@@ -6,9 +6,22 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import {
-  ChefHat, ShoppingCart, Car, Wrench, Hammer, Scissors,
-  Stethoscope, Building, Pill, Shirt, Globe, Gem, Package,
-  CheckCircle, ChevronRight, ChevronLeft,
+  ChefHat,
+  ShoppingCart,
+  Car,
+  Wrench,
+  Hammer,
+  Scissors,
+  Stethoscope,
+  Building,
+  Pill,
+  Shirt,
+  Globe,
+  Gem,
+  Package,
+  CheckCircle,
+  ChevronRight,
+  ChevronLeft,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,21 +33,25 @@ import { Industria, ModoFiscal } from '@/types/enums';
 // ============================================================
 // Configuración de industrias con iconos
 // ============================================================
-const INDUSTRIAS: { valor: Industria; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-  { valor: Industria.RESTAURANTE,    label: 'Restaurante',       icon: ChefHat },
-  { valor: Industria.COLMADO,        label: 'Colmado/Supermercado', icon: ShoppingCart },
-  { valor: Industria.CARWASH,        label: 'Car Wash',          icon: Car },
-  { valor: Industria.REPUESTOS,      label: 'Repuestos',         icon: Car },
-  { valor: Industria.TALLER_MECANICO,label: 'Taller Mecánico',   icon: Wrench },
-  { valor: Industria.FERRETERIA,     label: 'Ferretería',        icon: Hammer },
-  { valor: Industria.SALON_BARBERIA, label: 'Salón / Barbería',  icon: Scissors },
-  { valor: Industria.CLINICA,        label: 'Clínica / Salud',   icon: Stethoscope },
-  { valor: Industria.INMOBILIARIA,   label: 'Inmobiliaria',      icon: Building },
-  { valor: Industria.FARMACIA,       label: 'Farmacia',          icon: Pill },
-  { valor: Industria.TIENDA_ROPA,    label: 'Tienda de Ropa',    icon: Shirt },
-  { valor: Industria.TIENDA_ONLINE,  label: 'Tienda Online',     icon: Globe },
-  { valor: Industria.JOYERIA,        label: 'Joyería',           icon: Gem },
-  { valor: Industria.OTRO,           label: 'Otro tipo',         icon: Package },
+const INDUSTRIAS: {
+  valor: Industria;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}[] = [
+  { valor: Industria.RESTAURANTE, label: 'Restaurante', icon: ChefHat },
+  { valor: Industria.COLMADO, label: 'Colmado/Supermercado', icon: ShoppingCart },
+  { valor: Industria.CARWASH, label: 'Car Wash', icon: Car },
+  { valor: Industria.REPUESTOS, label: 'Repuestos', icon: Car },
+  { valor: Industria.TALLER_MECANICO, label: 'Taller Mecánico', icon: Wrench },
+  { valor: Industria.FERRETERIA, label: 'Ferretería', icon: Hammer },
+  { valor: Industria.SALON_BARBERIA, label: 'Salón / Barbería', icon: Scissors },
+  { valor: Industria.CLINICA, label: 'Clínica / Salud', icon: Stethoscope },
+  { valor: Industria.INMOBILIARIA, label: 'Inmobiliaria', icon: Building },
+  { valor: Industria.FARMACIA, label: 'Farmacia', icon: Pill },
+  { valor: Industria.TIENDA_ROPA, label: 'Tienda de Ropa', icon: Shirt },
+  { valor: Industria.TIENDA_ONLINE, label: 'Tienda Online', icon: Globe },
+  { valor: Industria.JOYERIA, label: 'Joyería', icon: Gem },
+  { valor: Industria.OTRO, label: 'Otro tipo', icon: Package },
 ];
 
 const PASOS = ['Tu empresa', 'Tipo de negocio', 'Modo fiscal'];
@@ -57,7 +74,12 @@ export function OnboardingWizard() {
     mode: 'onChange',
   });
 
-  const { watch, setValue, getValues, formState: { errors } } = form;
+  const {
+    watch,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = form;
   const industriaSeleccionada = watch('industria');
   const modoFiscalSeleccionado = watch('modoFiscal');
 
@@ -150,7 +172,13 @@ export function OnboardingWizard() {
             disabled={isLoading}
             className="gap-1 bg-slate-900 hover:bg-slate-700 min-w-36"
           >
-            {isLoading ? 'Creando...' : <>Crear empresa <CheckCircle className="h-4 w-4" /></>}
+            {isLoading ? (
+              'Creando...'
+            ) : (
+              <>
+                Crear empresa <CheckCircle className="h-4 w-4" />
+              </>
+            )}
           </Button>
         )}
       </div>
@@ -196,13 +224,21 @@ function StepIndicator({ pasoActual, pasos }: { pasoActual: number; pasos: strin
 // ============================================================
 // Paso 1 — Información básica
 // ============================================================
-function PasoInfoBasica({ form, errors }: { form: ReturnType<typeof useForm<CreateEmpresaInput>>; errors: ReturnType<typeof useForm<CreateEmpresaInput>>['formState']['errors'] }) {
+function PasoInfoBasica({
+  form,
+  errors,
+}: {
+  form: ReturnType<typeof useForm<CreateEmpresaInput>>;
+  errors: ReturnType<typeof useForm<CreateEmpresaInput>>['formState']['errors'];
+}) {
   const { register } = form;
   return (
     <div className="space-y-5">
       <div>
         <h2 className="text-lg font-semibold text-slate-900">Información de tu empresa</h2>
-        <p className="text-slate-500 text-sm mt-1">Puedes cambiar estos datos después en Configuración.</p>
+        <p className="text-slate-500 text-sm mt-1">
+          Puedes cambiar estos datos después en Configuración.
+        </p>
       </div>
 
       <div className="space-y-4">
@@ -264,9 +300,7 @@ function PasoIndustria({
     <div className="space-y-4">
       <div>
         <h2 className="text-lg font-semibold text-slate-900">¿Qué tipo de negocio tienes?</h2>
-        <p className="text-slate-500 text-sm mt-1">
-          Órbita adapta la interfaz según tu industria.
-        </p>
+        <p className="text-slate-500 text-sm mt-1">Órbita adapta la interfaz según tu industria.</p>
       </div>
 
       <div className="grid grid-cols-2 gap-2.5 max-h-72 overflow-y-auto pr-1">
@@ -341,8 +375,8 @@ function PasoModoFiscal({
             <div>
               <p className="font-semibold text-slate-900 text-sm">Modo Simple</p>
               <p className="text-slate-500 text-xs mt-1">
-                Factura sin NCF ni comprobantes fiscales. Ideal si estás comenzando,
-                no tienes RNC todavía, o eres un negocio informal.
+                Factura sin NCF ni comprobantes fiscales. Ideal si estás comenzando, no tienes RNC
+                todavía, o eres un negocio informal.
               </p>
             </div>
           </div>
@@ -376,8 +410,8 @@ function PasoModoFiscal({
                 <span className="text-xs font-normal text-slate-500">(cumplimiento DGII)</span>
               </p>
               <p className="text-slate-500 text-xs mt-1">
-                Facturas con NCF, ITBIS, reportes 606/607. Requieres RNC vigente.
-                Puedes activar la facturación electrónica (e-CF) más adelante.
+                Facturas con NCF, ITBIS, reportes 606/607. Requieres RNC vigente. Puedes activar la
+                facturación electrónica (e-CF) más adelante.
               </p>
             </div>
           </div>

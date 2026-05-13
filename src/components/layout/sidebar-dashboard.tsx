@@ -12,11 +12,18 @@ import {
   BarChart2,
   Settings,
   ChevronRight,
+  Truck,
 } from 'lucide-react';
 import type { RolEmpresa } from '@/types/enums';
 
 interface SidebarProps {
-  empresa: { id: string; nombre: string; nombreComercial: string | null; estadoSusc: string; trialFinaliza: Date | null };
+  empresa: {
+    id: string;
+    nombre: string;
+    nombreComercial: string | null;
+    estadoSusc: string;
+    trialFinaliza: Date | null;
+  };
   sucursal: { id: string; nombre: string } | null;
   rol: RolEmpresa | string;
   usuario: { nombre: string | null; apellido: string | null };
@@ -26,9 +33,14 @@ const NAV_ITEMS = [
   { href: '/dashboard', label: 'Inicio', icon: LayoutDashboard },
   { href: '/clientes', label: 'Clientes', icon: Users },
   { href: '/productos', label: 'Productos', icon: Package },
+  { href: '/proveedores', label: 'Proveedores', icon: Truck },
   { href: '/facturas', label: 'Facturas', icon: FileText },
   { href: '/reportes', label: 'Reportes', icon: BarChart2 },
-  { href: '/configuracion', label: 'Configuración', icon: Settings },
+];
+
+const CONFIG_ITEMS = [
+  { href: '/configuracion/categorias', label: 'Categorías' },
+  { href: '/configuracion/unidades-medida', label: 'Unidades de medida' },
 ];
 
 const ROL_LABELS: Record<string, string> = {
@@ -54,9 +66,7 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
           </div>
           <div className="min-w-0">
             <p className="text-sm font-semibold leading-tight truncate">{nombreEmpresa}</p>
-            {sucursal && (
-              <p className="text-xs text-slate-400 truncate">{sucursal.nombre}</p>
-            )}
+            {sucursal && <p className="text-xs text-slate-400 truncate">{sucursal.nombre}</p>}
           </div>
           <ChevronRight className="h-4 w-4 text-slate-500 shrink-0 ml-auto" />
         </div>
@@ -82,6 +92,30 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
             </Link>
           );
         })}
+
+        {/* Configuración */}
+        <div className="pt-3">
+          <p className="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+            Configuración
+          </p>
+          {CONFIG_ITEMS.map(({ href, label }) => {
+            const activo = pathname.startsWith(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activo
+                    ? 'bg-slate-700 text-white'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <Settings className="h-4 w-4 shrink-0" />
+                {label}
+              </Link>
+            );
+          })}
+        </div>
       </nav>
 
       {/* Footer — usuario y avatar Clerk */}
