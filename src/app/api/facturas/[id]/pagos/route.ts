@@ -5,10 +5,7 @@ import { ok, err, handleApiError } from '@/lib/api-response';
 import { requireEmpresa } from '@/lib/auth';
 import { RegistrarPagoSchema } from '@/lib/validations/facturas';
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { userId } = await auth();
     if (!userId) return err('UNAUTHORIZED', 'Tu sesión expiró.', 401);
@@ -79,7 +76,11 @@ export async function POST(
         return err('INVALID_STATE', 'No se puede registrar un pago en una factura anulada.', 422);
       }
       if (error.message === 'FACTURA_EN_BORRADOR') {
-        return err('INVALID_STATE', 'No se puede registrar un pago en una factura en borrador.', 422);
+        return err(
+          'INVALID_STATE',
+          'No se puede registrar un pago en una factura en borrador.',
+          422,
+        );
       }
       if (error.message === 'MONTO_EXCEDE_SALDO') {
         return err('INVALID_AMOUNT', 'El monto excede el saldo pendiente de la factura.', 422);

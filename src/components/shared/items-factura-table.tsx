@@ -50,11 +50,7 @@ export function ItemsFacturaTable({ items, onChange }: Props) {
   }
 
   function update(id: string, field: keyof ItemRow, value: string | number) {
-    onChange(
-      items.map((item) =>
-        item._id === id ? { ...item, [field]: value } : item,
-      ),
-    );
+    onChange(items.map((item) => (item._id === id ? { ...item, [field]: value } : item)));
   }
 
   function addFromProducto(producto: {
@@ -96,10 +92,7 @@ export function ItemsFacturaTable({ items, onChange }: Props) {
         <p className="text-sm font-medium text-slate-700">Productos / Servicios</p>
         <div className="ml-auto flex gap-2">
           <div className="w-56">
-            <BuscarProductoInput
-              onSelect={addFromProducto}
-              placeholder="Buscar producto..."
-            />
+            <BuscarProductoInput onSelect={addFromProducto} placeholder="Buscar producto..." />
           </div>
           <Button type="button" variant="outline" size="sm" onClick={addEmpty}>
             <Plus className="h-4 w-4 mr-1" />

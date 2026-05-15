@@ -105,9 +105,7 @@ export function BuscarProductoInput({ onSelect, placeholder = 'Buscar producto..
                   RD$ {Number(producto.precioVenta).toFixed(2)}
                 </span>
               </div>
-              {producto.sku && (
-                <span className="text-slate-400 text-xs">SKU: {producto.sku}</span>
-              )}
+              {producto.sku && <span className="text-slate-400 text-xs">SKU: {producto.sku}</span>}
             </button>
           ))}
         </div>

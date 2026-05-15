@@ -5,10 +5,7 @@ import { ok, err, handleApiError } from '@/lib/api-response';
 import { requireEmpresa } from '@/lib/auth';
 import { emitirFactura } from '@/lib/facturacion';
 
-export async function POST(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { userId } = await auth();
     if (!userId) return err('UNAUTHORIZED', 'Tu sesión expiró.', 401);

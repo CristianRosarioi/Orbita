@@ -163,6 +163,7 @@ model Empresa {
   facturas        Factura[]
   pagosFacturas   PagoFactura[]
   movimientos     MovimientoInventario[]
+  cajas           SesionCaja[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -484,8 +485,11 @@ model Factura {
   updatedAt             DateTime      @updatedAt @map("updated_at")
   deletedAt             DateTime?     @map("deleted_at")
 
+  sesionCajaId          String?       @map("sesion_caja_id")
+
   empresa     Empresa               @relation(fields: [empresaId], references: [id], onDelete: Cascade)
   cliente     Cliente?              @relation(fields: [clienteId], references: [id])
+  sesionCaja  SesionCaja?           @relation(fields: [sesionCajaId], references: [id])
   items       ItemFactura[]
   pagos       PagoFactura[]
   movimientos MovimientoInventario[]
@@ -547,6 +551,44 @@ model PagoFactura {
   @@index([facturaId])
   @@index([empresaId, fechaPago])
   @@map("pagos_factura")
+}
+
+// ============================================================
+// ENUMS — Fase 4
+// ============================================================
+
+enum EstadoCaja {
+  ABIERTA
+  CERRADA
+
+  @@map("estado_caja")
+}
+
+// ============================================================
+// MODELO: SesionCaja
+// ============================================================
+model SesionCaja {
+  id                    String      @id @default(cuid())
+  empresaId             String      @map("empresa_id")
+  sucursalId            String?     @map("sucursal_id")
+  usuarioId             String      @map("usuario_id")
+  estado                EstadoCaja  @default(ABIERTA)
+  montoApertura         Decimal     @map("monto_apertura")
+  montoCierreDeclarado  Decimal?    @map("monto_cierre_declarado")
+  montoCierreReal       Decimal?    @map("monto_cierre_real")
+  diferencia            Decimal?
+  fechaApertura         DateTime    @default(now()) @map("fecha_apertura")
+  fechaCierre           DateTime?   @map("fecha_cierre")
+  notas                 String?
+  createdAt             DateTime    @default(now()) @map("created_at")
+  updatedAt             DateTime    @updatedAt @map("updated_at")
+
+  empresa  Empresa   @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  facturas Factura[]
+
+  @@index([empresaId, estado])
+  @@index([empresaId, fechaApertura])
+  @@map("sesiones_caja")
 }
 
 // ============================================================

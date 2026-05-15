@@ -7,23 +7,27 @@ export const CreateItemFacturaSchema = z.object({
   productoId: z.string().min(1).optional(),
   productoNombre: z.string().min(1, 'El nombre del producto es requerido.').max(200),
   productoSku: z.string().optional(),
-  cantidad: z.number().positive('La cantidad debe ser mayor a 0.'),
-  precioUnitario: z.number().min(0, 'El precio no puede ser negativo.'),
-  itbisPorcentaje: z.number().min(0).max(100),
-  descuento: z.number().min(0),
+  cantidad: z.coerce.number().positive('La cantidad debe ser mayor a 0.'),
+  precioUnitario: z.coerce.number().min(0, 'El precio no puede ser negativo.'),
+  itbisPorcentaje: z.coerce.number().min(0).max(100),
+  descuento: z.coerce.number().min(0),
 });
 
 export const CreateFacturaSchema = z
   .object({
     clienteId: z.string().min(1).optional(),
-    clienteNombre: z.string().min(1, 'El nombre del cliente es requerido.').default('Consumidor Final'),
+    clienteNombre: z
+      .string()
+      .min(1, 'El nombre del cliente es requerido.')
+      .default('Consumidor Final'),
     clienteIdentificacion: z.string().optional(),
     metodoPago: z.enum(metodosPago),
     items: z.array(CreateItemFacturaSchema).min(1, 'La factura debe tener al menos un item.'),
-    descuento: z.number().min(0).optional(),
+    descuento: z.coerce.number().min(0).optional(),
     notas: z.string().optional(),
     fechaVencimiento: z.string().optional(),
     sucursalId: z.string().min(1).optional(),
+    sesionCajaId: z.string().min(1).optional(),
   })
   .superRefine((d, ctx) => {
     if (d.metodoPago === MetodoPago.CREDITO && !d.fechaVencimiento) {
@@ -36,12 +40,10 @@ export const CreateFacturaSchema = z
   });
 
 export const RegistrarPagoSchema = z.object({
-  monto: z.number().positive('El monto debe ser mayor a 0.'),
-  metodoPago: z
-    .enum(metodosPago)
-    .refine((v) => v !== MetodoPago.CREDITO, {
-      message: 'No se puede registrar un pago con método CREDITO.',
-    }),
+  monto: z.coerce.number().positive('El monto debe ser mayor a 0.'),
+  metodoPago: z.enum(metodosPago).refine((v) => v !== MetodoPago.CREDITO, {
+    message: 'No se puede registrar un pago con método CREDITO.',
+  }),
   referencia: z.string().optional(),
   notas: z.string().optional(),
   fechaPago: z.string().optional(),

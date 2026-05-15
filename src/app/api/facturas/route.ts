@@ -109,6 +109,7 @@ export async function POST(req: NextRequest) {
         data: {
           empresaId,
           sucursalId: data.sucursalId ?? null,
+          sesionCajaId: data.sesionCajaId ?? null,
           numero,
           numeroInt,
           anio,

@@ -10,10 +10,7 @@ const AnularSchema = z.object({
   motivo: z.string().min(10, 'El motivo debe tener al menos 10 caracteres.').max(500),
 });
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { userId } = await auth();
     if (!userId) return err('UNAUTHORIZED', 'Tu sesión expiró.', 401);

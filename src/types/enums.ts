@@ -103,4 +103,11 @@ export const TipoMovimientoInventario = {
   AJUSTE_SALIDA: 'AJUSTE_SALIDA',
   COMPRA: 'COMPRA',
 } as const;
-export type TipoMovimientoInventario = (typeof TipoMovimientoInventario)[keyof typeof TipoMovimientoInventario];
+export type TipoMovimientoInventario =
+  (typeof TipoMovimientoInventario)[keyof typeof TipoMovimientoInventario];
+
+export const EstadoCaja = {
+  ABIERTA: 'ABIERTA',
+  CERRADA: 'CERRADA',
+} as const;
+export type EstadoCaja = (typeof EstadoCaja)[keyof typeof EstadoCaja];

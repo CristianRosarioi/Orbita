@@ -65,8 +65,8 @@ export function AnularFacturaModal({ facturaId, onSuccess, trigger }: Props) {
         <AlertDialogHeader>
           <AlertDialogTitle>¿Anular esta factura?</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción es irreversible. La factura quedará marcada como anulada y se
-            restaurará el inventario afectado.
+            Esta acción es irreversible. La factura quedará marcada como anulada y se restaurará el
+            inventario afectado.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="space-y-1.5 py-2">

@@ -216,7 +216,10 @@ export function FacturaForm() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <Label htmlFor="metodo-pago">Método de pago</Label>
-            <Select value={metodoPago} onValueChange={(v) => setMetodoPago(v ?? MetodoPago.EFECTIVO)}>
+            <Select
+              value={metodoPago}
+              onValueChange={(v) => setMetodoPago(v ?? MetodoPago.EFECTIVO)}
+            >
               <SelectTrigger id="metodo-pago" className="w-full">
                 <SelectValue placeholder="Seleccionar método" />
               </SelectTrigger>
@@ -293,12 +296,7 @@ export function FacturaForm() {
 
       {/* Acciones */}
       <div className="flex gap-3 justify-end">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={handleGuardarBorrador}
-          disabled={loading}
-        >
+        <Button type="button" variant="outline" onClick={handleGuardarBorrador} disabled={loading}>
           {loading ? 'Guardando...' : 'Guardar borrador'}
         </Button>
         <Button type="button" onClick={handleEmitir} disabled={loading}>

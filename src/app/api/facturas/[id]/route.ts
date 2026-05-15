@@ -4,10 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { ok, err, handleApiError } from '@/lib/api-response';
 import { requireEmpresa } from '@/lib/auth';
 
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { userId } = await auth();
     if (!userId) return err('UNAUTHORIZED', 'Tu sesión expiró.', 401);

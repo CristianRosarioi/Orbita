@@ -1,6 +1,6 @@
 import { redirect, notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronLeft, Printer } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { getCurrentEmpresa } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { Card } from '@/components/ui/card';
@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { FacturaStatusBadge } from '@/components/shared/factura-status-badge';
 import { MoneyDisplay } from '@/components/shared/money-display';
 import { FacturaActions } from './_components/factura-actions';
+import { ImprimirTicketButton } from './_components/imprimir-ticket-button';
 
 const METODO_LABELS: Record<string, string> = {
   EFECTIVO: 'Efectivo',
@@ -17,11 +18,7 @@ const METODO_LABELS: Record<string, string> = {
   CREDITO: 'Crédito',
 };
 
-export default async function FacturaDetallePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function FacturaDetallePage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
 
@@ -79,14 +76,7 @@ export default async function FacturaDetallePage({
 
         <div className="flex gap-2 items-center flex-wrap">
           <FacturaActions facturaId={factura.id} estado={factura.estado} saldo={saldo} />
-          <button
-            disabled
-            title="Imprimir (próximamente)"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-sm text-slate-400 cursor-not-allowed"
-          >
-            <Printer className="h-4 w-4" />
-            Imprimir
-          </button>
+          <ImprimirTicketButton facturaId={factura.id} />
         </div>
       </div>
 
@@ -178,7 +168,9 @@ export default async function FacturaDetallePage({
             {Number(factura.descuento) > 0 && (
               <div className="flex justify-between text-red-600">
                 <span>Descuento</span>
-                <span>- <MoneyDisplay amount={factura.descuento} currency="RD$" /></span>
+                <span>
+                  - <MoneyDisplay amount={factura.descuento} currency="RD$" />
+                </span>
               </div>
             )}
             <div className="flex justify-between font-bold text-base text-slate-900 border-t border-slate-200 pt-2">

@@ -49,21 +49,27 @@ export default async function DashboardPage() {
   hoyFin.setHours(23, 59, 59, 999);
 
   const [facturasHoyData, clientesActivos, productosActivos] = await Promise.all([
-    prisma.factura.findMany({
-      where: {
-        empresaId: sesion.empresaActivaId,
-        deletedAt: null,
-        estado: { in: ['PAGADA', 'EMITIDA'] },
-        fechaEmision: { gte: hoyInicio, lte: hoyFin },
-      },
-      select: { total: true },
-    }).catch(() => []),
-    prisma.cliente.count({
-      where: { empresaId: sesion.empresaActivaId, deletedAt: null, activo: true },
-    }).catch(() => 0),
-    prisma.producto.count({
-      where: { empresaId: sesion.empresaActivaId, deletedAt: null, activo: true },
-    }).catch(() => 0),
+    prisma.factura
+      .findMany({
+        where: {
+          empresaId: sesion.empresaActivaId,
+          deletedAt: null,
+          estado: { in: ['PAGADA', 'EMITIDA'] },
+          fechaEmision: { gte: hoyInicio, lte: hoyFin },
+        },
+        select: { total: true },
+      })
+      .catch(() => []),
+    prisma.cliente
+      .count({
+        where: { empresaId: sesion.empresaActivaId, deletedAt: null, activo: true },
+      })
+      .catch(() => 0),
+    prisma.producto
+      .count({
+        where: { empresaId: sesion.empresaActivaId, deletedAt: null, activo: true },
+      })
+      .catch(() => 0),
   ]);
 
   const ventasHoy = facturasHoyData.reduce((sum, f) => sum + Number(f.total), 0);
@@ -133,7 +139,9 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="p-4 space-y-2">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Ventas del día</p>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+              Ventas del día
+            </p>
             <TrendingUp className="h-4 w-4 text-green-600" />
           </div>
           <p className="text-2xl font-bold text-slate-900">
@@ -159,7 +167,9 @@ export default async function DashboardPage() {
         </Card>
         <Card className="p-4 space-y-2">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Facturas hoy</p>
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+              Facturas hoy
+            </p>
             <FileText className="h-4 w-4 text-orange-600" />
           </div>
           <p className="text-2xl font-bold text-slate-900">{facturasHoyCount}</p>
@@ -175,13 +185,22 @@ export default async function DashboardPage() {
             <span className="text-green-500 text-base">✓</span> Tu empresa fue creada
           </li>
           <li className="flex items-center gap-2 text-slate-400">
-            <span className="text-base">○</span> <Link href="/productos" className="hover:underline">Agrega tu primer producto</Link>
+            <span className="text-base">○</span>{' '}
+            <Link href="/productos" className="hover:underline">
+              Agrega tu primer producto
+            </Link>
           </li>
           <li className="flex items-center gap-2 text-slate-400">
-            <span className="text-base">○</span> <Link href="/clientes" className="hover:underline">Registra tu primer cliente</Link>
+            <span className="text-base">○</span>{' '}
+            <Link href="/clientes" className="hover:underline">
+              Registra tu primer cliente
+            </Link>
           </li>
           <li className="flex items-center gap-2 text-slate-400">
-            <span className="text-base">○</span> <Link href="/facturas/nueva" className="hover:underline">Emite tu primera factura</Link>
+            <span className="text-base">○</span>{' '}
+            <Link href="/facturas/nueva" className="hover:underline">
+              Emite tu primera factura
+            </Link>
           </li>
         </ul>
       </Card>
