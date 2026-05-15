@@ -34,10 +34,16 @@ export default function UnidadesMedidaPage() {
     let active = true;
     fetch('/api/unidades-medida')
       .then((r) => r.json() as Promise<{ success: boolean; data: UnidadMedida[] }>)
-      .then((json) => { if (active && json.success) setUnidades(json.data); })
+      .then((json) => {
+        if (active && json.success) setUnidades(json.data);
+      })
       .catch(() => {})
-      .finally(() => { if (active) setLoading(false); });
-    return () => { active = false; };
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   async function crear() {
@@ -80,7 +86,9 @@ export default function UnidadesMedidaPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold text-slate-900">Unidades de Medida</h1>
-          <p className="text-sm text-slate-500">{base.length} unidades base + {custom.length} personalizadas</p>
+          <p className="text-sm text-slate-500">
+            {base.length} unidades base + {custom.length} personalizadas
+          </p>
         </div>
         <Button onClick={() => setCreando(true)} className="bg-slate-900 hover:bg-slate-700">
           <Plus className="h-4 w-4 mr-1.5" /> Nueva Unidad
@@ -92,36 +100,75 @@ export default function UnidadesMedidaPage() {
           <p className="text-sm font-medium text-slate-700">Nueva unidad personalizada</p>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label htmlFor="u-nombre">Nombre <span className="text-red-500">*</span></Label>
-              <Input id="u-nombre" value={form.nombre} onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))} placeholder="Ej. Barril" autoFocus />
+              <Label htmlFor="u-nombre">
+                Nombre <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="u-nombre"
+                value={form.nombre}
+                onChange={(e) => setForm((f) => ({ ...f, nombre: e.target.value }))}
+                placeholder="Ej. Barril"
+                autoFocus
+              />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="u-abrev">Abreviatura <span className="text-red-500">*</span></Label>
-              <Input id="u-abrev" value={form.abreviatura} onChange={(e) => setForm((f) => ({ ...f, abreviatura: e.target.value }))} placeholder="Ej. brl" />
+              <Label htmlFor="u-abrev">
+                Abreviatura <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="u-abrev"
+                value={form.abreviatura}
+                onChange={(e) => setForm((f) => ({ ...f, abreviatura: e.target.value }))}
+                placeholder="Ej. brl"
+              />
             </div>
           </div>
           <div className="flex gap-2 justify-end">
-            <Button variant="outline" onClick={() => { setCreando(false); setForm({ nombre: '', abreviatura: '' }); }}>Cancelar</Button>
-            <Button onClick={crear} className="bg-slate-900 hover:bg-slate-700">Guardar</Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setCreando(false);
+                setForm({ nombre: '', abreviatura: '' });
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button onClick={crear} className="bg-slate-900 hover:bg-slate-700">
+              Guardar
+            </Button>
           </div>
         </div>
       )}
 
       {loading ? (
-        <div className="space-y-2">{[1,2,3,4,5].map((i) => <div key={i} className="h-10 rounded-lg bg-slate-100 animate-pulse" />)}</div>
+        <div className="space-y-2">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="h-10 rounded-lg bg-slate-100 animate-pulse" />
+          ))}
+        </div>
       ) : (
         <div className="space-y-5">
           {custom.length > 0 && (
             <section className="space-y-2">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Personalizadas</p>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                Personalizadas
+              </p>
               <div className="space-y-1.5">
                 {custom.map((u) => (
-                  <div key={u.id} className="flex items-center gap-3 px-3 py-2 rounded-lg border bg-white hover:bg-slate-50">
+                  <div
+                    key={u.id}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg border bg-white hover:bg-slate-50"
+                  >
                     <span className="font-medium text-slate-900 text-sm flex-1">{u.nombre}</span>
-                    <Badge variant="outline" className="text-xs font-mono">{u.abreviatura}</Badge>
+                    <Badge variant="outline" className="text-xs font-mono">
+                      {u.abreviatura}
+                    </Badge>
                     <ConfirmDialog
                       trigger={
-                        <button className="p-1 text-slate-400 hover:text-red-600 rounded" title="Eliminar">
+                        <button
+                          className="p-1 text-slate-400 hover:text-red-600 rounded"
+                          title="Eliminar"
+                        >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       }
@@ -137,13 +184,23 @@ export default function UnidadesMedidaPage() {
           )}
 
           <section className="space-y-2">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Unidades base del sistema</p>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+              Unidades base del sistema
+            </p>
             <div className="space-y-1.5">
               {base.map((u) => (
-                <div key={u.id} className="flex items-center gap-3 px-3 py-2 rounded-lg border border-slate-100 bg-slate-50">
+                <div
+                  key={u.id}
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg border border-slate-100 bg-slate-50"
+                >
                   <span className="font-medium text-slate-700 text-sm flex-1">{u.nombre}</span>
-                  <Badge variant="outline" className="text-xs font-mono text-slate-500">{u.abreviatura}</Badge>
-                  <Lock className="h-3.5 w-3.5 text-slate-300" aria-label="Unidad base — no se puede eliminar" />
+                  <Badge variant="outline" className="text-xs font-mono text-slate-500">
+                    {u.abreviatura}
+                  </Badge>
+                  <Lock
+                    className="h-3.5 w-3.5 text-slate-300"
+                    aria-label="Unidad base — no se puede eliminar"
+                  />
                 </div>
               ))}
             </div>
@@ -153,4 +210,3 @@ export default function UnidadesMedidaPage() {
     </div>
   );
 }
-

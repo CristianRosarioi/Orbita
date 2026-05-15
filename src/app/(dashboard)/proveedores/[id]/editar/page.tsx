@@ -9,11 +9,7 @@ import { ProveedorForm } from '../../_components/proveedor-form';
 import type { CreateProveedorInput } from '@/lib/validations/proveedores';
 import { TipoIdentificacion } from '@/types/enums';
 
-export default async function EditarProveedorPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditarProveedorPage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
 

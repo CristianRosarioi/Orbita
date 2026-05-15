@@ -197,14 +197,24 @@ export function ClienteForm({ defaultValues, clienteId }: ClienteFormProps) {
       {/* Dirección */}
       <div className="space-y-2">
         <Label htmlFor="direccion">Dirección</Label>
-        <Textarea id="direccion" {...register('direccion')} placeholder="Calle, número, sector..." rows={2} />
+        <Textarea
+          id="direccion"
+          {...register('direccion')}
+          placeholder="Calle, número, sector..."
+          rows={2}
+        />
         {errors.direccion && <p className="text-sm text-red-600">{errors.direccion.message}</p>}
       </div>
 
       {/* Notas */}
       <div className="space-y-2">
         <Label htmlFor="notas">Notas internas</Label>
-        <Textarea id="notas" {...register('notas')} placeholder="Cualquier información adicional..." rows={3} />
+        <Textarea
+          id="notas"
+          {...register('notas')}
+          placeholder="Cualquier información adicional..."
+          rows={3}
+        />
         {errors.notas && <p className="text-sm text-red-600">{errors.notas.message}</p>}
       </div>
 

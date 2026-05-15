@@ -125,9 +125,7 @@ async function TablaClientes({
                   >
                     {c.nombreComercial ?? c.nombre}
                   </Link>
-                  {c.nombreComercial && (
-                    <p className="text-xs text-slate-500">{c.nombre}</p>
-                  )}
+                  {c.nombreComercial && <p className="text-xs text-slate-500">{c.nombre}</p>}
                 </TableCell>
                 <TableCell>
                   <Badge variant="outline" className="text-xs">
@@ -145,10 +143,7 @@ async function TablaClientes({
                 <TableCell className="text-slate-600 text-sm">{c.telefono ?? '—'}</TableCell>
                 <TableCell className="text-slate-600 text-sm">{c.email ?? '—'}</TableCell>
                 <TableCell>
-                  <Badge
-                    variant={c.activo ? 'default' : 'secondary'}
-                    className="text-xs"
-                  >
+                  <Badge variant={c.activo ? 'default' : 'secondary'} className="text-xs">
                     {c.activo ? 'Activo' : 'Inactivo'}
                   </Badge>
                 </TableCell>

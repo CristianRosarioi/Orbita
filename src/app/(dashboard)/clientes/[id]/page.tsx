@@ -26,11 +26,7 @@ function Campo({ label, valor }: { label: string; valor?: string | null }) {
   );
 }
 
-export default async function ClienteDetallePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function ClienteDetallePage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
 
@@ -60,17 +56,12 @@ export default async function ClienteDetallePage({
             <h1 className="text-2xl font-bold text-slate-900">
               {cliente.nombreComercial ?? cliente.nombre}
             </h1>
-            {cliente.nombreComercial && (
-              <p className="text-slate-500 text-sm">{cliente.nombre}</p>
-            )}
+            {cliente.nombreComercial && <p className="text-slate-500 text-sm">{cliente.nombre}</p>}
             <div className="flex items-center gap-2 mt-1">
               <Badge variant="outline" className="text-xs">
                 {LABEL_TIPO[cliente.tipo]}
               </Badge>
-              <Badge
-                variant={cliente.activo ? 'default' : 'secondary'}
-                className="text-xs"
-              >
+              <Badge variant={cliente.activo ? 'default' : 'secondary'} className="text-xs">
                 {cliente.activo ? 'Activo' : 'Inactivo'}
               </Badge>
             </div>
@@ -101,9 +92,7 @@ export default async function ClienteDetallePage({
           <Campo label="Ciudad" valor={cliente.ciudad} />
           <Campo label="Provincia" valor={cliente.provincia} />
         </div>
-        {cliente.direccion && (
-          <Campo label="Dirección" valor={cliente.direccion} />
-        )}
+        {cliente.direccion && <Campo label="Dirección" valor={cliente.direccion} />}
         {cliente.notas && <Campo label="Notas internas" valor={cliente.notas} />}
       </Card>
 

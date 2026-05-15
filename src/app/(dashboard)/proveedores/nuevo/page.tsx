@@ -14,9 +14,7 @@ export default function NuevoProveedorPage() {
         </Link>
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Nuevo proveedor</h1>
-          <p className="text-slate-500 text-sm mt-0.5">
-            Registra un nuevo proveedor o suplidor
-          </p>
+          <p className="text-slate-500 text-sm mt-0.5">Registra un nuevo proveedor o suplidor</p>
         </div>
       </div>
 

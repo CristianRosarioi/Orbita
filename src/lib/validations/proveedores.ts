@@ -4,10 +4,7 @@ import { TipoIdentificacion } from '@/types/enums';
 const BaseProveedorObject = z.object({
   tipoIdentificacion: z.enum(Object.values(TipoIdentificacion) as [string, ...string[]]),
   identificacion: z.string().max(20).optional(),
-  nombre: z
-    .string()
-    .min(2, 'El nombre debe tener al menos 2 caracteres.')
-    .max(150),
+  nombre: z.string().min(2, 'El nombre debe tener al menos 2 caracteres.').max(150),
   nombreComercial: z.string().max(150).optional(),
   contacto: z.string().max(150).optional(),
   email: z.email('El correo electrónico no es válido.').optional().or(z.literal('')),

@@ -33,7 +33,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const empresaId = await requireEmpresa();
     const { id } = await params;
 
-    const existente = await prisma.producto.findFirst({ where: { id, empresaId, deletedAt: null } });
+    const existente = await prisma.producto.findFirst({
+      where: { id, empresaId, deletedAt: null },
+    });
     if (!existente) return err('NOT_FOUND', 'Producto no encontrado.', 404);
 
     const body = await req.json().catch(() => null);
@@ -57,9 +59,15 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
       const cambiosPrecios = [
         precioCredito !== undefined ? { nivel: 'CREDITO' as const, precio: precioCredito } : null,
-        precioMayorista !== undefined ? { nivel: 'MAYORISTA' as const, precio: precioMayorista } : null,
-        precioEspecial !== undefined ? { nivel: 'ESPECIAL' as const, precio: precioEspecial } : null,
-      ].filter((p): p is { nivel: 'CREDITO' | 'MAYORISTA' | 'ESPECIAL'; precio: number } => p !== null);
+        precioMayorista !== undefined
+          ? { nivel: 'MAYORISTA' as const, precio: precioMayorista }
+          : null,
+        precioEspecial !== undefined
+          ? { nivel: 'ESPECIAL' as const, precio: precioEspecial }
+          : null,
+      ].filter(
+        (p): p is { nivel: 'CREDITO' | 'MAYORISTA' | 'ESPECIAL'; precio: number } => p !== null,
+      );
 
       for (const p of cambiosPrecios) {
         await tx.precioProducto.upsert({
@@ -85,7 +93,9 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     const empresaId = await requireEmpresa();
     const { id } = await params;
 
-    const existente = await prisma.producto.findFirst({ where: { id, empresaId, deletedAt: null } });
+    const existente = await prisma.producto.findFirst({
+      where: { id, empresaId, deletedAt: null },
+    });
     if (!existente) return err('NOT_FOUND', 'Producto no encontrado.', 404);
 
     await prisma.producto.update({ where: { id }, data: { deletedAt: new Date() } });

@@ -132,10 +132,7 @@ async function TablaProductos({
                   RD$ {Number(p.precioVenta).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
                 </TableCell>
                 <TableCell>
-                  <Badge
-                    variant={p.activo ? 'default' : 'secondary'}
-                    className="text-xs"
-                  >
+                  <Badge variant={p.activo ? 'default' : 'secondary'} className="text-xs">
                     {p.activo ? 'Activo' : 'Inactivo'}
                   </Badge>
                 </TableCell>
@@ -211,7 +208,9 @@ export default async function ProductosPage({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Productos</h1>
-          <p className="text-slate-500 text-sm mt-1">Gestiona tu catálogo de productos y servicios</p>
+          <p className="text-slate-500 text-sm mt-1">
+            Gestiona tu catálogo de productos y servicios
+          </p>
         </div>
         <Link href="/productos/nuevo" className={buttonVariants()}>
           <PackagePlus className="h-4 w-4 mr-2" />

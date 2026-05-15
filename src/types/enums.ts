@@ -77,3 +77,30 @@ export const NivelPrecio = {
   ESPECIAL: 'ESPECIAL',
 } as const;
 export type NivelPrecio = (typeof NivelPrecio)[keyof typeof NivelPrecio];
+
+export const EstadoFactura = {
+  BORRADOR: 'BORRADOR',
+  EMITIDA: 'EMITIDA',
+  PAGADA: 'PAGADA',
+  ANULADA: 'ANULADA',
+  VENCIDA: 'VENCIDA',
+} as const;
+export type EstadoFactura = (typeof EstadoFactura)[keyof typeof EstadoFactura];
+
+export const MetodoPago = {
+  EFECTIVO: 'EFECTIVO',
+  TARJETA: 'TARJETA',
+  TRANSFERENCIA: 'TRANSFERENCIA',
+  CHEQUE: 'CHEQUE',
+  CREDITO: 'CREDITO',
+} as const;
+export type MetodoPago = (typeof MetodoPago)[keyof typeof MetodoPago];
+
+export const TipoMovimientoInventario = {
+  VENTA: 'VENTA',
+  DEVOLUCION: 'DEVOLUCION',
+  AJUSTE_ENTRADA: 'AJUSTE_ENTRADA',
+  AJUSTE_SALIDA: 'AJUSTE_SALIDA',
+  COMPRA: 'COMPRA',
+} as const;
+export type TipoMovimientoInventario = (typeof TipoMovimientoInventario)[keyof typeof TipoMovimientoInventario];

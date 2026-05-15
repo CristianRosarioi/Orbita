@@ -9,11 +9,7 @@ import { ClienteForm } from '../../_components/cliente-form';
 import type { CreateClienteInput } from '@/lib/validations/clientes';
 import { TipoCliente, TipoIdentificacion } from '@/types/enums';
 
-export default async function EditarClientePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditarClientePage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
 

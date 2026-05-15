@@ -53,7 +53,11 @@ interface InlineFormProps {
 }
 
 function InlineForm({ defaultValues, onSave, onCancel, loading }: InlineFormProps) {
-  const { register, handleSubmit, formState: { errors } } = useForm<CreateCategoriaInput>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateCategoriaInput>({
     resolver: zodResolver(CreateCategoriaSchema),
     defaultValues: { orden: 0, ...defaultValues },
   });
@@ -102,13 +106,7 @@ function InlineForm({ defaultValues, onSave, onCancel, loading }: InlineFormProp
         <Button type="submit" size="sm" disabled={loading} className="h-8">
           <Check className="h-3.5 w-3.5" />
         </Button>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          onClick={onCancel}
-          className="h-8"
-        >
+        <Button type="button" size="sm" variant="outline" onClick={onCancel} className="h-8">
           <X className="h-3.5 w-3.5" />
         </Button>
       </div>
@@ -143,9 +141,15 @@ export default function CategoriasPage() {
       .then((json) => {
         if (active && json.success) setCategorias(json.data);
       })
-      .catch(() => { if (active) toast.error('Error cargando categorías.'); })
-      .finally(() => { if (active) setCargando(false); });
-    return () => { active = false; };
+      .catch(() => {
+        if (active) toast.error('Error cargando categorías.');
+      })
+      .finally(() => {
+        if (active) setCargando(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const handleCrear = async (data: CreateCategoriaInput) => {
@@ -241,9 +245,7 @@ export default function CategoriasPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Categorías</h1>
-          <p className="text-slate-500 text-sm mt-1">
-            Organiza tus productos en categorías
-          </p>
+          <p className="text-slate-500 text-sm mt-1">Organiza tus productos en categorías</p>
         </div>
         <Button
           onClick={() => {
@@ -260,11 +262,7 @@ export default function CategoriasPage() {
 
       {/* Formulario de nueva categoría */}
       {creando && (
-        <InlineForm
-          onSave={handleCrear}
-          onCancel={() => setCreando(false)}
-          loading={saving}
-        />
+        <InlineForm onSave={handleCrear} onCancel={() => setCreando(false)} loading={saving} />
       )}
 
       {/* Lista */}
@@ -278,7 +276,9 @@ export default function CategoriasPage() {
         <div className="text-center py-16">
           <Tag className="mx-auto h-10 w-10 text-slate-300 mb-3" />
           <p className="text-slate-500 font-medium">No hay categorías</p>
-          <p className="text-slate-400 text-sm mt-1">Crea la primera para organizar tus productos.</p>
+          <p className="text-slate-400 text-sm mt-1">
+            Crea la primera para organizar tus productos.
+          </p>
         </div>
       ) : (
         <div className="space-y-1">
@@ -309,8 +309,7 @@ export default function CategoriasPage() {
                 </div>
                 {cat._count !== undefined && (
                   <span className="text-xs text-slate-400">
-                    {cat._count.productos}{' '}
-                    {cat._count.productos === 1 ? 'producto' : 'productos'}
+                    {cat._count.productos} {cat._count.productos === 1 ? 'producto' : 'productos'}
                   </span>
                 )}
                 <button

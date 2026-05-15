@@ -139,7 +139,11 @@ export function ProductoForm({
               <Label htmlFor="nombre">
                 Nombre <span className="text-red-500">*</span>
               </Label>
-              <Input id="nombre" {...register('nombre')} placeholder="Nombre del producto o servicio" />
+              <Input
+                id="nombre"
+                {...register('nombre')}
+                placeholder="Nombre del producto o servicio"
+              />
               {errors.nombre && <p className="text-sm text-red-600">{errors.nombre.message}</p>}
             </div>
 
@@ -315,7 +319,9 @@ export function ProductoForm({
                   type="number"
                   min={0}
                   step={0.01}
-                  {...register('precioCredito', { setValueAs: (v) => v === '' ? undefined : parseFloat(v) })}
+                  {...register('precioCredito', {
+                    setValueAs: (v) => (v === '' ? undefined : parseFloat(v)),
+                  })}
                   placeholder="0.00"
                 />
               </div>
@@ -326,7 +332,9 @@ export function ProductoForm({
                   type="number"
                   min={0}
                   step={0.01}
-                  {...register('precioMayorista', { setValueAs: (v) => v === '' ? undefined : parseFloat(v) })}
+                  {...register('precioMayorista', {
+                    setValueAs: (v) => (v === '' ? undefined : parseFloat(v)),
+                  })}
                   placeholder="0.00"
                 />
               </div>
@@ -337,7 +345,9 @@ export function ProductoForm({
                   type="number"
                   min={0}
                   step={0.01}
-                  {...register('precioEspecial', { setValueAs: (v) => v === '' ? undefined : parseFloat(v) })}
+                  {...register('precioEspecial', {
+                    setValueAs: (v) => (v === '' ? undefined : parseFloat(v)),
+                  })}
                   placeholder="0.00"
                 />
               </div>

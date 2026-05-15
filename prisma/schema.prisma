@@ -1,4 +1,4 @@
-// Schema de Prisma para Órbita RD — Fase 2
+// Schema de Prisma para Órbita RD — Fase 3
 // Prisma 7: la URL de conexión está en prisma.config.ts, NO aquí
 
 generator client {
@@ -159,6 +159,10 @@ model Empresa {
   clientes        Cliente[]
   proveedores     Proveedor[]
   productos       Producto[]
+  secuencias      SecuenciaFactura[]
+  facturas        Factura[]
+  pagosFacturas   PagoFactura[]
+  movimientos     MovimientoInventario[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -300,7 +304,8 @@ model Cliente {
   updatedAt          DateTime           @updatedAt @map("updated_at")
   deletedAt          DateTime?          @map("deleted_at")
 
-  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  empresa  Empresa   @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  facturas Factura[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, identificacion])
@@ -364,10 +369,12 @@ model Producto {
   updatedAt             DateTime     @updatedAt @map("updated_at")
   deletedAt             DateTime?    @map("deleted_at")
 
-  empresa      Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
-  categoria    Categoria?     @relation(fields: [categoriaId], references: [id])
-  unidadMedida UnidadMedida   @relation(fields: [unidadMedidaId], references: [id])
-  precios      PrecioProducto[]
+  empresa       Empresa          @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  categoria     Categoria?       @relation(fields: [categoriaId], references: [id])
+  unidadMedida  UnidadMedida     @relation(fields: [unidadMedidaId], references: [id])
+  precios       PrecioProducto[]
+  itemsFactura  ItemFactura[]
+  movimientos   MovimientoInventario[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, sku])
@@ -391,4 +398,178 @@ model PrecioProducto {
 
   @@unique([productoId, nivel])
   @@map("precios_producto")
+}
+
+// ============================================================
+// ENUMS — Fase 3
+// ============================================================
+
+enum EstadoFactura {
+  BORRADOR
+  EMITIDA
+  PAGADA
+  ANULADA
+  VENCIDA
+
+  @@map("estado_factura")
+}
+
+enum MetodoPago {
+  EFECTIVO
+  TARJETA
+  TRANSFERENCIA
+  CHEQUE
+  CREDITO
+
+  @@map("metodo_pago")
+}
+
+enum TipoMovimientoInventario {
+  VENTA
+  DEVOLUCION
+  AJUSTE_ENTRADA
+  AJUSTE_SALIDA
+  COMPRA
+
+  @@map("tipo_movimiento_inventario")
+}
+
+// ============================================================
+// MODELO: SecuenciaFactura
+// ============================================================
+model SecuenciaFactura {
+  id            String   @id @default(cuid())
+  empresaId     String   @map("empresa_id")
+  prefijo       String   @default("FAC")
+  anio          Int
+  ultimoNumero  Int      @default(0) @map("ultimo_numero")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@unique([empresaId, anio])
+  @@index([empresaId])
+  @@map("secuencias_factura")
+}
+
+// ============================================================
+// MODELO: Factura
+// ============================================================
+model Factura {
+  id                    String        @id @default(cuid())
+  empresaId             String        @map("empresa_id")
+  sucursalId            String?       @map("sucursal_id")
+  numero                String        @map("numero")
+  numeroInt             Int           @map("numero_int")
+  anio                  Int
+  clienteId             String?       @map("cliente_id")
+  clienteNombre         String        @map("cliente_nombre")
+  clienteIdentificacion String?       @map("cliente_identificacion")
+  estado                EstadoFactura @default(BORRADOR)
+  metodoPago            MetodoPago    @default(EFECTIVO) @map("metodo_pago")
+  subtotal              Decimal
+  itbis                 Decimal       @default(0)
+  descuento             Decimal       @default(0)
+  total                 Decimal
+  totalPagado           Decimal       @default(0) @map("total_pagado")
+  saldo                 Decimal
+  notas                 String?
+  fechaVencimiento      DateTime?     @map("fecha_vencimiento")
+  fechaEmision          DateTime      @default(now()) @map("fecha_emision")
+  creadoPor             String        @map("creado_por")
+  anuladoPor            String?       @map("anulado_por")
+  motivoAnulacion       String?       @map("motivo_anulacion")
+  createdAt             DateTime      @default(now()) @map("created_at")
+  updatedAt             DateTime      @updatedAt @map("updated_at")
+  deletedAt             DateTime?     @map("deleted_at")
+
+  empresa     Empresa               @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente     Cliente?              @relation(fields: [clienteId], references: [id])
+  items       ItemFactura[]
+  pagos       PagoFactura[]
+  movimientos MovimientoInventario[]
+
+  @@unique([empresaId, numero])
+  @@index([empresaId, estado])
+  @@index([empresaId, clienteId])
+  @@index([empresaId, fechaEmision])
+  @@index([empresaId, numeroInt])
+  @@map("facturas")
+}
+
+// ============================================================
+// MODELO: ItemFactura
+// ============================================================
+model ItemFactura {
+  id              String  @id @default(cuid())
+  facturaId       String  @map("factura_id")
+  productoId      String? @map("producto_id")
+  productoNombre  String  @map("producto_nombre")
+  productoSku     String? @map("producto_sku")
+  cantidad        Decimal
+  precioUnitario  Decimal @map("precio_unitario")
+  itbisPorcentaje Decimal @default(18) @map("itbis_porcentaje")
+  itbisMonto      Decimal @default(0) @map("itbis_monto")
+  descuento       Decimal @default(0)
+  subtotal        Decimal
+  total           Decimal
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  factura  Factura   @relation(fields: [facturaId], references: [id], onDelete: Cascade)
+  producto Producto? @relation(fields: [productoId], references: [id])
+
+  @@index([facturaId])
+  @@index([productoId])
+  @@map("items_factura")
+}
+
+// ============================================================
+// MODELO: PagoFactura
+// ============================================================
+model PagoFactura {
+  id            String     @id @default(cuid())
+  facturaId     String     @map("factura_id")
+  empresaId     String     @map("empresa_id")
+  monto         Decimal
+  metodoPago    MetodoPago @map("metodo_pago")
+  referencia    String?
+  notas         String?
+  fechaPago     DateTime   @default(now()) @map("fecha_pago")
+  registradoPor String     @map("registrado_por")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+
+  factura Factura @relation(fields: [facturaId], references: [id], onDelete: Cascade)
+  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([facturaId])
+  @@index([empresaId, fechaPago])
+  @@map("pagos_factura")
+}
+
+// ============================================================
+// MODELO: MovimientoInventario
+// ============================================================
+model MovimientoInventario {
+  id           String                   @id @default(cuid())
+  empresaId    String                   @map("empresa_id")
+  productoId   String                   @map("producto_id")
+  facturaId    String?                  @map("factura_id")
+  tipo         TipoMovimientoInventario
+  cantidad     Decimal
+  stockAntes   Decimal                  @map("stock_antes")
+  stockDespues Decimal                  @map("stock_despues")
+  notas        String?
+  creadoPor    String                   @map("creado_por")
+  createdAt    DateTime                 @default(now()) @map("created_at")
+
+  empresa  Empresa   @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  producto Producto  @relation(fields: [productoId], references: [id])
+  factura  Factura?  @relation(fields: [facturaId], references: [id])
+
+  @@index([empresaId, productoId])
+  @@index([facturaId])
+  @@map("movimientos_inventario")
 }

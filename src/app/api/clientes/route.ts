@@ -76,7 +76,11 @@ export async function POST(req: NextRequest) {
         ...data,
         empresaId,
         tipo: data.tipo as 'PERSONA' | 'EMPRESA',
-        tipoIdentificacion: data.tipoIdentificacion as 'CEDULA' | 'RNC' | 'PASAPORTE' | 'SIN_IDENTIFICACION',
+        tipoIdentificacion: data.tipoIdentificacion as
+          | 'CEDULA'
+          | 'RNC'
+          | 'PASAPORTE'
+          | 'SIN_IDENTIFICACION',
         limiteCredito: data.limiteCredito,
         email: data.email || null,
       },

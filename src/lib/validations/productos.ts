@@ -26,9 +26,7 @@ const BaseProductoObject = z.object({
 
 export const CreateProductoSchema = BaseProductoObject.refine(
   (d) =>
-    d.tipo === TipoProducto.SERVICIO
-      ? d.stockActual === undefined || d.stockActual === 0
-      : true,
+    d.tipo === TipoProducto.SERVICIO ? d.stockActual === undefined || d.stockActual === 0 : true,
   { message: 'Los servicios no pueden tener stock.', path: ['stockActual'] },
 );
 
@@ -36,9 +34,7 @@ export const UpdateProductoSchema = BaseProductoObject.partial()
   .extend({ activo: z.boolean().optional() })
   .refine(
     (d) =>
-      d.tipo === TipoProducto.SERVICIO && d.stockActual !== undefined
-        ? d.stockActual === 0
-        : true,
+      d.tipo === TipoProducto.SERVICIO && d.stockActual !== undefined ? d.stockActual === 0 : true,
     { message: 'Los servicios no pueden tener stock.', path: ['stockActual'] },
   );
 

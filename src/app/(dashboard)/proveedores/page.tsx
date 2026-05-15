@@ -110,17 +110,13 @@ async function TablaProveedores({
                   >
                     {p.nombreComercial ?? p.nombre}
                   </Link>
-                  {p.nombreComercial && (
-                    <p className="text-xs text-slate-500">{p.nombre}</p>
-                  )}
+                  {p.nombreComercial && <p className="text-xs text-slate-500">{p.nombre}</p>}
                 </TableCell>
                 <TableCell className="text-slate-600 text-sm">
                   {p.identificacion ? (
                     <>
                       <span className="text-xs text-slate-400 mr-1">
-                        {p.tipoIdentificacion === 'SIN_IDENTIFICACION'
-                          ? '—'
-                          : p.tipoIdentificacion}
+                        {p.tipoIdentificacion === 'SIN_IDENTIFICACION' ? '—' : p.tipoIdentificacion}
                       </span>
                       {p.identificacion}
                     </>
@@ -132,10 +128,7 @@ async function TablaProveedores({
                 <TableCell className="text-slate-600 text-sm">{p.telefono ?? '—'}</TableCell>
                 <TableCell className="text-slate-600 text-sm">{p.email ?? '—'}</TableCell>
                 <TableCell>
-                  <Badge
-                    variant={p.activo ? 'default' : 'secondary'}
-                    className="text-xs"
-                  >
+                  <Badge variant={p.activo ? 'default' : 'secondary'} className="text-xs">
                     {p.activo ? 'Activo' : 'Inactivo'}
                   </Badge>
                 </TableCell>
@@ -202,7 +195,9 @@ export default async function ProveedoresPage({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Proveedores</h1>
-          <p className="text-slate-500 text-sm mt-1">Gestiona tu lista de proveedores y suplidores</p>
+          <p className="text-slate-500 text-sm mt-1">
+            Gestiona tu lista de proveedores y suplidores
+          </p>
         </div>
         <Link href="/proveedores/nuevo" className={buttonVariants()}>
           <UserPlus className="h-4 w-4 mr-2" />

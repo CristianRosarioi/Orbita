@@ -27,12 +27,7 @@ export function Pagination({ page, totalPages, total }: PaginationProps) {
     <div className="flex items-center justify-between text-sm text-slate-500">
       <span>{total} registros</span>
       <div className="flex items-center gap-1">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => go(page - 1)}
-          disabled={page <= 1}
-        >
+        <Button variant="outline" size="icon" onClick={() => go(page - 1)} disabled={page <= 1}>
           <ChevronLeft className="h-4 w-4" />
         </Button>
         <span className="px-3 text-slate-700 font-medium">

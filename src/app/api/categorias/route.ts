@@ -38,7 +38,11 @@ export async function POST(req: NextRequest) {
     }
 
     const existente = await prisma.categoria.findFirst({
-      where: { empresaId, nombre: { equals: parsed.data.nombre, mode: 'insensitive' }, deletedAt: null },
+      where: {
+        empresaId,
+        nombre: { equals: parsed.data.nombre, mode: 'insensitive' },
+        deletedAt: null,
+      },
     });
     if (existente) return err('CONFLICT', 'Ya existe una categoría con ese nombre.', 409);
 

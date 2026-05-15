@@ -51,12 +51,7 @@ export function SearchInput({
   return (
     <div className={`relative ${className ?? ''}`}>
       <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
-      <Input
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        className="pl-8 pr-8"
-      />
+      <Input value={value} onChange={onChange} placeholder={placeholder} className="pl-8 pr-8" />
       {value && (
         <button
           onClick={clear}

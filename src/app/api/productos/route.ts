@@ -87,13 +87,23 @@ export async function POST(req: NextRequest) {
 
       const preciosList = [
         precioCredito !== undefined ? { nivel: 'CREDITO' as const, precio: precioCredito } : null,
-        precioMayorista !== undefined ? { nivel: 'MAYORISTA' as const, precio: precioMayorista } : null,
-        precioEspecial !== undefined ? { nivel: 'ESPECIAL' as const, precio: precioEspecial } : null,
-      ].filter((p): p is { nivel: 'CREDITO' | 'MAYORISTA' | 'ESPECIAL'; precio: number } => p !== null);
+        precioMayorista !== undefined
+          ? { nivel: 'MAYORISTA' as const, precio: precioMayorista }
+          : null,
+        precioEspecial !== undefined
+          ? { nivel: 'ESPECIAL' as const, precio: precioEspecial }
+          : null,
+      ].filter(
+        (p): p is { nivel: 'CREDITO' | 'MAYORISTA' | 'ESPECIAL'; precio: number } => p !== null,
+      );
 
       if (preciosList.length > 0) {
         await tx.precioProducto.createMany({
-          data: preciosList.map((p) => ({ productoId: nuevo.id, nivel: p.nivel, precio: p.precio })),
+          data: preciosList.map((p) => ({
+            productoId: nuevo.id,
+            nivel: p.nivel,
+            precio: p.precio,
+          })),
         });
       }
 

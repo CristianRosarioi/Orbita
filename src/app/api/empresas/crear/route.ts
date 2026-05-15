@@ -29,7 +29,11 @@ export async function POST(req: NextRequest) {
 
     const usuario = await getOrCreateDbUser();
     if (!usuario) {
-      return err('USER_NOT_FOUND', 'No pudimos identificar tu cuenta. Por favor inténtalo de nuevo.', 400);
+      return err(
+        'USER_NOT_FOUND',
+        'No pudimos identificar tu cuenta. Por favor inténtalo de nuevo.',
+        400,
+      );
     }
 
     if (data.rnc) {
@@ -86,7 +90,11 @@ export async function POST(req: NextRequest) {
       // 4. Crear o actualizar la sesión activa del usuario
       await tx.sesionUsuarioEmpresa.upsert({
         where: { usuarioId: usuario.id },
-        create: { usuarioId: usuario.id, empresaActivaId: empresa.id, sucursalActivaId: sucursal.id },
+        create: {
+          usuarioId: usuario.id,
+          empresaActivaId: empresa.id,
+          sucursalActivaId: sucursal.id,
+        },
         update: { empresaActivaId: empresa.id, sucursalActivaId: sucursal.id },
       });
 

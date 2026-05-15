@@ -37,7 +37,11 @@ export async function POST(req: NextRequest) {
     }
 
     const existente = await prisma.unidadMedida.findFirst({
-      where: { empresaId, abreviatura: { equals: parsed.data.abreviatura, mode: 'insensitive' }, deletedAt: null },
+      where: {
+        empresaId,
+        abreviatura: { equals: parsed.data.abreviatura, mode: 'insensitive' },
+        deletedAt: null,
+      },
     });
     if (existente) return err('CONFLICT', 'Ya existe una unidad con esa abreviatura.', 409);
 

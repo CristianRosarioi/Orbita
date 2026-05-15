@@ -26,11 +26,7 @@ function Campo({ label, valor }: { label: string; valor?: string | null }) {
   );
 }
 
-export default async function ProductoDetallePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function ProductoDetallePage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
 
@@ -76,10 +72,7 @@ export default async function ProductoDetallePage({
                   {producto.categoria.nombre}
                 </Badge>
               )}
-              <Badge
-                variant={producto.activo ? 'default' : 'secondary'}
-                className="text-xs"
-              >
+              <Badge variant={producto.activo ? 'default' : 'secondary'} className="text-xs">
                 {producto.activo ? 'Activo' : 'Inactivo'}
               </Badge>
             </div>
@@ -107,9 +100,7 @@ export default async function ProductoDetallePage({
             }
           />
         </div>
-        {producto.descripcion && (
-          <Campo label="Descripción" valor={producto.descripcion} />
-        )}
+        {producto.descripcion && <Campo label="Descripción" valor={producto.descripcion} />}
       </Card>
 
       {/* Precios */}

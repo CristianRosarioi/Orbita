@@ -48,7 +48,11 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         ...rest,
         ...(tipo && { tipo: tipo as 'PERSONA' | 'EMPRESA' }),
         ...(tipoIdentificacion && {
-          tipoIdentificacion: tipoIdentificacion as 'CEDULA' | 'RNC' | 'PASAPORTE' | 'SIN_IDENTIFICACION',
+          tipoIdentificacion: tipoIdentificacion as
+            | 'CEDULA'
+            | 'RNC'
+            | 'PASAPORTE'
+            | 'SIN_IDENTIFICACION',
         }),
         email: email === '' ? null : email,
       },

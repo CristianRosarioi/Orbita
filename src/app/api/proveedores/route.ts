@@ -66,7 +66,11 @@ export async function POST(req: NextRequest) {
       data: {
         ...parsed.data,
         empresaId,
-        tipoIdentificacion: parsed.data.tipoIdentificacion as 'CEDULA' | 'RNC' | 'PASAPORTE' | 'SIN_IDENTIFICACION',
+        tipoIdentificacion: parsed.data.tipoIdentificacion as
+          | 'CEDULA'
+          | 'RNC'
+          | 'PASAPORTE'
+          | 'SIN_IDENTIFICACION',
         email: parsed.data.email || null,
       },
     });

@@ -9,11 +9,7 @@ import { ProductoForm } from '../../_components/producto-form';
 import type { CreateProductoInput } from '@/lib/validations/productos';
 import { TipoProducto } from '@/types/enums';
 
-export default async function EditarProductoPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditarProductoPage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
 

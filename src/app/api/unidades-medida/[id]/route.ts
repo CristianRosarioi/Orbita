@@ -12,7 +12,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const empresaId = await requireEmpresa();
     const { id } = await params;
 
-    const existente = await prisma.unidadMedida.findFirst({ where: { id, empresaId, deletedAt: null } });
+    const existente = await prisma.unidadMedida.findFirst({
+      where: { id, empresaId, deletedAt: null },
+    });
     if (!existente) return err('NOT_FOUND', 'Unidad de medida no encontrada.', 404);
     if (existente.esBase) return err('FORBIDDEN', 'Las unidades base no se pueden modificar.', 403);
 
@@ -38,7 +40,9 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     const empresaId = await requireEmpresa();
     const { id } = await params;
 
-    const existente = await prisma.unidadMedida.findFirst({ where: { id, empresaId, deletedAt: null } });
+    const existente = await prisma.unidadMedida.findFirst({
+      where: { id, empresaId, deletedAt: null },
+    });
     if (!existente) return err('NOT_FOUND', 'Unidad de medida no encontrada.', 404);
     if (existente.esBase) return err('FORBIDDEN', 'Las unidades base no se pueden eliminar.', 403);
 

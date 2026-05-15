@@ -1,8 +1,10 @@
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { Users, Package, FileText, TrendingUp } from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import { MoneyDisplay } from '@/components/shared/money-display';
 
 function diasRestantes(fecha: Date | null): number | null {
   if (!fecha) return null;
@@ -39,6 +41,33 @@ export default async function DashboardPage() {
   if (!sesion) redirect('/onboarding');
 
   const empresa = sesion.empresaActiva;
+
+  // Real-time stats for today
+  const hoyInicio = new Date();
+  hoyInicio.setHours(0, 0, 0, 0);
+  const hoyFin = new Date();
+  hoyFin.setHours(23, 59, 59, 999);
+
+  const [facturasHoyData, clientesActivos, productosActivos] = await Promise.all([
+    prisma.factura.findMany({
+      where: {
+        empresaId: sesion.empresaActivaId,
+        deletedAt: null,
+        estado: { in: ['PAGADA', 'EMITIDA'] },
+        fechaEmision: { gte: hoyInicio, lte: hoyFin },
+      },
+      select: { total: true },
+    }).catch(() => []),
+    prisma.cliente.count({
+      where: { empresaId: sesion.empresaActivaId, deletedAt: null, activo: true },
+    }).catch(() => 0),
+    prisma.producto.count({
+      where: { empresaId: sesion.empresaActivaId, deletedAt: null, activo: true },
+    }).catch(() => 0),
+  ]);
+
+  const ventasHoy = facturasHoyData.reduce((sum, f) => sum + Number(f.total), 0);
+  const facturasHoyCount = facturasHoyData.length;
   const trial = diasRestantes(empresa.trialFinaliza);
   const nombreCompleto = [usuario.nombre, usuario.apellido].filter(Boolean).join(' ');
 
@@ -100,23 +129,42 @@ export default async function DashboardPage() {
         )}
       </div>
 
-      {/* Cards de métricas — placeholder hasta Fase 2 */}
+      {/* Cards de métricas */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Ventas del día', valor: 'RD$0.00', icon: TrendingUp, color: 'text-green-600' },
-          { label: 'Clientes', valor: '0', icon: Users, color: 'text-blue-600' },
-          { label: 'Productos', valor: '0', icon: Package, color: 'text-purple-600' },
-          { label: 'Facturas hoy', valor: '0', icon: FileText, color: 'text-orange-600' },
-        ].map(({ label, valor, icon: Icon, color }) => (
-          <Card key={label} className="p-4 space-y-2">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{label}</p>
-              <Icon className={`h-4 w-4 ${color}`} />
-            </div>
-            <p className="text-2xl font-bold text-slate-900">{valor}</p>
-            <p className="text-xs text-slate-400">Se llenará en la Fase 2</p>
-          </Card>
-        ))}
+        <Card className="p-4 space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Ventas del día</p>
+            <TrendingUp className="h-4 w-4 text-green-600" />
+          </div>
+          <p className="text-2xl font-bold text-slate-900">
+            <MoneyDisplay amount={ventasHoy} currency="RD$" />
+          </p>
+          <p className="text-xs text-slate-400">Facturas emitidas y pagadas hoy</p>
+        </Card>
+        <Card className="p-4 space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Clientes</p>
+            <Users className="h-4 w-4 text-blue-600" />
+          </div>
+          <p className="text-2xl font-bold text-slate-900">{clientesActivos}</p>
+          <p className="text-xs text-slate-400">Clientes activos</p>
+        </Card>
+        <Card className="p-4 space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Productos</p>
+            <Package className="h-4 w-4 text-purple-600" />
+          </div>
+          <p className="text-2xl font-bold text-slate-900">{productosActivos}</p>
+          <p className="text-xs text-slate-400">Productos activos</p>
+        </Card>
+        <Card className="p-4 space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Facturas hoy</p>
+            <FileText className="h-4 w-4 text-orange-600" />
+          </div>
+          <p className="text-2xl font-bold text-slate-900">{facturasHoyCount}</p>
+          <p className="text-xs text-slate-400">Emitidas y pagadas hoy</p>
+        </Card>
       </div>
 
       {/* Próximos pasos */}
@@ -127,13 +175,13 @@ export default async function DashboardPage() {
             <span className="text-green-500 text-base">✓</span> Tu empresa fue creada
           </li>
           <li className="flex items-center gap-2 text-slate-400">
-            <span className="text-base">○</span> Agrega tu primer producto
+            <span className="text-base">○</span> <Link href="/productos" className="hover:underline">Agrega tu primer producto</Link>
           </li>
           <li className="flex items-center gap-2 text-slate-400">
-            <span className="text-base">○</span> Registra tu primer cliente
+            <span className="text-base">○</span> <Link href="/clientes" className="hover:underline">Registra tu primer cliente</Link>
           </li>
           <li className="flex items-center gap-2 text-slate-400">
-            <span className="text-base">○</span> Emite tu primera factura
+            <span className="text-base">○</span> <Link href="/facturas/nueva" className="hover:underline">Emite tu primera factura</Link>
           </li>
         </ul>
       </Card>

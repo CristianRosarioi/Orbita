@@ -63,19 +63,13 @@ export default async function ProveedorDetallePage({
               <p className="text-slate-500 text-sm">{proveedor.nombre}</p>
             )}
             <div className="flex items-center gap-2 mt-1">
-              <Badge
-                variant={proveedor.activo ? 'default' : 'secondary'}
-                className="text-xs"
-              >
+              <Badge variant={proveedor.activo ? 'default' : 'secondary'} className="text-xs">
                 {proveedor.activo ? 'Activo' : 'Inactivo'}
               </Badge>
             </div>
           </div>
         </div>
-        <Link
-          href={`/proveedores/${id}/editar`}
-          className={buttonVariants({ variant: 'outline' })}
-        >
+        <Link href={`/proveedores/${id}/editar`} className={buttonVariants({ variant: 'outline' })}>
           <Pencil className="h-4 w-4 mr-2" />
           Editar
         </Link>
@@ -105,9 +99,7 @@ export default async function ProveedorDetallePage({
           <Campo label="Ciudad" valor={proveedor.ciudad} />
           <Campo label="Provincia" valor={proveedor.provincia} />
         </div>
-        {proveedor.direccion && (
-          <Campo label="Dirección" valor={proveedor.direccion} />
-        )}
+        {proveedor.direccion && <Campo label="Dirección" valor={proveedor.direccion} />}
         {proveedor.notas && <Campo label="Notas internas" valor={proveedor.notas} />}
       </Card>
 

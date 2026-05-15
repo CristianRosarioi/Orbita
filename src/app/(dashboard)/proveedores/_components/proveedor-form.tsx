@@ -123,15 +123,18 @@ export function ProveedorForm({ defaultValues, proveedorId }: ProveedorFormProps
         <div className="space-y-2">
           <Label htmlFor="contacto">Persona de contacto</Label>
           <Input id="contacto" {...register('contacto')} placeholder="Juan Pérez" />
-          {errors.contacto && (
-            <p className="text-sm text-red-600">{errors.contacto.message}</p>
-          )}
+          {errors.contacto && <p className="text-sm text-red-600">{errors.contacto.message}</p>}
         </div>
 
         {/* Email */}
         <div className="space-y-2">
           <Label htmlFor="email">Correo electrónico</Label>
-          <Input id="email" type="email" {...register('email')} placeholder="contacto@proveedor.com" />
+          <Input
+            id="email"
+            type="email"
+            {...register('email')}
+            placeholder="contacto@proveedor.com"
+          />
           {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
         </div>
 

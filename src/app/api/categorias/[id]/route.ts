@@ -12,7 +12,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     const empresaId = await requireEmpresa();
     const { id } = await params;
 
-    const existente = await prisma.categoria.findFirst({ where: { id, empresaId, deletedAt: null } });
+    const existente = await prisma.categoria.findFirst({
+      where: { id, empresaId, deletedAt: null },
+    });
     if (!existente) return err('NOT_FOUND', 'Categoría no encontrada.', 404);
 
     const body = await req.json().catch(() => null);
@@ -44,7 +46,11 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     if (!existente) return err('NOT_FOUND', 'Categoría no encontrada.', 404);
 
     if (existente._count.productos > 0) {
-      return err('CONFLICT', 'No puedes eliminar una categoría que tiene productos asignados.', 409);
+      return err(
+        'CONFLICT',
+        'No puedes eliminar una categoría que tiene productos asignados.',
+        409,
+      );
     }
 
     await prisma.categoria.update({ where: { id }, data: { deletedAt: new Date() } });
