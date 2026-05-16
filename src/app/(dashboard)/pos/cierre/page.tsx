@@ -78,13 +78,15 @@ export default function CierreCajaPage() {
     }
   };
 
-  const fmt = (n: number) =>
-    new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(n);
+  const fmt = (n: number) => new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(n);
 
   const fmtFecha = (d: string) =>
     new Date(d).toLocaleDateString('es-DO', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
 
   const METODO_ICONS: Record<string, React.ReactNode> = {
@@ -119,13 +121,21 @@ export default function CierreCajaPage() {
           </div>
           <h2 className="text-xl font-bold text-slate-900">Caja cerrada</h2>
           <p className="text-slate-500 text-sm">El resumen del turno ha sido guardado.</p>
-          <div className={`p-4 rounded-lg ${diferencia < 0 ? 'bg-red-50' : diferencia > 0 ? 'bg-blue-50' : 'bg-green-50'}`}>
+          <div
+            className={`p-4 rounded-lg ${diferencia < 0 ? 'bg-red-50' : diferencia > 0 ? 'bg-blue-50' : 'bg-green-50'}`}
+          >
             <p className="text-sm text-slate-500 mb-1">Diferencia</p>
-            <p className={`text-3xl font-bold ${diferencia < 0 ? 'text-red-600' : diferencia > 0 ? 'text-blue-600' : 'text-green-600'}`}>
+            <p
+              className={`text-3xl font-bold ${diferencia < 0 ? 'text-red-600' : diferencia > 0 ? 'text-blue-600' : 'text-green-600'}`}
+            >
               {diferencia >= 0 ? '+' : ''}RD$ {fmt(diferencia)}
             </p>
             <p className="text-xs text-slate-400 mt-1">
-              {diferencia < 0 ? 'Faltante en caja' : diferencia > 0 ? 'Sobrante en caja' : 'Sin diferencias'}
+              {diferencia < 0
+                ? 'Faltante en caja'
+                : diferencia > 0
+                  ? 'Sobrante en caja'
+                  : 'Sin diferencias'}
             </p>
           </div>
           <div className="flex gap-2">
@@ -208,7 +218,8 @@ export default function CierreCajaPage() {
         <div className="flex items-center justify-between text-sm">
           <span className="text-slate-500">Efectivo esperado en caja</span>
           <span className="font-semibold text-slate-900">
-            RD$ {fmt(Number(resumen.sesion.montoApertura) + (resumen.desglosePorMetodo.EFECTIVO ?? 0))}
+            RD${' '}
+            {fmt(Number(resumen.sesion.montoApertura) + (resumen.desglosePorMetodo.EFECTIVO ?? 0))}
           </span>
         </div>
       </Card>

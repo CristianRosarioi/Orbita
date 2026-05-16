@@ -20,7 +20,12 @@ export async function GET() {
     }
 
     const facturas = await prisma.factura.findMany({
-      where: { empresaId, sesionCajaId: cajaActiva.id, deletedAt: null, estado: { not: 'ANULADA' } },
+      where: {
+        empresaId,
+        sesionCajaId: cajaActiva.id,
+        deletedAt: null,
+        estado: { not: 'ANULADA' },
+      },
       include: { pagos: true },
     });
 

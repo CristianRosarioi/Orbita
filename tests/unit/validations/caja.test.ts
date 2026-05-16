@@ -51,10 +51,10 @@ describe('CerrarCajaSchema', () => {
   });
 
   it('acepta monto positivo', () => {
-    const result = CerrarCajaSchema.safeParse({ montoCierreDeclarado: 7500.50 });
+    const result = CerrarCajaSchema.safeParse({ montoCierreDeclarado: 7500.5 });
     expect(result.success).toBe(true);
     if (result.success) {
-      expect(result.data.montoCierreDeclarado).toBe(7500.50);
+      expect(result.data.montoCierreDeclarado).toBe(7500.5);
     }
   });
 

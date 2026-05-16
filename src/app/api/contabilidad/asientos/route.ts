@@ -5,10 +5,10 @@ import { auth } from '@clerk/nextjs/server';
 import { z } from 'zod';
 
 const FiltrosSchema = z.object({
-  page:   z.coerce.number().min(1).default(1),
-  limit:  z.coerce.number().min(1).max(100).default(50),
-  desde:  z.string().optional(),
-  hasta:  z.string().optional(),
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(50),
+  desde: z.string().optional(),
+  hasta: z.string().optional(),
 });
 
 export async function GET(req: Request) {
@@ -21,7 +21,11 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const parsed = FiltrosSchema.safeParse(Object.fromEntries(url.searchParams));
     if (!parsed.success) {
-      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Parámetros inválidos.', 422);
+      return err(
+        'VALIDATION_ERROR',
+        parsed.error.issues[0]?.message ?? 'Parámetros inválidos.',
+        422,
+      );
     }
 
     const { page, limit, desde, hasta } = parsed.data;

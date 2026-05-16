@@ -45,12 +45,9 @@ export function ProductoCardPOS({
       {sku && <p className="text-xs text-slate-400 mt-0.5">SKU: {sku}</p>}
       <div className="mt-2 flex items-center justify-between">
         <span className="text-base font-bold text-green-700">
-          RD${' '}
-          {new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(precioVenta)}
+          RD$ {new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(precioVenta)}
         </span>
-        {tipo === 'BIEN' && (
-          <span className="text-xs text-slate-400">{stockActual} en stock</span>
-        )}
+        {tipo === 'BIEN' && <span className="text-xs text-slate-400">{stockActual} en stock</span>}
       </div>
     </button>
   );

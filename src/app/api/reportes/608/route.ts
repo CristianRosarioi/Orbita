@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { facturaA608 } from '@/lib/exportar-reportes';
 
 const FiltrosSchema = z.object({
-  mes:  z.coerce.number().min(1).max(12),
+  mes: z.coerce.number().min(1).max(12),
   anio: z.coerce.number().min(2020).max(2100),
 });
 
@@ -51,9 +51,10 @@ export async function GET(req: Request) {
     return ok({
       periodo: { mes, anio },
       modoFiscal: empresa?.modoFiscal,
-      advertencia: empresa?.modoFiscal === 'SIMPLE'
-        ? 'Empresa en Modo Simple. Los NCF son referenciales y no tienen validez fiscal ante la DGII.'
-        : null,
+      advertencia:
+        empresa?.modoFiscal === 'SIMPLE'
+          ? 'Empresa en Modo Simple. Los NCF son referenciales y no tienen validez fiscal ante la DGII.'
+          : null,
       cantidadRegistros: registros.length,
       registros,
     });

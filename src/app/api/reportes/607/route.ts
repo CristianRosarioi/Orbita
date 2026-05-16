@@ -5,7 +5,7 @@ import { auth } from '@clerk/nextjs/server';
 import { z } from 'zod';
 
 const FiltrosSchema = z.object({
-  mes:  z.coerce.number().min(1).max(12),
+  mes: z.coerce.number().min(1).max(12),
   anio: z.coerce.number().min(2020).max(2100),
 });
 
@@ -34,7 +34,8 @@ export async function GET(req: Request) {
     return ok({
       periodo: { mes, anio },
       modoFiscal: empresa?.modoFiscal,
-      advertencia: 'El módulo de compras (Fase 6) aún no está disponible. El reporte 607 estará completo cuando se implemente.',
+      advertencia:
+        'El módulo de compras (Fase 6) aún no está disponible. El reporte 607 estará completo cuando se implemente.',
       cantidadRegistros: 0,
       totalCompras: 0,
       totalITBIS: 0,

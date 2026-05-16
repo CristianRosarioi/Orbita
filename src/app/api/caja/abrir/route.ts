@@ -19,7 +19,11 @@ export async function POST(req: NextRequest) {
       where: { empresaId, usuarioId: usuario.id, estado: 'ABIERTA' },
     });
     if (cajaActiva) {
-      return err('CAJA_YA_ABIERTA', 'Ya tienes una caja abierta. Ciérrala antes de abrir una nueva.', 409);
+      return err(
+        'CAJA_YA_ABIERTA',
+        'Ya tienes una caja abierta. Ciérrala antes de abrir una nueva.',
+        409,
+      );
     }
 
     const body = await req.json().catch(() => null);

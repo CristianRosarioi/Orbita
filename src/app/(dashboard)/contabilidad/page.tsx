@@ -122,24 +122,32 @@ export default function ContabilidadPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
-              {resultados.utilidadNeta >= 0
-                ? <TrendingUp className="h-4 w-4 text-green-600" />
-                : <TrendingDown className="h-4 w-4 text-red-600" />}
+              {resultados.utilidadNeta >= 0 ? (
+                <TrendingUp className="h-4 w-4 text-green-600" />
+              ) : (
+                <TrendingDown className="h-4 w-4 text-red-600" />
+              )}
               Estado de Resultados — Mes actual
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-3 gap-6">
             <div>
               <p className="text-xs text-slate-500 mb-1">Ingresos totales</p>
-              <p className="text-lg font-semibold text-green-600">RD$ {fmt(resultados.totalIngresos)}</p>
+              <p className="text-lg font-semibold text-green-600">
+                RD$ {fmt(resultados.totalIngresos)}
+              </p>
             </div>
             <div>
               <p className="text-xs text-slate-500 mb-1">Gastos totales</p>
-              <p className="text-lg font-semibold text-red-600">RD$ {fmt(resultados.totalGastos)}</p>
+              <p className="text-lg font-semibold text-red-600">
+                RD$ {fmt(resultados.totalGastos)}
+              </p>
             </div>
             <div>
               <p className="text-xs text-slate-500 mb-1">Utilidad neta</p>
-              <p className={`text-lg font-bold ${resultados.utilidadNeta >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+              <p
+                className={`text-lg font-bold ${resultados.utilidadNeta >= 0 ? 'text-green-700' : 'text-red-700'}`}
+              >
                 RD$ {fmt(resultados.utilidadNeta)}
               </p>
             </div>
@@ -164,11 +172,15 @@ export default function ContabilidadPage() {
             <Card key={tipo}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-sm font-semibold ${colores[tipo]}`}>
-                  {tipo === 'ACTIVO' ? 'Activos'
-                    : tipo === 'PASIVO' ? 'Pasivos'
-                    : tipo === 'PATRIMONIO' ? 'Patrimonio'
-                    : tipo === 'INGRESO' ? 'Ingresos'
-                    : 'Gastos'}
+                  {tipo === 'ACTIVO'
+                    ? 'Activos'
+                    : tipo === 'PASIVO'
+                      ? 'Pasivos'
+                      : tipo === 'PATRIMONIO'
+                        ? 'Patrimonio'
+                        : tipo === 'INGRESO'
+                          ? 'Ingresos'
+                          : 'Gastos'}
                   <span className="ml-2 text-slate-500 font-normal">RD$ {fmt(total)}</span>
                 </CardTitle>
               </CardHeader>
@@ -176,7 +188,9 @@ export default function ContabilidadPage() {
                 <div className="space-y-1">
                   {cuentas.map((c) => (
                     <div key={c.codigo} className="flex justify-between text-sm">
-                      <span className="text-slate-600">{c.codigo} — {c.nombre}</span>
+                      <span className="text-slate-600">
+                        {c.codigo} — {c.nombre}
+                      </span>
                       <span className="font-medium tabular-nums">RD$ {fmt(c.saldo)}</span>
                     </div>
                   ))}
@@ -192,7 +206,9 @@ export default function ContabilidadPage() {
           <CardContent className="py-12 text-center">
             <Wallet className="h-10 w-10 text-slate-300 mx-auto mb-3" />
             <p className="text-slate-500 text-sm">No hay movimientos contables todavía.</p>
-            <p className="text-slate-400 text-xs mt-1">Los asientos se crean automáticamente al emitir facturas.</p>
+            <p className="text-slate-400 text-xs mt-1">
+              Los asientos se crean automáticamente al emitir facturas.
+            </p>
           </CardContent>
         </Card>
       )}

@@ -78,7 +78,12 @@ export async function crearAsientoFactura(
     ? await encontrarCuenta(empresaId, '1103', tx) // CxC Clientes
     : await encontrarCuenta(empresaId, cuentaEfectivoOBanco(factura.metodoPago), tx);
 
-  const lineas: { cuentaId: string; tipo: 'DEBITO' | 'CREDITO'; monto: number; descripcion: string }[] = [];
+  const lineas: {
+    cuentaId: string;
+    tipo: 'DEBITO' | 'CREDITO';
+    monto: number;
+    descripcion: string;
+  }[] = [];
 
   // DÉBITO: cuenta de caja/banco/CxC por el total
   lineas.push({
@@ -198,8 +203,20 @@ export async function crearAsientoPago(
 
   await tx.lineaAsiento.createMany({
     data: [
-      { asientoId: asiento.id, cuentaId: cuentaCaja, tipo: 'DEBITO',  monto, descripcion: `Cobro — ${factura.numero}` },
-      { asientoId: asiento.id, cuentaId: cuentaCxC,  tipo: 'CREDITO', monto, descripcion: `Cobro — ${factura.numero}` },
+      {
+        asientoId: asiento.id,
+        cuentaId: cuentaCaja,
+        tipo: 'DEBITO',
+        monto,
+        descripcion: `Cobro — ${factura.numero}`,
+      },
+      {
+        asientoId: asiento.id,
+        cuentaId: cuentaCxC,
+        tipo: 'CREDITO',
+        monto,
+        descripcion: `Cobro — ${factura.numero}`,
+      },
     ],
   });
 }

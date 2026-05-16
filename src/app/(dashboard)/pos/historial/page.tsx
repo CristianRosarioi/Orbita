@@ -13,8 +13,11 @@ function fmt(n: number) {
 function fmtFecha(d: Date | string | null) {
   if (!d) return '—';
   return new Date(d).toLocaleDateString('es-DO', {
-    day: '2-digit', month: '2-digit', year: 'numeric',
-    hour: '2-digit', minute: '2-digit',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
   });
 }
 
@@ -113,7 +116,11 @@ export default async function HistorialCajaPage() {
                   <td className="py-3 pl-3 text-center">
                     <Badge
                       variant={s.estado === 'ABIERTA' ? 'default' : 'secondary'}
-                      className={s.estado === 'ABIERTA' ? 'bg-green-100 text-green-700 hover:bg-green-100' : ''}
+                      className={
+                        s.estado === 'ABIERTA'
+                          ? 'bg-green-100 text-green-700 hover:bg-green-100'
+                          : ''
+                      }
                     >
                       {s.estado === 'ABIERTA' ? 'Abierta' : 'Cerrada'}
                     </Badge>

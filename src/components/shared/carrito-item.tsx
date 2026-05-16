@@ -24,8 +24,7 @@ export function CarritoItem({
   onDecrementar,
   onEliminar,
 }: CarritoItemProps) {
-  const fmt = (n: number) =>
-    new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(n);
+  const fmt = (n: number) => new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(n);
 
   return (
     <div className="flex items-center gap-2 py-2 border-b border-slate-100 last:border-0">
@@ -35,21 +34,11 @@ export function CarritoItem({
       </div>
 
       <div className="flex items-center gap-1 shrink-0">
-        <Button
-          variant="outline"
-          size="icon"
-          className="h-6 w-6"
-          onClick={() => onDecrementar(id)}
-        >
+        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => onDecrementar(id)}>
           <Minus className="h-3 w-3" />
         </Button>
         <span className="w-6 text-center text-sm font-semibold">{cantidad}</span>
-        <Button
-          variant="outline"
-          size="icon"
-          className="h-6 w-6"
-          onClick={() => onIncrementar(id)}
-        >
+        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => onIncrementar(id)}>
           <Plus className="h-3 w-3" />
         </Button>
       </div>

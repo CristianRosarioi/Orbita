@@ -37,7 +37,10 @@ const METODO_LABELS: Record<string, string> = {
 };
 
 function fmt(n: number): string {
-  return new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n);
+  return new Intl.NumberFormat('es-DO', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(n);
 }
 
 // Ancho de ticket térmico estándar 80mm ≈ 226pt en jsPDF
@@ -57,7 +60,12 @@ export function generarTicketPOS(factura: FacturaTicket, empresa: EmpresaTicket)
 
   let y = MARGIN;
 
-  const line = (text: string, align: 'left' | 'center' | 'right' = 'left', bold = false, size = 8) => {
+  const line = (
+    text: string,
+    align: 'left' | 'center' | 'right' = 'left',
+    bold = false,
+    size = 8,
+  ) => {
     doc.setFontSize(size);
     doc.setFont('helvetica', bold ? 'bold' : 'normal');
     const x = align === 'center' ? PAGE_W / 2 : align === 'right' ? PAGE_W - MARGIN : MARGIN;
@@ -84,7 +92,11 @@ export function generarTicketPOS(factura: FacturaTicket, empresa: EmpresaTicket)
   divider();
 
   const fecha = new Date(factura.fechaEmision);
-  const fechaStr = fecha.toLocaleDateString('es-DO', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const fechaStr = fecha.toLocaleDateString('es-DO', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
   const horaStr = fecha.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
   line(`Fecha: ${fechaStr}  Hora: ${horaStr}`);
   line(`Factura: ${factura.numero}`, 'left', true);
@@ -104,7 +116,10 @@ export function generarTicketPOS(factura: FacturaTicket, empresa: EmpresaTicket)
 
   for (const item of factura.items) {
     // Nombre puede ser largo — truncar o dividir
-    const nombre = item.productoNombre.length > 22 ? item.productoNombre.slice(0, 22) + '…' : item.productoNombre;
+    const nombre =
+      item.productoNombre.length > 22
+        ? item.productoNombre.slice(0, 22) + '…'
+        : item.productoNombre;
     doc.setFontSize(7.5);
     doc.text(nombre, MARGIN, y);
     doc.text(String(item.cantidad), MARGIN + 40, y, { align: 'right' });

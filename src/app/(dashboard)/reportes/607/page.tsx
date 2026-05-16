@@ -15,8 +15,9 @@ export default function Reporte607Page() {
       <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 flex items-start gap-3">
         <AlertCircle className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
         <p className="text-sm text-amber-800">
-          El reporte 607 requiere el módulo de <strong>Compras y Gastos</strong>, que se implementará en la Fase 6
-          de Órbita. Este módulo registrará las compras a proveedores con sus NCF correspondientes.
+          El reporte 607 requiere el módulo de <strong>Compras y Gastos</strong>, que se
+          implementará en la Fase 6 de Órbita. Este módulo registrará las compras a proveedores con
+          sus NCF correspondientes.
         </p>
       </div>
 

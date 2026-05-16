@@ -3,25 +3,25 @@ import { z } from 'zod';
 
 // Inline schemas que replican los usados en las API routes de contabilidad y reportes
 const FiltrosAsientosSchema = z.object({
-  page:   z.coerce.number().min(1).default(1),
-  limit:  z.coerce.number().min(1).max(100).default(50),
-  desde:  z.string().optional(),
-  hasta:  z.string().optional(),
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(100).default(50),
+  desde: z.string().optional(),
+  hasta: z.string().optional(),
 });
 
 const FiltrosResultadosSchema = z.object({
-  mes:  z.coerce.number().min(1).max(12).optional(),
+  mes: z.coerce.number().min(1).max(12).optional(),
   anio: z.coerce.number().min(2020).max(2100).optional(),
 });
 
 const FiltrosReporteSchema = z.object({
-  mes:  z.coerce.number().min(1).max(12),
+  mes: z.coerce.number().min(1).max(12),
   anio: z.coerce.number().min(2020).max(2100),
 });
 
 const ExportarSchema = z.object({
-  mes:     z.coerce.number().min(1).max(12),
-  anio:    z.coerce.number().min(2020).max(2100),
+  mes: z.coerce.number().min(1).max(12),
+  anio: z.coerce.number().min(2020).max(2100),
   formato: z.enum(['txt', 'xlsx']).default('txt'),
 });
 

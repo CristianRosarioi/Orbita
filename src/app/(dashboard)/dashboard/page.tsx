@@ -2,7 +2,15 @@ import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
-import { Users, Package, FileText, TrendingUp } from 'lucide-react';
+import {
+  Users,
+  Package,
+  FileText,
+  TrendingUp,
+  AlertTriangle,
+  CheckCircle2,
+  Clock,
+} from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { MoneyDisplay } from '@/components/shared/money-display';
 
@@ -41,18 +49,29 @@ export default async function DashboardPage() {
   if (!sesion) redirect('/onboarding');
 
   const empresa = sesion.empresaActiva;
+  const empresaId = sesion.empresaActivaId;
 
-  // Real-time stats for today
+  const ahora = new Date();
   const hoyInicio = new Date();
   hoyInicio.setHours(0, 0, 0, 0);
   const hoyFin = new Date();
   hoyFin.setHours(23, 59, 59, 999);
+  const mesInicio = new Date(ahora.getFullYear(), ahora.getMonth(), 1);
+  const mesFin = new Date(ahora.getFullYear(), ahora.getMonth() + 1, 0, 23, 59, 59);
 
-  const [facturasHoyData, clientesActivos, productosActivos] = await Promise.all([
+  const [
+    facturasHoyData,
+    clientesActivos,
+    productosActivos,
+    facturasMes,
+    pagosMes,
+    facturasVencidas,
+    productosStockBajoRaw,
+  ] = await Promise.all([
     prisma.factura
       .findMany({
         where: {
-          empresaId: sesion.empresaActivaId,
+          empresaId,
           deletedAt: null,
           estado: { in: ['PAGADA', 'EMITIDA'] },
           fechaEmision: { gte: hoyInicio, lte: hoyFin },
@@ -60,22 +79,54 @@ export default async function DashboardPage() {
         select: { total: true },
       })
       .catch(() => []),
-    prisma.cliente
+    prisma.cliente.count({ where: { empresaId, deletedAt: null, activo: true } }).catch(() => 0),
+    prisma.producto.count({ where: { empresaId, deletedAt: null, activo: true } }).catch(() => 0),
+    prisma.factura
+      .findMany({
+        where: {
+          empresaId,
+          deletedAt: null,
+          estado: { in: ['PAGADA', 'EMITIDA'] },
+          fechaEmision: { gte: mesInicio, lte: mesFin },
+        },
+        select: { total: true, saldo: true, estado: true },
+      })
+      .catch(() => []),
+    prisma.pagoFactura
+      .findMany({
+        where: { empresaId, fechaPago: { gte: mesInicio, lte: mesFin } },
+        select: { monto: true },
+      })
+      .catch(() => []),
+    prisma.factura
       .count({
-        where: { empresaId: sesion.empresaActivaId, deletedAt: null, activo: true },
+        where: { empresaId, deletedAt: null, estado: 'EMITIDA', fechaVencimiento: { lt: ahora } },
       })
       .catch(() => 0),
     prisma.producto
-      .count({
-        where: { empresaId: sesion.empresaActivaId, deletedAt: null, activo: true },
+      .findMany({
+        where: { empresaId, deletedAt: null, activo: true, tipo: 'BIEN', stockMinimo: { gt: 0 } },
+        select: { nombre: true, stockActual: true, stockMinimo: true },
       })
-      .catch(() => 0),
+      .catch(() => []),
   ]);
 
-  const ventasHoy = facturasHoyData.reduce((sum, f) => sum + Number(f.total), 0);
+  const ventasHoy = facturasHoyData.reduce((s, f) => s + Number(f.total), 0);
   const facturasHoyCount = facturasHoyData.length;
+  const totalFacturadoMes = facturasMes.reduce((s, f) => s + Number(f.total), 0);
+  const totalCobradoMes = pagosMes.reduce((s, p) => s + Number(p.monto), 0);
+  const pendienteCobrar = facturasMes
+    .filter((f) => f.estado === 'EMITIDA')
+    .reduce((s, f) => s + Number(f.saldo), 0);
+  const productosStockBajo = productosStockBajoRaw.filter(
+    (p) => Number(p.stockActual) <= Number(p.stockMinimo),
+  );
+
   const trial = diasRestantes(empresa.trialFinaliza);
   const nombreCompleto = [usuario.nombre, usuario.apellido].filter(Boolean).join(' ');
+  const hayAlertas = facturasVencidas > 0 || productosStockBajo.length > 0;
+
+  const mesNombre = ahora.toLocaleDateString('es-DO', { month: 'long', year: 'numeric' });
 
   return (
     <div className="p-6 lg:p-8 space-y-6 max-w-5xl">
@@ -92,11 +143,7 @@ export default async function DashboardPage() {
       {/* Banner de trial */}
       {empresa.estadoSusc === 'TRIAL' && trial !== null && (
         <div
-          className={`rounded-lg px-4 py-3 text-sm flex items-center justify-between ${
-            trial <= 3
-              ? 'bg-red-50 border border-red-200 text-red-800'
-              : 'bg-blue-50 border border-blue-200 text-blue-800'
-          }`}
+          className={`rounded-lg px-4 py-3 text-sm flex items-center justify-between ${trial <= 3 ? 'bg-red-50 border border-red-200 text-red-800' : 'bg-blue-50 border border-blue-200 text-blue-800'}`}
         >
           <span>
             {trial === 0
@@ -115,9 +162,7 @@ export default async function DashboardPage() {
       {/* Modo fiscal */}
       <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 flex items-center gap-3 text-sm">
         <div
-          className={`w-2.5 h-2.5 rounded-full shrink-0 ${
-            empresa.modoFiscal === 'FISCAL' ? 'bg-green-500' : 'bg-slate-400'
-          }`}
+          className={`w-2.5 h-2.5 rounded-full shrink-0 ${empresa.modoFiscal === 'FISCAL' ? 'bg-green-500' : 'bg-slate-400'}`}
         />
         <span className="text-slate-600">
           Modo{' '}
@@ -126,16 +171,16 @@ export default async function DashboardPage() {
             : 'Simple — sin comprobantes fiscales'}
         </span>
         {empresa.modoFiscal === 'SIMPLE' && (
-          <a
-            href="/configuracion/fiscal"
+          <Link
+            href="/configuracion/empresa"
             className="ml-auto text-slate-900 font-medium hover:underline"
           >
             Activar modo fiscal
-          </a>
+          </Link>
         )}
       </div>
 
-      {/* Cards de métricas */}
+      {/* Cards de métricas hoy */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="p-4 space-y-2">
           <div className="flex items-center justify-between">
@@ -176,6 +221,89 @@ export default async function DashboardPage() {
           <p className="text-xs text-slate-400">Emitidas y pagadas hoy</p>
         </Card>
       </div>
+
+      {/* Resumen del mes */}
+      <div>
+        <h2 className="font-semibold text-slate-900 mb-3 capitalize">Resumen de {mesNombre}</h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="p-4 space-y-1">
+            <p className="text-xs text-slate-500">Total facturado</p>
+            <p className="text-xl font-bold text-slate-900">
+              <MoneyDisplay amount={totalFacturadoMes} currency="RD$" />
+            </p>
+            <p className="text-xs text-slate-400">
+              {facturasMes.length} factura{facturasMes.length !== 1 ? 's' : ''}
+            </p>
+          </Card>
+          <Card className="p-4 space-y-1">
+            <p className="text-xs text-slate-500">Total cobrado</p>
+            <p className="text-xl font-bold text-green-700">
+              <MoneyDisplay amount={totalCobradoMes} currency="RD$" />
+            </p>
+            <p className="text-xs text-slate-400">Pagos recibidos</p>
+          </Card>
+          <Card className="p-4 space-y-1">
+            <p className="text-xs text-slate-500">Pendiente cobrar</p>
+            <p className="text-xl font-bold text-amber-600">
+              <MoneyDisplay amount={pendienteCobrar} currency="RD$" />
+            </p>
+            <p className="text-xs text-slate-400">En crédito sin cobrar</p>
+          </Card>
+          <Card className="p-4 space-y-1">
+            <p className="text-xs text-slate-500">Facturas del mes</p>
+            <p className="text-xl font-bold text-slate-900">{facturasMes.length}</p>
+            <p className="text-xs text-slate-400">Emitidas + pagadas</p>
+          </Card>
+        </div>
+      </div>
+
+      {/* Alertas */}
+      <Card className="p-5">
+        <h2 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+          {hayAlertas ? (
+            <AlertTriangle className="h-4 w-4 text-amber-500" />
+          ) : (
+            <CheckCircle2 className="h-4 w-4 text-green-500" />
+          )}
+          Alertas
+        </h2>
+        {!hayAlertas ? (
+          <p className="text-sm text-slate-500">Todo en orden — sin alertas pendientes.</p>
+        ) : (
+          <ul className="space-y-2 text-sm">
+            {facturasVencidas > 0 && (
+              <li className="flex items-start gap-2 text-amber-700">
+                <Clock className="h-4 w-4 mt-0.5 shrink-0" />
+                <span>
+                  <strong>{facturasVencidas}</strong> factura{facturasVencidas !== 1 ? 's' : ''}{' '}
+                  vencida{facturasVencidas !== 1 ? 's' : ''} sin cobrar.{' '}
+                  <Link href="/facturas?estado=EMITIDA" className="underline hover:no-underline">
+                    Ver facturas
+                  </Link>
+                </span>
+              </li>
+            )}
+            {productosStockBajo.slice(0, 5).map((p, i) => (
+              <li key={i} className="flex items-start gap-2 text-red-700">
+                <Package className="h-4 w-4 mt-0.5 shrink-0" />
+                <span>
+                  <strong>{p.nombre}</strong>: stock {Number(p.stockActual)} (mínimo{' '}
+                  {Number(p.stockMinimo)}).
+                </span>
+              </li>
+            ))}
+            {productosStockBajo.length > 5 && (
+              <li className="text-slate-500 ml-6">
+                Y {productosStockBajo.length - 5} producto
+                {productosStockBajo.length - 5 !== 1 ? 's' : ''} más con stock bajo.{' '}
+                <Link href="/productos" className="underline hover:no-underline">
+                  Ver todos
+                </Link>
+              </li>
+            )}
+          </ul>
+        )}
+      </Card>
 
       {/* Próximos pasos */}
       <Card className="p-5">

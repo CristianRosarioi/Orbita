@@ -21,8 +21,18 @@ interface ReporteData {
 }
 
 const MESES = [
-  'Enero','Febrero','Marzo','Abril','Mayo','Junio',
-  'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
 ];
 
 export default function Reporte608Page() {
@@ -31,13 +41,22 @@ export default function Reporte608Page() {
   const [anio, setAnio] = useState(ahora.getFullYear());
   const [datos, setDatos] = useState<ReporteData | null>(null);
   const [cargando, setCargando] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   async function generar() {
     setCargando(true);
+    setErrorMsg(null);
+    setDatos(null);
     try {
       const res = await fetch(`/api/reportes/608?mes=${mes}&anio=${anio}`);
       const d = await res.json();
-      if (d.success) setDatos(d.data);
+      if (d.success) {
+        setDatos(d.data);
+      } else {
+        setErrorMsg(d.error?.message ?? 'Error al generar el reporte.');
+      }
+    } catch {
+      setErrorMsg('No se pudo conectar con el servidor. Intenta de nuevo.');
     } finally {
       setCargando(false);
     }
@@ -69,7 +88,9 @@ export default function Reporte608Page() {
               className="border rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {MESES.map((m, i) => (
-                <option key={m} value={i + 1}>{m}</option>
+                <option key={m} value={i + 1}>
+                  {m}
+                </option>
               ))}
             </select>
           </div>
@@ -81,7 +102,9 @@ export default function Reporte608Page() {
               className="border rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {anios.map((a) => (
-                <option key={a} value={a}>{a}</option>
+                <option key={a} value={a}>
+                  {a}
+                </option>
               ))}
             </select>
           </div>
@@ -104,6 +127,13 @@ export default function Reporte608Page() {
         </CardContent>
       </Card>
 
+      {errorMsg && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 flex items-start gap-3">
+          <AlertCircle className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+          <p className="text-sm text-red-800">{errorMsg}</p>
+        </div>
+      )}
+
       {datos && (
         <>
           {datos.advertencia && (
@@ -125,15 +155,21 @@ export default function Reporte608Page() {
             <CardContent className="p-0 overflow-x-auto">
               {datos.registros.length === 0 ? (
                 <div className="py-12 text-center">
-                  <p className="text-slate-500 text-sm">No hay comprobantes anulados en este período.</p>
+                  <p className="text-slate-500 text-sm">
+                    No hay comprobantes anulados en este período.
+                  </p>
                 </div>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b bg-slate-50">
-                      <th className="text-left px-4 py-2 font-medium text-slate-500">NCF / Número</th>
+                      <th className="text-left px-4 py-2 font-medium text-slate-500">
+                        NCF / Número
+                      </th>
                       <th className="text-left px-4 py-2 font-medium text-slate-500">Tipo NCF</th>
-                      <th className="text-left px-4 py-2 font-medium text-slate-500">Fecha Anulación</th>
+                      <th className="text-left px-4 py-2 font-medium text-slate-500">
+                        Fecha Anulación
+                      </th>
                     </tr>
                   </thead>
                   <tbody>

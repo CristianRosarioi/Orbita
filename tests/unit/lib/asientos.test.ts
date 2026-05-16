@@ -20,7 +20,7 @@ function makeTx(overrides: Partial<Record<string, unknown>> = {}): Prisma.Transa
   };
 
   const capturedLineas: unknown[] = [];
-  let asientoId = 'asiento-1';
+  const asientoId = 'asiento-1';
 
   return {
     cuentaContable: {
@@ -53,9 +53,9 @@ function makeTx(overrides: Partial<Record<string, unknown>> = {}): Prisma.Transa
 
 describe('crearAsientoFactura', () => {
   it('débitos === créditos para factura de bienes con ITBIS', async () => {
-    const total    = 11800;
+    const total = 11800;
     const subtotal = 10000;
-    const itbis    = 1800;
+    const itbis = 1800;
 
     const tx = makeTx({
       factura: {
@@ -77,8 +77,9 @@ describe('crearAsientoFactura', () => {
 
     await crearAsientoFactura('f1', 'emp1', 'user1', tx);
 
-    const lineas = (tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number }> })._capturedLineas;
-    const debitos  = lineas.filter((l) => l.tipo === 'DEBITO').reduce((s, l) => s + l.monto, 0);
+    const lineas = (tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number }> })
+      ._capturedLineas;
+    const debitos = lineas.filter((l) => l.tipo === 'DEBITO').reduce((s, l) => s + l.monto, 0);
     const creditos = lineas.filter((l) => l.tipo === 'CREDITO').reduce((s, l) => s + l.monto, 0);
 
     expect(Math.abs(debitos - creditos)).toBeLessThan(0.01);
@@ -109,8 +110,9 @@ describe('crearAsientoFactura', () => {
 
     await crearAsientoFactura('f2', 'emp1', 'user1', tx);
 
-    const lineas = (tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number }> })._capturedLineas;
-    const debitos  = lineas.filter((l) => l.tipo === 'DEBITO').reduce((s, l) => s + l.monto, 0);
+    const lineas = (tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number }> })
+      ._capturedLineas;
+    const debitos = lineas.filter((l) => l.tipo === 'DEBITO').reduce((s, l) => s + l.monto, 0);
     const creditos = lineas.filter((l) => l.tipo === 'CREDITO').reduce((s, l) => s + l.monto, 0);
 
     expect(Math.abs(debitos - creditos)).toBeLessThan(0.01);
@@ -137,7 +139,9 @@ describe('crearAsientoFactura', () => {
 
     await crearAsientoFactura('f3', 'emp1', 'user1', tx);
 
-    const lineas = (tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number; cuentaId: string }> })._capturedLineas;
+    const lineas = (
+      tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number; cuentaId: string }> }
+    )._capturedLineas;
     const debitoLine = lineas.find((l) => l.tipo === 'DEBITO');
     expect(debitoLine?.cuentaId).toBe('c-1103');
   });
@@ -183,8 +187,9 @@ describe('crearAsientoPago', () => {
 
     await crearAsientoPago('pago1', 'f1', 'emp1', 'EFECTIVO', monto, 'user1', tx);
 
-    const lineas = (tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number }> })._capturedLineas;
-    const debitos  = lineas.filter((l) => l.tipo === 'DEBITO').reduce((s, l) => s + l.monto, 0);
+    const lineas = (tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number }> })
+      ._capturedLineas;
+    const debitos = lineas.filter((l) => l.tipo === 'DEBITO').reduce((s, l) => s + l.monto, 0);
     const creditos = lineas.filter((l) => l.tipo === 'CREDITO').reduce((s, l) => s + l.monto, 0);
 
     expect(Math.abs(debitos - creditos)).toBeLessThan(0.01);
@@ -202,7 +207,9 @@ describe('crearAsientoPago', () => {
 
     await crearAsientoPago('pago2', 'f1', 'emp1', 'TARJETA', 1000, 'user1', tx);
 
-    const lineas = (tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number; cuentaId: string }> })._capturedLineas;
+    const lineas = (
+      tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number; cuentaId: string }> }
+    )._capturedLineas;
     const debitoLine = lineas.find((l) => l.tipo === 'DEBITO');
     expect(debitoLine?.cuentaId).toBe('c-1102');
   });
@@ -224,9 +231,9 @@ describe('crearAsientoPago', () => {
 describe('crearAsientoAnulacion', () => {
   it('reversa exactamente las líneas del asiento original', async () => {
     const lineasOriginales = [
-      { cuentaId: 'c-1101', tipo: 'DEBITO',  monto: '11800', descripcion: 'Factura' },
+      { cuentaId: 'c-1101', tipo: 'DEBITO', monto: '11800', descripcion: 'Factura' },
       { cuentaId: 'c-4001', tipo: 'CREDITO', monto: '10000', descripcion: 'Ventas' },
-      { cuentaId: 'c-2102', tipo: 'CREDITO', monto: '1800',  descripcion: 'ITBIS' },
+      { cuentaId: 'c-2102', tipo: 'CREDITO', monto: '1800', descripcion: 'ITBIS' },
     ];
 
     const tx = makeTx({
@@ -247,7 +254,9 @@ describe('crearAsientoAnulacion', () => {
 
     await crearAsientoAnulacion('f1', 'emp1', 'user1', tx);
 
-    const lineas = (tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number; cuentaId: string }> })._capturedLineas;
+    const lineas = (
+      tx as unknown as { _capturedLineas: Array<{ tipo: string; monto: number; cuentaId: string }> }
+    )._capturedLineas;
 
     // Verificar que cada línea original fue reversada
     const caja = lineas.find((l) => l.cuentaId === 'c-1101');
@@ -256,7 +265,7 @@ describe('crearAsientoAnulacion', () => {
     const ventas = lineas.find((l) => l.cuentaId === 'c-4001');
     expect(ventas?.tipo).toBe('DEBITO'); // original era CREDITO
 
-    const debitos  = lineas.reduce((s, l) => s + (l.tipo === 'DEBITO'  ? Number(l.monto) : 0), 0);
+    const debitos = lineas.reduce((s, l) => s + (l.tipo === 'DEBITO' ? Number(l.monto) : 0), 0);
     const creditos = lineas.reduce((s, l) => s + (l.tipo === 'CREDITO' ? Number(l.monto) : 0), 0);
     expect(Math.abs(debitos - creditos)).toBeLessThan(0.01);
   });

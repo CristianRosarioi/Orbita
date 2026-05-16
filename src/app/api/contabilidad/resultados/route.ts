@@ -5,7 +5,7 @@ import { auth } from '@clerk/nextjs/server';
 import { z } from 'zod';
 
 const FiltrosSchema = z.object({
-  mes:  z.coerce.number().min(1).max(12).optional(),
+  mes: z.coerce.number().min(1).max(12).optional(),
   anio: z.coerce.number().min(2020).max(2100).optional(),
 });
 
@@ -20,7 +20,11 @@ export async function GET(req: Request) {
     const url = new URL(req.url);
     const parsed = FiltrosSchema.safeParse(Object.fromEntries(url.searchParams));
     if (!parsed.success) {
-      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Parámetros inválidos.', 422);
+      return err(
+        'VALIDATION_ERROR',
+        parsed.error.issues[0]?.message ?? 'Parámetros inválidos.',
+        422,
+      );
     }
 
     const { mes, anio } = parsed.data;
@@ -52,22 +56,30 @@ export async function GET(req: Request) {
     const ingresos = cuentas
       .filter((c) => c.tipo === 'INGRESO')
       .map((c) => {
-        const creditos = c.lineas.filter((l) => l.tipo === 'CREDITO').reduce((s, l) => s + Number(l.monto), 0);
-        const debitos  = c.lineas.filter((l) => l.tipo === 'DEBITO').reduce((s, l) => s + Number(l.monto), 0);
+        const creditos = c.lineas
+          .filter((l) => l.tipo === 'CREDITO')
+          .reduce((s, l) => s + Number(l.monto), 0);
+        const debitos = c.lineas
+          .filter((l) => l.tipo === 'DEBITO')
+          .reduce((s, l) => s + Number(l.monto), 0);
         return { codigo: c.codigo, nombre: c.nombre, monto: creditos - debitos };
       });
 
     const gastos = cuentas
       .filter((c) => c.tipo === 'GASTO')
       .map((c) => {
-        const debitos  = c.lineas.filter((l) => l.tipo === 'DEBITO').reduce((s, l) => s + Number(l.monto), 0);
-        const creditos = c.lineas.filter((l) => l.tipo === 'CREDITO').reduce((s, l) => s + Number(l.monto), 0);
+        const debitos = c.lineas
+          .filter((l) => l.tipo === 'DEBITO')
+          .reduce((s, l) => s + Number(l.monto), 0);
+        const creditos = c.lineas
+          .filter((l) => l.tipo === 'CREDITO')
+          .reduce((s, l) => s + Number(l.monto), 0);
         return { codigo: c.codigo, nombre: c.nombre, monto: debitos - creditos };
       });
 
     const totalIngresos = ingresos.reduce((s, c) => s + c.monto, 0);
-    const totalGastos   = gastos.reduce((s, c) => s + c.monto, 0);
-    const utilidadNeta  = totalIngresos - totalGastos;
+    const totalGastos = gastos.reduce((s, c) => s + c.monto, 0);
+    const utilidadNeta = totalIngresos - totalGastos;
 
     return ok({
       periodo: { mes, anio: anioFiltro },

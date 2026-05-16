@@ -60,6 +60,7 @@ const REPORTES_ITEMS = [
 const ROLES_CAJA = ['OWNER', 'ADMIN', 'CAJERO'];
 
 const CONFIG_ITEMS = [
+  { href: '/configuracion/empresa', label: 'Mi empresa' },
   { href: '/configuracion/categorias', label: 'Categorías' },
   { href: '/configuracion/unidades-medida', label: 'Unidades de medida' },
 ];
@@ -181,9 +182,8 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
             Contabilidad
           </p>
           {CONTABILIDAD_ITEMS.map(({ href, label, icon: Icon }) => {
-            const activo = href === '/contabilidad'
-              ? pathname === '/contabilidad'
-              : pathname.startsWith(href);
+            const activo =
+              href === '/contabilidad' ? pathname === '/contabilidad' : pathname.startsWith(href);
             return (
               <Link
                 key={href}
@@ -207,9 +207,8 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
             Reportes DGII
           </p>
           {REPORTES_ITEMS.map(({ href, label, icon: Icon }) => {
-            const activo = href === '/reportes'
-              ? pathname === '/reportes'
-              : pathname.startsWith(href);
+            const activo =
+              href === '/reportes' ? pathname === '/reportes' : pathname.startsWith(href);
             return (
               <Link
                 key={href}

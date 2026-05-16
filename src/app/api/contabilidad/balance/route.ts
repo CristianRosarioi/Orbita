@@ -32,8 +32,8 @@ export async function GET() {
       // Saldo normal según tipo de cuenta
       const saldo =
         cuenta.tipo === 'ACTIVO' || cuenta.tipo === 'GASTO'
-          ? debitos - creditos   // cuentas de saldo deudor
-          : creditos - debitos;  // cuentas de saldo acreedor
+          ? debitos - creditos // cuentas de saldo deudor
+          : creditos - debitos; // cuentas de saldo acreedor
 
       return {
         id: cuenta.id,
@@ -49,11 +49,11 @@ export async function GET() {
 
     // Totales por tipo
     const totales = {
-      activo:    balance.filter((c) => c.tipo === 'ACTIVO').reduce((s, c) => s + c.saldo, 0),
-      pasivo:    balance.filter((c) => c.tipo === 'PASIVO').reduce((s, c) => s + c.saldo, 0),
-      patrimonio:balance.filter((c) => c.tipo === 'PATRIMONIO').reduce((s, c) => s + c.saldo, 0),
-      ingreso:   balance.filter((c) => c.tipo === 'INGRESO').reduce((s, c) => s + c.saldo, 0),
-      gasto:     balance.filter((c) => c.tipo === 'GASTO').reduce((s, c) => s + c.saldo, 0),
+      activo: balance.filter((c) => c.tipo === 'ACTIVO').reduce((s, c) => s + c.saldo, 0),
+      pasivo: balance.filter((c) => c.tipo === 'PASIVO').reduce((s, c) => s + c.saldo, 0),
+      patrimonio: balance.filter((c) => c.tipo === 'PATRIMONIO').reduce((s, c) => s + c.saldo, 0),
+      ingreso: balance.filter((c) => c.tipo === 'INGRESO').reduce((s, c) => s + c.saldo, 0),
+      gasto: balance.filter((c) => c.tipo === 'GASTO').reduce((s, c) => s + c.saldo, 0),
     };
 
     return ok({ cuentas: balance, totales });

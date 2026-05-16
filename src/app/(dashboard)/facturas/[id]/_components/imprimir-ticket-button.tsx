@@ -40,12 +40,19 @@ export function ImprimirTicketButton({ facturaId }: ImprimirTicketButtonProps) {
           descuento: Number(f.descuento),
           total: Number(f.total),
           clienteNombre: f.clienteNombre,
-          items: f.items.map((i: { productoNombre: string; cantidad: string | number; precioUnitario: string | number; total: string | number }) => ({
-            productoNombre: i.productoNombre,
-            cantidad: Number(i.cantidad),
-            precioUnitario: Number(i.precioUnitario),
-            total: Number(i.total),
-          })),
+          items: f.items.map(
+            (i: {
+              productoNombre: string;
+              cantidad: string | number;
+              precioUnitario: string | number;
+              total: string | number;
+            }) => ({
+              productoNombre: i.productoNombre,
+              cantidad: Number(i.cantidad),
+              precioUnitario: Number(i.precioUnitario),
+              total: Number(i.total),
+            }),
+          ),
         },
         dataEmpresa.data,
       );

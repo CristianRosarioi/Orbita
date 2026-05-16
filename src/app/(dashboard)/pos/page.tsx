@@ -72,7 +72,13 @@ export default function POSPage() {
   const [descuento, setDescuento] = useState(0);
   const [cargandoCobro, setCargandoCobro] = useState(false);
   const [resultado, setResultado] = useState<ResultadoVenta | null>(null);
-  const [empresa, setEmpresa] = useState<{ nombre: string; nombreComercial: string | null; telefono: string | null; direccion: string | null; modoFiscal: string } | null>(null);
+  const [empresa, setEmpresa] = useState<{
+    nombre: string;
+    nombreComercial: string | null;
+    telefono: string | null;
+    direccion: string | null;
+    modoFiscal: string;
+  } | null>(null);
 
   // Cargar sesión de caja
   useEffect(() => {
@@ -95,7 +101,9 @@ export default function POSPage() {
   useEffect(() => {
     fetch('/api/empresas/activa')
       .then((r) => r.json())
-      .then((d) => { if (d.success) setEmpresa(d.data); })
+      .then((d) => {
+        if (d.success) setEmpresa(d.data);
+      })
       .catch(() => {});
   }, []);
 
@@ -104,7 +112,10 @@ export default function POSPage() {
     searchRef.current?.focus();
   }, [resultado]);
 
-  const categorias = ['TODOS', ...Array.from(new Set(productos.map((p) => p.categoria?.nombre ?? 'Sin categoría')))];
+  const categorias = [
+    'TODOS',
+    ...Array.from(new Set(productos.map((p) => p.categoria?.nombre ?? 'Sin categoría'))),
+  ];
 
   const productosFiltrados = productos.filter((p) => {
     const q = busqueda.toLowerCase();
@@ -114,37 +125,39 @@ export default function POSPage() {
       (p.sku?.toLowerCase().includes(q) ?? false) ||
       (p.codigoBarras?.includes(q) ?? false);
     const matchCategoria =
-      categoriaFiltro === 'TODOS' ||
-      (p.categoria?.nombre ?? 'Sin categoría') === categoriaFiltro;
+      categoriaFiltro === 'TODOS' || (p.categoria?.nombre ?? 'Sin categoría') === categoriaFiltro;
     return matchBusqueda && matchCategoria;
   });
 
-  const agregarAlCarrito = useCallback((productoId: string) => {
-    const producto = productos.find((p) => p.id === productoId);
-    if (!producto) return;
+  const agregarAlCarrito = useCallback(
+    (productoId: string) => {
+      const producto = productos.find((p) => p.id === productoId);
+      if (!producto) return;
 
-    setCarrito((prev) => {
-      const existente = prev.find((i) => i.productoId === productoId);
-      if (existente) {
-        return prev.map((i) =>
-          i.productoId === productoId ? { ...i, cantidad: i.cantidad + 1 } : i,
-        );
-      }
-      return [
-        ...prev,
-        {
-          productoId: producto.id,
-          nombre: producto.nombre,
-          sku: producto.sku,
-          cantidad: 1,
-          precioUnitario: Number(producto.precioVenta),
-          itbisPorcentaje: producto.itbisAplicable ? ITBIS_RATE : 0,
-        },
-      ];
-    });
-    setBusqueda('');
-    searchRef.current?.focus();
-  }, [productos]);
+      setCarrito((prev) => {
+        const existente = prev.find((i) => i.productoId === productoId);
+        if (existente) {
+          return prev.map((i) =>
+            i.productoId === productoId ? { ...i, cantidad: i.cantidad + 1 } : i,
+          );
+        }
+        return [
+          ...prev,
+          {
+            productoId: producto.id,
+            nombre: producto.nombre,
+            sku: producto.sku,
+            cantidad: 1,
+            precioUnitario: Number(producto.precioVenta),
+            itbisPorcentaje: producto.itbisAplicable ? ITBIS_RATE : 0,
+          },
+        ];
+      });
+      setBusqueda('');
+      searchRef.current?.focus();
+    },
+    [productos],
+  );
 
   // Al presionar Enter en el buscador con un resultado exacto (para lector de barras)
   const handleBusquedaKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -180,7 +193,10 @@ export default function POSPage() {
 
   const { subtotal, itbis, total } = calcularTotales(carrito, descuento);
 
-  const handleCobrar = async (metodo: 'EFECTIVO' | 'TARJETA' | 'TRANSFERENCIA', montoRecibido?: number) => {
+  const handleCobrar = async (
+    metodo: 'EFECTIVO' | 'TARJETA' | 'TRANSFERENCIA',
+    montoRecibido?: number,
+  ) => {
     if (!sesion || carrito.length === 0) return;
     setCargandoCobro(true);
 
@@ -208,7 +224,8 @@ export default function POSPage() {
         body: JSON.stringify(bodyFactura),
       });
       const dataFactura = await respFactura.json();
-      if (!dataFactura.success) throw new Error(dataFactura.error?.message ?? 'Error al crear factura');
+      if (!dataFactura.success)
+        throw new Error(dataFactura.error?.message ?? 'Error al crear factura');
 
       const facturaId = dataFactura.data.id;
 
@@ -248,12 +265,19 @@ export default function POSPage() {
         total: Number(f.total),
         clienteNombre: f.clienteNombre,
         montoRecibido: resultado.montoRecibido,
-        items: f.items.map((i: { productoNombre: string; cantidad: string | number; precioUnitario: string | number; total: string | number }) => ({
-          productoNombre: i.productoNombre,
-          cantidad: Number(i.cantidad),
-          precioUnitario: Number(i.precioUnitario),
-          total: Number(i.total),
-        })),
+        items: f.items.map(
+          (i: {
+            productoNombre: string;
+            cantidad: string | number;
+            precioUnitario: string | number;
+            total: string | number;
+          }) => ({
+            productoNombre: i.productoNombre,
+            cantidad: Number(i.cantidad),
+            precioUnitario: Number(i.precioUnitario),
+            total: Number(i.total),
+          }),
+        ),
       },
       empresa,
     );
@@ -287,7 +311,9 @@ export default function POSPage() {
           <div className="m-4 p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-amber-800">
               <AlertTriangle className="h-4 w-4 shrink-0" />
-              <span className="text-sm font-medium">No tienes una caja abierta para este turno.</span>
+              <span className="text-sm font-medium">
+                No tienes una caja abierta para este turno.
+              </span>
             </div>
             <Button
               size="sm"
@@ -303,25 +329,28 @@ export default function POSPage() {
         <div className="p-4 pb-2 space-y-3">
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <Input
-              ref={searchRef}
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              onKeyDown={handleBusquedaKeyDown}
-              placeholder="Buscar por nombre, SKU o código de barras…"
-              className="pl-9 pr-9"
-              autoFocus
-            />
-            {busqueda && (
-              <button
-                type="button"
-                onClick={() => { setBusqueda(''); searchRef.current?.focus(); }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Input
+                ref={searchRef}
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                onKeyDown={handleBusquedaKeyDown}
+                placeholder="Buscar por nombre, SKU o código de barras…"
+                className="pl-9 pr-9"
+                autoFocus
+              />
+              {busqueda && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setBusqueda('');
+                    searchRef.current?.focus();
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
             </div>
             {sesion && (
               <Link
@@ -399,7 +428,11 @@ export default function POSPage() {
         <div className="flex-1 overflow-y-auto px-4">
           {carrito.length === 0 ? (
             <div className="flex items-center justify-center h-full text-slate-300">
-              <p className="text-sm text-center">Agrega productos<br />desde el catálogo</p>
+              <p className="text-sm text-center">
+                Agrega productos
+                <br />
+                desde el catálogo
+              </p>
             </div>
           ) : (
             <div className="py-2">
@@ -441,7 +474,9 @@ export default function POSPage() {
         numeroFactura={resultado?.numero ?? ''}
         total={resultado?.total ?? 0}
         cambio={
-          resultado?.montoRecibido ? Math.max(0, resultado.montoRecibido - (resultado.total ?? 0)) : 0
+          resultado?.montoRecibido
+            ? Math.max(0, resultado.montoRecibido - (resultado.total ?? 0))
+            : 0
         }
         onImprimir={imprimirTicket}
         onNuevaVenta={nuevaVenta}
@@ -454,7 +489,12 @@ export default function POSPage() {
 function Package({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+      />
     </svg>
   );
 }

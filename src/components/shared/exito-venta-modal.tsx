@@ -2,12 +2,7 @@
 
 import { CheckCircle2, Printer, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface ExitoVentaModalProps {
   abierto: boolean;
@@ -26,8 +21,7 @@ export function ExitoVentaModal({
   onImprimir,
   onNuevaVenta,
 }: ExitoVentaModalProps) {
-  const fmt = (n: number) =>
-    new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(n);
+  const fmt = (n: number) => new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(n);
 
   return (
     <Dialog open={abierto} onOpenChange={() => {}}>
@@ -45,18 +39,12 @@ export function ExitoVentaModal({
           <p className="text-slate-500 text-sm mt-3">Total cobrado</p>
           <p className="text-3xl font-bold text-green-700">RD$ {fmt(total)}</p>
           {cambio > 0 && (
-            <p className="text-lg font-semibold text-blue-600 mt-2">
-              Cambio: RD$ {fmt(cambio)}
-            </p>
+            <p className="text-lg font-semibold text-blue-600 mt-2">Cambio: RD$ {fmt(cambio)}</p>
           )}
         </div>
 
         <div className="flex flex-col gap-2">
-          <Button
-            onClick={onImprimir}
-            variant="outline"
-            className="w-full gap-2"
-          >
+          <Button onClick={onImprimir} variant="outline" className="w-full gap-2">
             <Printer className="h-4 w-4" />
             Imprimir ticket
           </Button>

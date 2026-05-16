@@ -7,8 +7,8 @@ import { facturaA608, generarTXT608, generarExcel608 } from '@/lib/exportar-repo
 import { NextResponse } from 'next/server';
 
 const FiltrosSchema = z.object({
-  mes:     z.coerce.number().min(1).max(12),
-  anio:    z.coerce.number().min(2020).max(2100),
+  mes: z.coerce.number().min(1).max(12),
+  anio: z.coerce.number().min(2020).max(2100),
   formato: z.enum(['txt', 'xlsx']).default('txt'),
 });
 

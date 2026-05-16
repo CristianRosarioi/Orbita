@@ -38,12 +38,10 @@ export function CobrarPanel({
   const [metodo, setMetodo] = useState<MetodoPago>('EFECTIVO');
   const [montoRecibido, setMontoRecibido] = useState<string>('');
 
-  const fmt = (n: number) =>
-    new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(n);
+  const fmt = (n: number) => new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(n);
 
-  const cambio = metodo === 'EFECTIVO' && montoRecibido
-    ? Math.max(0, parseFloat(montoRecibido) - total)
-    : 0;
+  const cambio =
+    metodo === 'EFECTIVO' && montoRecibido ? Math.max(0, parseFloat(montoRecibido) - total) : 0;
 
   const handleCobrar = () => {
     const recibido = metodo === 'EFECTIVO' && montoRecibido ? parseFloat(montoRecibido) : undefined;
@@ -125,9 +123,7 @@ export function CobrarPanel({
             className="mt-1 text-lg font-semibold"
           />
           {cambio > 0 && (
-            <p className="text-sm font-semibold text-blue-600 mt-1">
-              Cambio: RD$ {fmt(cambio)}
-            </p>
+            <p className="text-sm font-semibold text-blue-600 mt-1">Cambio: RD$ {fmt(cambio)}</p>
           )}
         </div>
       )}

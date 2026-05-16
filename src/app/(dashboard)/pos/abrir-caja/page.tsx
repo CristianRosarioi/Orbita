@@ -79,8 +79,7 @@ export default function AbrirCajaPage() {
     }
   };
 
-  const fmt = (n: number) =>
-    new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(n);
+  const fmt = (n: number) => new Intl.NumberFormat('es-DO', { minimumFractionDigits: 2 }).format(n);
 
   const fmtFecha = (d: string) =>
     new Date(d).toLocaleDateString('es-DO', {
@@ -181,7 +180,9 @@ export default function AbrirCajaPage() {
               <span>RD$ {fmt(ultimaSesion.montoApertura)}</span>
             </div>
             {ultimaSesion.diferencia !== null && (
-              <div className={`flex justify-between font-medium ${ultimaSesion.diferencia < 0 ? 'text-red-600' : 'text-green-600'}`}>
+              <div
+                className={`flex justify-between font-medium ${ultimaSesion.diferencia < 0 ? 'text-red-600' : 'text-green-600'}`}
+              >
                 <span>Diferencia</span>
                 <span>
                   {ultimaSesion.diferencia >= 0 ? '+' : ''}

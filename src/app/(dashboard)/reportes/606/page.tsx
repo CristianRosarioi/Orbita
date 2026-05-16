@@ -29,8 +29,18 @@ interface ReporteData {
 }
 
 const MESES = [
-  'Enero','Febrero','Marzo','Abril','Mayo','Junio',
-  'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre',
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
 ];
 
 function fmt(n: number) {
@@ -43,13 +53,22 @@ export default function Reporte606Page() {
   const [anio, setAnio] = useState(ahora.getFullYear());
   const [datos, setDatos] = useState<ReporteData | null>(null);
   const [cargando, setCargando] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   async function generar() {
     setCargando(true);
+    setErrorMsg(null);
+    setDatos(null);
     try {
       const res = await fetch(`/api/reportes/606?mes=${mes}&anio=${anio}`);
       const d = await res.json();
-      if (d.success) setDatos(d.data);
+      if (d.success) {
+        setDatos(d.data);
+      } else {
+        setErrorMsg(d.error?.message ?? 'Error al generar el reporte.');
+      }
+    } catch {
+      setErrorMsg('No se pudo conectar con el servidor. Intenta de nuevo.');
     } finally {
       setCargando(false);
     }
@@ -82,7 +101,9 @@ export default function Reporte606Page() {
               className="border rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {MESES.map((m, i) => (
-                <option key={m} value={i + 1}>{m}</option>
+                <option key={m} value={i + 1}>
+                  {m}
+                </option>
               ))}
             </select>
           </div>
@@ -94,7 +115,9 @@ export default function Reporte606Page() {
               className="border rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {anios.map((a) => (
-                <option key={a} value={a}>{a}</option>
+                <option key={a} value={a}>
+                  {a}
+                </option>
               ))}
             </select>
           </div>
@@ -116,6 +139,13 @@ export default function Reporte606Page() {
           )}
         </CardContent>
       </Card>
+
+      {errorMsg && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 flex items-start gap-3">
+          <AlertCircle className="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+          <p className="text-sm text-red-800">{errorMsg}</p>
+        </div>
+      )}
 
       {datos && (
         <>
@@ -148,7 +178,7 @@ export default function Reporte606Page() {
             </Card>
           </div>
 
-          {/* Tabla de registros */}
+          {/* Tabla */}
           <Card>
             <CardHeader className="pb-2 flex flex-row items-center justify-between">
               <CardTitle className="text-sm font-semibold">
@@ -159,7 +189,12 @@ export default function Reporte606Page() {
             <CardContent className="p-0 overflow-x-auto">
               {datos.registros.length === 0 ? (
                 <div className="py-12 text-center">
-                  <p className="text-slate-500 text-sm">No hay facturas emitidas en este período.</p>
+                  <p className="text-slate-500 text-sm">
+                    No hay facturas emitidas en este período.
+                  </p>
+                  <p className="text-slate-400 text-xs mt-1">
+                    Prueba seleccionando otro mes o año.
+                  </p>
                 </div>
               ) : (
                 <table className="w-full text-xs">
@@ -167,7 +202,9 @@ export default function Reporte606Page() {
                     <tr className="border-b bg-slate-50">
                       <th className="text-left px-4 py-2 font-medium text-slate-500">NCF</th>
                       <th className="text-left px-4 py-2 font-medium text-slate-500">Tipo</th>
-                      <th className="text-left px-4 py-2 font-medium text-slate-500">RNC Comprador</th>
+                      <th className="text-left px-4 py-2 font-medium text-slate-500">
+                        RNC Comprador
+                      </th>
                       <th className="text-left px-4 py-2 font-medium text-slate-500">Fecha</th>
                       <th className="text-right px-4 py-2 font-medium text-slate-500">Bienes</th>
                       <th className="text-right px-4 py-2 font-medium text-slate-500">Servicios</th>
@@ -182,10 +219,18 @@ export default function Reporte606Page() {
                         <td className="px-4 py-2">{r.tipoNcf}</td>
                         <td className="px-4 py-2 font-mono">{r.rncComprador || '—'}</td>
                         <td className="px-4 py-2">{r.fechaComprobante}</td>
-                        <td className="px-4 py-2 text-right tabular-nums">{r.montoBienes > 0 ? `RD$ ${fmt(r.montoBienes)}` : '—'}</td>
-                        <td className="px-4 py-2 text-right tabular-nums">{r.montoServicios > 0 ? `RD$ ${fmt(r.montoServicios)}` : '—'}</td>
-                        <td className="px-4 py-2 text-right tabular-nums font-medium">RD$ {fmt(r.total)}</td>
-                        <td className="px-4 py-2 text-right tabular-nums text-blue-700">RD$ {fmt(r.itbisFacturado)}</td>
+                        <td className="px-4 py-2 text-right tabular-nums">
+                          {r.montoBienes > 0 ? `RD$ ${fmt(r.montoBienes)}` : '—'}
+                        </td>
+                        <td className="px-4 py-2 text-right tabular-nums">
+                          {r.montoServicios > 0 ? `RD$ ${fmt(r.montoServicios)}` : '—'}
+                        </td>
+                        <td className="px-4 py-2 text-right tabular-nums font-medium">
+                          RD$ {fmt(r.total)}
+                        </td>
+                        <td className="px-4 py-2 text-right tabular-nums text-blue-700">
+                          RD$ {fmt(r.itbisFacturado)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
