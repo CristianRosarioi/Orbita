@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import type { Prisma } from '@/generated/prisma/client';
+import { crearAsientoFactura, crearAsientoAnulacion } from '@/lib/asientos';
 
 // ---- Types ----
 interface ItemCalculo {
@@ -145,6 +146,7 @@ export async function emitirFactura(
 
   // If not credit: register payment and mark as PAGADA
   const totalNum = Number(factura.total);
+  let facturaActualizada;
   if (factura.metodoPago !== 'CREDITO') {
     await tx.pagoFactura.create({
       data: {
@@ -156,7 +158,7 @@ export async function emitirFactura(
       },
     });
 
-    return tx.factura.update({
+    facturaActualizada = await tx.factura.update({
       where: { id: facturaId },
       data: {
         estado: 'PAGADA',
@@ -164,13 +166,17 @@ export async function emitirFactura(
         saldo: 0,
       },
     });
+  } else {
+    // Credit: leave as EMITIDA with full balance pending
+    facturaActualizada = await tx.factura.update({
+      where: { id: facturaId },
+      data: { estado: 'EMITIDA' },
+    });
   }
 
-  // Credit: leave as EMITIDA with full balance pending
-  return tx.factura.update({
-    where: { id: facturaId },
-    data: { estado: 'EMITIDA' },
-  });
+  await crearAsientoFactura(facturaId, empresaId, usuarioClerkId, tx);
+
+  return facturaActualizada;
 }
 
 // ---- anularFactura ----
@@ -229,10 +235,14 @@ export async function anularFactura(
     });
   }
 
-  return tx.factura.update({
+  const facturaAnulada = await tx.factura.update({
     where: { id: facturaId },
     data: { estado: 'ANULADA', anuladoPor: usuarioClerkId, motivoAnulacion: motivo },
   });
+
+  await crearAsientoAnulacion(facturaId, empresaId, usuarioClerkId, tx);
+
+  return facturaAnulada;
 }
 
 // ---- Export prisma for use in routes ----

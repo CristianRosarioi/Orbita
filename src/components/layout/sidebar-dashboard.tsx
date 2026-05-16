@@ -16,6 +16,10 @@ import {
   ShoppingCart,
   DollarSign,
   ClipboardList,
+  BookOpen,
+  Scale,
+  BookMarked,
+  FileDown,
 } from 'lucide-react';
 import type { RolEmpresa } from '@/types/enums';
 
@@ -38,7 +42,19 @@ const NAV_ITEMS = [
   { href: '/productos', label: 'Productos', icon: Package },
   { href: '/proveedores', label: 'Proveedores', icon: Truck },
   { href: '/facturas', label: 'Facturas', icon: FileText },
-  { href: '/reportes', label: 'Reportes', icon: BarChart2 },
+];
+
+const CONTABILIDAD_ITEMS = [
+  { href: '/contabilidad', label: 'Balance general', icon: Scale },
+  { href: '/contabilidad/cuentas', label: 'Plan de cuentas', icon: BookMarked },
+  { href: '/contabilidad/asientos', label: 'Libro diario', icon: BookOpen },
+];
+
+const REPORTES_ITEMS = [
+  { href: '/reportes', label: 'Centro de reportes', icon: BarChart2 },
+  { href: '/reportes/606', label: 'Reporte 606', icon: FileDown },
+  { href: '/reportes/607', label: 'Reporte 607', icon: FileDown },
+  { href: '/reportes/608', label: 'Reporte 608', icon: FileDown },
 ];
 
 const ROLES_CAJA = ['OWNER', 'ADMIN', 'CAJERO'];
@@ -88,7 +104,9 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
             <Link
               href={href}
               className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                activo ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                activo
+                  ? 'bg-slate-700 text-white'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
               <Icon className="h-4 w-4 shrink-0" />
@@ -102,7 +120,9 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
           <Link
             href="/pos"
             className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-              pathname.startsWith('/pos') ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              pathname.startsWith('/pos')
+                ? 'bg-slate-700 text-white'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <ShoppingCart className="h-4 w-4 shrink-0" />
@@ -113,7 +133,9 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
               <Link
                 href="/pos/abrir-caja"
                 className={`flex items-center gap-2 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                  pathname === '/pos/abrir-caja' ? 'text-white' : 'text-slate-500 hover:text-slate-300'
+                  pathname === '/pos/abrir-caja'
+                    ? 'text-white'
+                    : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
                 <DollarSign className="h-3 w-3 shrink-0" />
@@ -122,7 +144,9 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
               <Link
                 href="/pos/historial"
                 className={`flex items-center gap-2 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                  pathname === '/pos/historial' ? 'text-white' : 'text-slate-500 hover:text-slate-300'
+                  pathname === '/pos/historial'
+                    ? 'text-white'
+                    : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
                 <ClipboardList className="h-3 w-3 shrink-0" />
@@ -140,7 +164,9 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
               key={href}
               href={href}
               className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                activo ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                activo
+                  ? 'bg-slate-700 text-white'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
               <Icon className="h-4 w-4 shrink-0" />
@@ -148,6 +174,58 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
             </Link>
           );
         })}
+
+        {/* Contabilidad con sub-links */}
+        <div>
+          <p className="px-3 pt-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-0.5">
+            Contabilidad
+          </p>
+          {CONTABILIDAD_ITEMS.map(({ href, label, icon: Icon }) => {
+            const activo = href === '/contabilidad'
+              ? pathname === '/contabilidad'
+              : pathname.startsWith(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activo
+                    ? 'bg-slate-700 text-white'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                {label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Reportes DGII con sub-links */}
+        <div>
+          <p className="px-3 pt-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-0.5">
+            Reportes DGII
+          </p>
+          {REPORTES_ITEMS.map(({ href, label, icon: Icon }) => {
+            const activo = href === '/reportes'
+              ? pathname === '/reportes'
+              : pathname.startsWith(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  activo
+                    ? 'bg-slate-700 text-white'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                }`}
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                {label}
+              </Link>
+            );
+          })}
+        </div>
 
         {/* Configuración */}
         <div className="pt-3">

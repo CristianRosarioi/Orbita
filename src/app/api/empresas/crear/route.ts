@@ -10,6 +10,7 @@ import {
   ModoFiscal as PrismaModoFiscal,
 } from '@/generated/prisma/client';
 import { UNIDADES_BASE } from '@/lib/seed-data';
+import { getPlanCuentasBase } from '@/lib/plan-cuentas';
 
 export async function POST(req: NextRequest) {
   try {
@@ -104,6 +105,18 @@ export async function POST(req: NextRequest) {
           empresaId: empresa.id,
           nombre: u.nombre,
           abreviatura: u.abreviatura,
+          esBase: true,
+        })),
+      });
+
+      // 6. Crear el plan de cuentas estándar dominicano
+      await tx.cuentaContable.createMany({
+        data: getPlanCuentasBase().map((c) => ({
+          empresaId: empresa.id,
+          codigo: c.codigo,
+          nombre: c.nombre,
+          tipo: c.tipo,
+          padre: c.padre,
           esBase: true,
         })),
       });

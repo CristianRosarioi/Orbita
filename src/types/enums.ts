@@ -111,3 +111,18 @@ export const EstadoCaja = {
   CERRADA: 'CERRADA',
 } as const;
 export type EstadoCaja = (typeof EstadoCaja)[keyof typeof EstadoCaja];
+
+export const TipoCuenta = {
+  ACTIVO: 'ACTIVO',
+  PASIVO: 'PASIVO',
+  PATRIMONIO: 'PATRIMONIO',
+  INGRESO: 'INGRESO',
+  GASTO: 'GASTO',
+} as const;
+export type TipoCuenta = (typeof TipoCuenta)[keyof typeof TipoCuenta];
+
+export const TipoAsiento = {
+  DEBITO: 'DEBITO',
+  CREDITO: 'CREDITO',
+} as const;
+export type TipoAsiento = (typeof TipoAsiento)[keyof typeof TipoAsiento];

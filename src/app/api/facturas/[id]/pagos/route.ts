@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { ok, err, handleApiError } from '@/lib/api-response';
 import { requireEmpresa } from '@/lib/auth';
 import { RegistrarPagoSchema } from '@/lib/validations/facturas';
+import { crearAsientoPago } from '@/lib/asientos';
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -62,6 +63,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
           estado: nuevoEstado as never,
         },
       });
+
+      await crearAsientoPago(pago.id, id, empresaId, data.metodoPago, data.monto, userId, tx);
 
       return pago;
     });

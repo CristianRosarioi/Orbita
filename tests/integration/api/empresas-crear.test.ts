@@ -106,6 +106,7 @@ describe('POST /api/empresas/crear', () => {
         sucursal: { create: vi.fn().mockResolvedValue(mockSucursal) },
         sesionUsuarioEmpresa: { upsert: vi.fn().mockResolvedValue({}) },
         unidadMedida: { createMany: vi.fn().mockResolvedValue({}) },
+        cuentaContable: { createMany: vi.fn().mockResolvedValue({}) },
       };
       return fn(tx);
     });

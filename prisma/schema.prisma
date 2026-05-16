@@ -164,6 +164,8 @@ model Empresa {
   pagosFacturas   PagoFactura[]
   movimientos     MovimientoInventario[]
   cajas           SesionCaja[]
+  cuentas         CuentaContable[]
+  asientos        AsientoContable[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -615,3 +617,93 @@ model MovimientoInventario {
   @@index([facturaId])
   @@map("movimientos_inventario")
 }
+
+// ============================================================
+// ENUMS — Fase 5
+// ============================================================
+
+enum TipoCuenta {
+  ACTIVO
+  PASIVO
+  PATRIMONIO
+  INGRESO
+  GASTO
+
+  @@map("tipo_cuenta")
+}
+
+enum TipoAsiento {
+  DEBITO
+  CREDITO
+
+  @@map("tipo_asiento")
+}
+
+// ============================================================
+// MODELO: CuentaContable
+// ============================================================
+model CuentaContable {
+  id        String     @id @default(cuid())
+  empresaId String     @map("empresa_id")
+  codigo    String
+  nombre    String
+  tipo      TipoCuenta
+  padre     String?
+  esBase    Boolean    @default(false) @map("es_base")
+  activa    Boolean    @default(true)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+
+  empresa Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  lineas  LineaAsiento[]
+
+  @@unique([empresaId, codigo])
+  @@index([empresaId, tipo])
+  @@index([empresaId, deletedAt])
+  @@map("cuentas_contables")
+}
+
+// ============================================================
+// MODELO: AsientoContable
+// ============================================================
+model AsientoContable {
+  id          String    @id @default(cuid())
+  empresaId   String    @map("empresa_id")
+  numero      Int
+  descripcion String
+  fecha       DateTime  @default(now())
+  facturaId   String?   @map("factura_id")
+  pagoId      String?   @map("pago_id")
+  creadoPor   String    @map("creado_por")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  empresa Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  lineas  LineaAsiento[]
+
+  @@index([empresaId, fecha])
+  @@index([facturaId])
+  @@map("asientos_contables")
+}
+
+// ============================================================
+// MODELO: LineaAsiento
+// ============================================================
+model LineaAsiento {
+  id          String      @id @default(cuid())
+  asientoId   String      @map("asiento_id")
+  cuentaId    String      @map("cuenta_id")
+  tipo        TipoAsiento
+  monto       Decimal
+  descripcion String?
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  asiento AsientoContable @relation(fields: [asientoId], references: [id], onDelete: Cascade)
+  cuenta  CuentaContable  @relation(fields: [cuentaId], references: [id])
+
+  @@index([asientoId])
+  @@index([cuentaId])
+  @@map("lineas_asiento")
+}
+
