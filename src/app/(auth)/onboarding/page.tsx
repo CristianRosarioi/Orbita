@@ -5,7 +5,16 @@ import { OnboardingWizard } from './onboarding-wizard';
 
 export const metadata = { title: 'Configura tu empresa — Órbita' };
 
-export default async function OnboardingPage() {
+export default async function OnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ token?: string }>;
+}) {
+  const { token } = await searchParams;
+
+  // Si llega con token de invitación, redirigir a la página de invitación
+  if (token) redirect(`/invitacion?token=${token}`);
+
   const usuario = await getOrCreateDbUser();
   if (!usuario) redirect('/sign-in');
 

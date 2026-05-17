@@ -126,3 +126,11 @@ export const TipoAsiento = {
   CREDITO: 'CREDITO',
 } as const;
 export type TipoAsiento = (typeof TipoAsiento)[keyof typeof TipoAsiento];
+
+export const EstadoInvitacion = {
+  PENDIENTE: 'PENDIENTE',
+  ACEPTADA: 'ACEPTADA',
+  RECHAZADA: 'RECHAZADA',
+  EXPIRADA: 'EXPIRADA',
+} as const;
+export type EstadoInvitacion = (typeof EstadoInvitacion)[keyof typeof EstadoInvitacion];

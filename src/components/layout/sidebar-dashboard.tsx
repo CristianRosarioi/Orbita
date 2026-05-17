@@ -61,6 +61,7 @@ const ROLES_CAJA = ['OWNER', 'ADMIN', 'CAJERO'];
 
 const CONFIG_ITEMS = [
   { href: '/configuracion/empresa', label: 'Mi empresa' },
+  { href: '/configuracion/usuarios', label: 'Usuarios' },
   { href: '/configuracion/categorias', label: 'Categorías' },
   { href: '/configuracion/unidades-medida', label: 'Unidades de medida' },
 ];
@@ -262,8 +263,9 @@ export function SidebarDashboard({ empresa, sucursal, rol, usuario }: SidebarPro
         />
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-white truncate">
-            {usuario.nombre ?? ''} {usuario.apellido ?? ''}
+            {[usuario.nombre, usuario.apellido].filter(Boolean).join(' ') || 'Usuario'}
           </p>
+          <p className="text-xs text-slate-400">{ROL_LABELS[rol] ?? rol}</p>
         </div>
       </div>
     </aside>

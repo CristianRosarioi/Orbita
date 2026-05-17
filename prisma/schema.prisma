@@ -166,6 +166,7 @@ model Empresa {
   cajas           SesionCaja[]
   cuentas         CuentaContable[]
   asientos        AsientoContable[]
+  invitaciones    Invitacion[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -616,6 +617,43 @@ model MovimientoInventario {
   @@index([empresaId, productoId])
   @@index([facturaId])
   @@map("movimientos_inventario")
+}
+
+// ============================================================
+// ENUMS — Fase 6
+// ============================================================
+
+enum EstadoInvitacion {
+  PENDIENTE
+  ACEPTADA
+  RECHAZADA
+  EXPIRADA
+
+  @@map("estado_invitacion")
+}
+
+// ============================================================
+// MODELO: Invitacion
+// ============================================================
+model Invitacion {
+  id          String           @id @default(cuid())
+  empresaId   String           @map("empresa_id")
+  email       String
+  rol         RolEmpresa
+  token       String           @unique
+  estado      EstadoInvitacion @default(PENDIENTE)
+  invitadoPor String           @map("invitado_por")
+  expiresAt   DateTime         @map("expires_at")
+  aceptadoEn  DateTime?        @map("aceptado_en")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId])
+  @@index([token])
+  @@index([email])
+  @@map("invitaciones")
 }
 
 // ============================================================
