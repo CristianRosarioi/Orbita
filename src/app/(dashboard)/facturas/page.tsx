@@ -138,7 +138,9 @@ async function FacturasList({
               <tbody className="divide-y divide-slate-100">
                 {facturas.map((f) => (
                   <tr key={f.id} className="hover:bg-slate-50/80 transition-colors cursor-pointer">
-                    <td className="px-4 py-3 font-mono font-medium text-xs text-slate-700">{f.numero}</td>
+                    <td className="px-4 py-3 font-mono font-medium text-xs text-slate-700">
+                      {f.numero}
+                    </td>
                     <td className="px-4 py-3 text-slate-700">{f.clienteNombre}</td>
                     <td className="px-4 py-3 text-slate-500">
                       {new Date(f.fechaEmision).toLocaleDateString('es-DO', {

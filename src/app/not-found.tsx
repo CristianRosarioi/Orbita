@@ -14,9 +14,7 @@ export default function NotFound() {
         <div className="space-y-2">
           <p className="text-7xl font-extrabold text-slate-200">404</p>
           <h1 className="text-xl font-semibold text-slate-800">Página no encontrada</h1>
-          <p className="text-slate-500 text-sm">
-            El contenido que buscas no existe o fue movido.
-          </p>
+          <p className="text-slate-500 text-sm">El contenido que buscas no existe o fue movido.</p>
         </div>
 
         <Link href="/" className={buttonVariants({ size: 'lg' })}>

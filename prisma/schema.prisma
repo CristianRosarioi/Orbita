@@ -167,6 +167,10 @@ model Empresa {
   cuentas         CuentaContable[]
   asientos        AsientoContable[]
   invitaciones    Invitacion[]
+  mesas           Mesa[]
+  comandas        Comanda[]
+  cuentasFiado    CuentaFiado[]
+  movimientosFiado MovimientoFiado[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -308,8 +312,9 @@ model Cliente {
   updatedAt          DateTime           @updatedAt @map("updated_at")
   deletedAt          DateTime?          @map("deleted_at")
 
-  empresa  Empresa   @relation(fields: [empresaId], references: [id], onDelete: Cascade)
-  facturas Factura[]
+  empresa      Empresa      @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  facturas     Factura[]
+  cuentaFiado  CuentaFiado?
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, identificacion])
@@ -379,6 +384,7 @@ model Producto {
   precios       PrecioProducto[]
   itemsFactura  ItemFactura[]
   movimientos   MovimientoInventario[]
+  itemsComanda  ItemComanda[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, sku])
@@ -743,5 +749,164 @@ model LineaAsiento {
   @@index([asientoId])
   @@index([cuentaId])
   @@map("lineas_asiento")
+}
+
+// ============================================================
+// ENUMS — Fase 7: Verticales (Restaurante / Colmado)
+// ============================================================
+
+enum EstadoMesa {
+  DISPONIBLE
+  OCUPADA
+  RESERVADA
+  INACTIVA
+
+  @@map("estado_mesa")
+}
+
+enum EstadoComanda {
+  ABIERTA
+  LISTA
+  SERVIDA
+  CANCELADA
+
+  @@map("estado_comanda")
+}
+
+enum EstadoItemComanda {
+  PENDIENTE
+  EN_PREPARACION
+  LISTO
+  CANCELADO
+
+  @@map("estado_item_comanda")
+}
+
+enum EstadoFiado {
+  PENDIENTE
+  PAGADO_PARCIAL
+  PAGADO
+  VENCIDO
+
+  @@map("estado_fiado")
+}
+
+// ============================================================
+// MODELO: Mesa (Restaurante)
+// ============================================================
+model Mesa {
+  id        String     @id @default(cuid())
+  empresaId String     @map("empresa_id")
+  numero    Int
+  nombre    String?
+  capacidad Int        @default(4)
+  estado    EstadoMesa @default(DISPONIBLE)
+  activa    Boolean    @default(true)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  empresa  Empresa   @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  comandas Comanda[]
+
+  @@unique([empresaId, numero])
+  @@index([empresaId, estado])
+  @@map("mesas")
+}
+
+// ============================================================
+// MODELO: Comanda (Restaurante)
+// ============================================================
+model Comanda {
+  id        String        @id @default(cuid())
+  empresaId String        @map("empresa_id")
+  mesaId    String?       @map("mesa_id")
+  numero    Int
+  estado    EstadoComanda @default(ABIERTA)
+  mesero    String?
+  personas  Int           @default(1)
+  notas     String?
+  subtotal  Decimal       @default(0)
+  itbis     Decimal       @default(0)
+  propina   Decimal       @default(0)
+  total     Decimal       @default(0)
+  facturaId String?       @map("factura_id")
+  creadoPor String        @map("creado_por")
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  empresa Empresa       @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  mesa    Mesa?         @relation(fields: [mesaId], references: [id])
+  items   ItemComanda[]
+
+  @@unique([empresaId, numero])
+  @@index([empresaId, estado])
+  @@index([mesaId])
+  @@map("comandas")
+}
+
+// ============================================================
+// MODELO: ItemComanda (Restaurante)
+// ============================================================
+model ItemComanda {
+  id         String            @id @default(cuid())
+  comandaId  String            @map("comanda_id")
+  productoId String?           @map("producto_id")
+  nombre     String
+  cantidad   Decimal
+  precio     Decimal
+  notas      String?
+  estado     EstadoItemComanda @default(PENDIENTE)
+  createdAt  DateTime          @default(now()) @map("created_at")
+  updatedAt  DateTime          @updatedAt @map("updated_at")
+
+  comanda  Comanda   @relation(fields: [comandaId], references: [id], onDelete: Cascade)
+  producto Producto? @relation(fields: [productoId], references: [id])
+
+  @@index([comandaId])
+  @@map("items_comanda")
+}
+
+// ============================================================
+// MODELO: CuentaFiado (Colmado)
+// ============================================================
+model CuentaFiado {
+  id        String      @id @default(cuid())
+  empresaId String      @map("empresa_id")
+  clienteId String      @unique @map("cliente_id")
+  limite    Decimal     @default(0)
+  saldo     Decimal     @default(0)
+  estado    EstadoFiado @default(PENDIENTE)
+  notas     String?
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  empresa     Empresa           @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente     Cliente           @relation(fields: [clienteId], references: [id])
+  movimientos MovimientoFiado[]
+
+  @@index([empresaId, estado])
+  @@map("cuentas_fiado")
+}
+
+// ============================================================
+// MODELO: MovimientoFiado (Colmado)
+// ============================================================
+model MovimientoFiado {
+  id            String   @id @default(cuid())
+  cuentaFiadoId String   @map("cuenta_fiado_id")
+  empresaId     String   @map("empresa_id")
+  tipo          String
+  monto         Decimal
+  descripcion   String?
+  facturaId     String?  @map("factura_id")
+  registradoPor String   @map("registrado_por")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  cuenta   CuentaFiado @relation(fields: [cuentaFiadoId], references: [id], onDelete: Cascade)
+  empresa  Empresa     @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([cuentaFiadoId])
+  @@index([empresaId])
+  @@map("movimientos_fiado")
 }
 

@@ -24,6 +24,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           id: true,
           nombre: true,
           nombreComercial: true,
+          industria: true,
           estadoSusc: true,
           trialFinaliza: true,
         },

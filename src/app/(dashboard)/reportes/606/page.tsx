@@ -161,7 +161,9 @@ export default function Reporte606Page() {
             <Card>
               <CardContent className="pt-4">
                 <p className="text-xs text-slate-500">Comprobantes</p>
-                <p className="text-2xl font-bold tracking-tight text-slate-900">{datos.cantidadRegistros}</p>
+                <p className="text-2xl font-bold tracking-tight text-slate-900">
+                  {datos.cantidadRegistros}
+                </p>
               </CardContent>
             </Card>
             <Card>

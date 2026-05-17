@@ -33,7 +33,7 @@ const SEGMENTO_LABEL: Record<string, string> = {
 };
 
 function esId(seg: string) {
-  return seg.startsWith('c') && seg.length > 15 || seg.match(/^[a-z0-9]{15,}$/i) !== null;
+  return (seg.startsWith('c') && seg.length > 15) || seg.match(/^[a-z0-9]{15,}$/i) !== null;
 }
 
 export function DashboardHeader() {
@@ -65,13 +65,19 @@ export function DashboardHeader() {
         </p>
         {anteriores.length > 0 && (
           <nav className="flex items-center gap-1 text-xs mt-0.5 min-w-0">
-            <Link href="/dashboard" className="text-slate-400 hover:text-slate-600 transition-colors shrink-0">
+            <Link
+              href="/dashboard"
+              className="text-slate-400 hover:text-slate-600 transition-colors shrink-0"
+            >
               <Home className="h-3 w-3" />
             </Link>
             {anteriores.map((c) => (
               <span key={c.href} className="flex items-center gap-1 text-slate-400 shrink-0">
                 <ChevronRight className="h-3 w-3" />
-                <Link href={c.href} className="hover:text-slate-600 transition-colors truncate max-w-28">
+                <Link
+                  href={c.href}
+                  className="hover:text-slate-600 transition-colors truncate max-w-28"
+                >
                   {c.label}
                 </Link>
               </span>

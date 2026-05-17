@@ -134,3 +134,43 @@ export const EstadoInvitacion = {
   EXPIRADA: 'EXPIRADA',
 } as const;
 export type EstadoInvitacion = (typeof EstadoInvitacion)[keyof typeof EstadoInvitacion];
+
+// Fase 7 — Verticales
+
+export const EstadoMesa = {
+  DISPONIBLE: 'DISPONIBLE',
+  OCUPADA: 'OCUPADA',
+  RESERVADA: 'RESERVADA',
+  INACTIVA: 'INACTIVA',
+} as const;
+export type EstadoMesa = (typeof EstadoMesa)[keyof typeof EstadoMesa];
+
+export const EstadoComanda = {
+  ABIERTA: 'ABIERTA',
+  LISTA: 'LISTA',
+  SERVIDA: 'SERVIDA',
+  CANCELADA: 'CANCELADA',
+} as const;
+export type EstadoComanda = (typeof EstadoComanda)[keyof typeof EstadoComanda];
+
+export const EstadoItemComanda = {
+  PENDIENTE: 'PENDIENTE',
+  EN_PREPARACION: 'EN_PREPARACION',
+  LISTO: 'LISTO',
+  CANCELADO: 'CANCELADO',
+} as const;
+export type EstadoItemComanda = (typeof EstadoItemComanda)[keyof typeof EstadoItemComanda];
+
+export const EstadoFiado = {
+  PENDIENTE: 'PENDIENTE',
+  PAGADO_PARCIAL: 'PAGADO_PARCIAL',
+  PAGADO: 'PAGADO',
+  VENCIDO: 'VENCIDO',
+} as const;
+export type EstadoFiado = (typeof EstadoFiado)[keyof typeof EstadoFiado];
+
+export const TipoMovimientoFiado = {
+  CARGO: 'CARGO',
+  ABONO: 'ABONO',
+} as const;
+export type TipoMovimientoFiado = (typeof TipoMovimientoFiado)[keyof typeof TipoMovimientoFiado];

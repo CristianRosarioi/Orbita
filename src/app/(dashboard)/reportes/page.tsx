@@ -37,7 +37,9 @@ export default function ReportesPage() {
       <div className="flex items-center gap-3">
         <BarChart2 className="h-6 w-6 text-slate-700" />
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Centro de Reportes DGII</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            Centro de Reportes DGII
+          </h1>
           <p className="text-slate-500 text-sm mt-0.5">
             Genera y exporta los reportes requeridos por la Dirección General de Impuestos Internos
           </p>

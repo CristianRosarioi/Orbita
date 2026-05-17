@@ -23,6 +23,10 @@ import {
   FileDown,
   Menu,
   X,
+  LayoutGrid,
+  ChefHat,
+  CreditCard,
+  Tag,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -32,6 +36,7 @@ interface SidebarProps {
     id: string;
     nombre: string;
     nombreComercial: string | null;
+    industria: string;
     estadoSusc: string;
     trialFinaliza: Date | null;
   };
@@ -39,6 +44,20 @@ interface SidebarProps {
   rol: RolEmpresa | string;
   usuario: { nombre: string | null; apellido: string | null };
 }
+
+const INDUSTRIAS_RESTAURANTE = ['RESTAURANTE'];
+const INDUSTRIAS_COLMADO = ['COLMADO', 'TIENDA_ONLINE', 'FARMACIA', 'TIENDA_ROPA'];
+
+const RESTAURANTE_ITEMS = [
+  { href: '/restaurante/mesas', label: 'Mesas', icon: LayoutGrid },
+  { href: '/restaurante/comandas', label: 'Comandas', icon: ClipboardList },
+  { href: '/restaurante/cocina', label: 'Cocina', icon: ChefHat },
+];
+
+const COLMADO_ITEMS = [
+  { href: '/colmado/fiado', label: 'Fiado', icon: CreditCard },
+  { href: '/colmado/precios', label: 'Precios', icon: Tag },
+];
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Inicio', icon: LayoutDashboard },
@@ -197,7 +216,9 @@ function SidebarContent({
                 onClick={onLinkClick}
                 className={cn(
                   'flex items-center gap-2 rounded-md py-1.5 text-xs font-medium transition-colors',
-                  pathname === '/pos/abrir-caja' ? 'text-white' : 'text-slate-500 hover:text-slate-300',
+                  pathname === '/pos/abrir-caja'
+                    ? 'text-white'
+                    : 'text-slate-500 hover:text-slate-300',
                 )}
               >
                 <DollarSign className="h-3 w-3 shrink-0" />
@@ -208,7 +229,9 @@ function SidebarContent({
                 onClick={onLinkClick}
                 className={cn(
                   'flex items-center gap-2 rounded-md py-1.5 text-xs font-medium transition-colors',
-                  pathname === '/pos/historial' ? 'text-white' : 'text-slate-500 hover:text-slate-300',
+                  pathname === '/pos/historial'
+                    ? 'text-white'
+                    : 'text-slate-500 hover:text-slate-300',
                 )}
               >
                 <ClipboardList className="h-3 w-3 shrink-0" />
@@ -222,6 +245,26 @@ function SidebarContent({
         {NAV_ITEMS.slice(1).map(({ href, label, icon }) => (
           <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
         ))}
+
+        {/* Vertical: Restaurante */}
+        {INDUSTRIAS_RESTAURANTE.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Restaurante" />
+            {RESTAURANTE_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Colmado / Tienda */}
+        {INDUSTRIAS_COLMADO.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Mi Tienda" />
+            {COLMADO_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
 
         {/* Contabilidad */}
         <SectionDivider label="Contabilidad" />
@@ -259,9 +302,7 @@ function SidebarContent({
       {/* Footer usuario */}
       <div className="border-t border-slate-800 p-3">
         <div className="flex items-center gap-3">
-          <UserButton
-            appearance={{ elements: { avatarBox: 'w-8 h-8' } }}
-          />
+          <UserButton appearance={{ elements: { avatarBox: 'w-8 h-8' } }} />
           <div className="hidden min-w-0 flex-1 xl:block">
             <p className="truncate text-sm font-medium text-white">
               {[usuario.nombre, usuario.apellido].filter(Boolean).join(' ') || 'Usuario'}

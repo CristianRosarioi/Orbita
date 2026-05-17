@@ -138,7 +138,8 @@ export default async function DashboardPage() {
       {/* Encabezado */}
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-          {saludo}{usuario.nombre ? `, ${usuario.nombre}` : ''}
+          {saludo}
+          {usuario.nombre ? `, ${usuario.nombre}` : ''}
         </h1>
         <div className="flex items-center gap-2 mt-1 flex-wrap">
           <p className="text-sm text-slate-500">{empresa.nombreComercial ?? empresa.nombre}</p>
