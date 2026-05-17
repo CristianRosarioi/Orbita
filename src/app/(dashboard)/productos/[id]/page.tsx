@@ -62,7 +62,7 @@ export default async function ProductoDetallePage({ params }: { params: Promise<
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">{producto.nombre}</h1>
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">{producto.nombre}</h1>
             <div className="flex items-center gap-2 mt-1">
               <Badge variant="outline" className="text-xs">
                 {LABEL_TIPO[producto.tipo]}

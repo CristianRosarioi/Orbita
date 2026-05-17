@@ -104,7 +104,7 @@ export default function ConfigEmpresaPage() {
       <div className="flex items-center gap-3">
         <Building2 className="h-6 w-6 text-slate-700" />
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Mi empresa</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Mi empresa</h1>
           <p className="text-slate-500 text-sm mt-0.5">Actualiza la información de tu empresa</p>
         </div>
       </div>

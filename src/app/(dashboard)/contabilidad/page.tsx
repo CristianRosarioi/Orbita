@@ -71,9 +71,9 @@ export default function ContabilidadPage() {
   const ecuacion = t ? t.activo - t.pasivo - t.patrimonio : 0;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 space-y-4 md:p-6 md:space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Balance General</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Balance General</h1>
         <p className="text-slate-500 text-sm mt-1">Estado financiero acumulado de tu empresa</p>
       </div>
 

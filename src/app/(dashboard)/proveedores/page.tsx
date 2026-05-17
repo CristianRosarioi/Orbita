@@ -194,7 +194,7 @@ export default async function ProveedoresPage({
     <div className="p-6 lg:p-8 space-y-6 max-w-6xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Proveedores</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Proveedores</h1>
           <p className="text-slate-500 text-sm mt-1">
             Gestiona tu lista de proveedores y suplidores
           </p>

@@ -55,7 +55,9 @@ function InvitacionContent() {
           setCargando(false);
         }
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [token]);
 
   async function aceptar() {
@@ -121,7 +123,9 @@ function InvitacionContent() {
           <div className="space-y-3 text-sm">
             <div className="flex items-center justify-between py-2 border-b border-slate-100">
               <span className="text-slate-500">Tu rol</span>
-              <span className="font-semibold text-slate-800">{ROL_LABELS[info.rol] ?? info.rol}</span>
+              <span className="font-semibold text-slate-800">
+                {ROL_LABELS[info.rol] ?? info.rol}
+              </span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-slate-100">
               <span className="text-slate-500">Invitado por</span>

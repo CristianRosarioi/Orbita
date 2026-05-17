@@ -59,7 +59,7 @@ export default async function FacturaDetallePage({ params }: { params: Promise<{
           </Link>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-slate-900 font-mono">{factura.numero}</h1>
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 font-mono">{factura.numero}</h1>
               <FacturaStatusBadge estado={factura.estado} />
             </div>
             <p className="text-slate-500 text-sm mt-0.5">

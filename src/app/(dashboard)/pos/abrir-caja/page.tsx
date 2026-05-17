@@ -97,7 +97,7 @@ export default function AbrirCajaPage() {
           <ChevronLeft className="h-5 w-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Abrir caja</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Abrir caja</h1>
           <p className="text-slate-500 text-sm">Registra el efectivo con el que inicias el turno</p>
         </div>
       </div>

@@ -81,9 +81,9 @@ export default function Reporte606Page() {
   const anios = Array.from({ length: 6 }, (_, i) => ahora.getFullYear() - i);
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 space-y-4 md:p-6 md:space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Reporte 606</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Reporte 606</h1>
         <p className="text-slate-500 text-sm mt-1">Relación de comprobantes fiscales emitidos</p>
       </div>
 
@@ -161,7 +161,7 @@ export default function Reporte606Page() {
             <Card>
               <CardContent className="pt-4">
                 <p className="text-xs text-slate-500">Comprobantes</p>
-                <p className="text-2xl font-bold text-slate-900">{datos.cantidadRegistros}</p>
+                <p className="text-2xl font-bold tracking-tight text-slate-900">{datos.cantidadRegistros}</p>
               </CardContent>
             </Card>
             <Card>

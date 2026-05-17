@@ -114,22 +114,22 @@ async function FacturasList({
             <table className="w-full text-sm">
               <thead className="bg-slate-50">
                 <tr className="border-b border-slate-200">
-                  <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wide">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Número
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wide">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Cliente
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wide">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Fecha
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wide">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Método
                   </th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wide">
+                  <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Total
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wide">
+                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                     Estado
                   </th>
                   <th className="px-4 py-3 w-16" />
@@ -137,8 +137,8 @@ async function FacturasList({
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {facturas.map((f) => (
-                  <tr key={f.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-4 py-3 font-mono text-xs text-slate-700">{f.numero}</td>
+                  <tr key={f.id} className="hover:bg-slate-50/80 transition-colors cursor-pointer">
+                    <td className="px-4 py-3 font-mono font-medium text-xs text-slate-700">{f.numero}</td>
                     <td className="px-4 py-3 text-slate-700">{f.clienteNombre}</td>
                     <td className="px-4 py-3 text-slate-500">
                       {new Date(f.fechaEmision).toLocaleDateString('es-DO', {
@@ -207,7 +207,7 @@ export default async function FacturasPage({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Facturas</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Facturas</h1>
           <p className="text-slate-500 text-sm mt-0.5">Gestiona tus facturas y cobros</p>
         </div>
         <Link href="/facturas/nueva">

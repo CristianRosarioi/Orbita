@@ -2,6 +2,7 @@ import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import { SidebarDashboard } from '@/components/layout/sidebar-dashboard';
+import { DashboardHeader } from '@/components/layout/dashboard-header';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { userId } = await auth();
@@ -40,14 +41,17 @@ export default async function DashboardLayout({ children }: { children: React.Re
   });
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-slate-50">
       <SidebarDashboard
         empresa={sesion.empresaActiva}
         sucursal={sesion.sucursalActiva}
         rol={membresia?.rol ?? 'VIEWER'}
         usuario={usuario}
       />
-      <main className="flex-1 overflow-y-auto">{children}</main>
+      <div className="flex flex-col flex-1 overflow-hidden min-w-0">
+        <DashboardHeader />
+        <main className="flex-1 overflow-y-auto">{children}</main>
+      </div>
     </div>
   );
 }

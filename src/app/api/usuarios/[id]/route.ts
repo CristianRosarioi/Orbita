@@ -17,7 +17,8 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       where: { id, empresaId },
     });
     if (!miembro) return err('NOT_FOUND', 'El miembro no existe en esta empresa.', 404);
-    if (miembro.rol === 'OWNER') return err('FORBIDDEN', 'No se puede cambiar el rol del Propietario.', 403);
+    if (miembro.rol === 'OWNER')
+      return err('FORBIDDEN', 'No se puede cambiar el rol del Propietario.', 403);
 
     const actualizado = await prisma.miembroEmpresa.update({
       where: { id },
@@ -30,9 +31,12 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     return ok(actualizado);
   } catch (error) {
     if (error instanceof Error) {
-      if (error.message === 'EMPRESA_REQUERIDA') return err('UNAUTHORIZED', 'No tienes una empresa activa.', 401);
-      if (error.message === 'FORBIDDEN') return err('FORBIDDEN', 'No tienes permisos para cambiar roles.', 403);
-      if (error.message === 'SIN_MEMBRESIA') return err('UNAUTHORIZED', 'No tienes acceso a esta empresa.', 401);
+      if (error.message === 'EMPRESA_REQUERIDA')
+        return err('UNAUTHORIZED', 'No tienes una empresa activa.', 401);
+      if (error.message === 'FORBIDDEN')
+        return err('FORBIDDEN', 'No tienes permisos para cambiar roles.', 403);
+      if (error.message === 'SIN_MEMBRESIA')
+        return err('UNAUTHORIZED', 'No tienes acceso a esta empresa.', 401);
     }
     return handleApiError(error, 'PATCH /api/usuarios/[id]');
   }
@@ -52,7 +56,8 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
       include: { usuario: { select: { id: true } } },
     });
     if (!miembro) return err('NOT_FOUND', 'El miembro no existe en esta empresa.', 404);
-    if (miembro.rol === 'OWNER') return err('FORBIDDEN', 'No se puede remover al Propietario.', 403);
+    if (miembro.rol === 'OWNER')
+      return err('FORBIDDEN', 'No se puede remover al Propietario.', 403);
     if (miembro.usuario.id === usuarioActual.id) {
       return err('FORBIDDEN', 'No puedes removerte a ti mismo.', 403);
     }
@@ -65,9 +70,12 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     return ok({ mensaje: 'Usuario removido correctamente.' });
   } catch (error) {
     if (error instanceof Error) {
-      if (error.message === 'EMPRESA_REQUERIDA') return err('UNAUTHORIZED', 'No tienes una empresa activa.', 401);
-      if (error.message === 'FORBIDDEN') return err('FORBIDDEN', 'No tienes permisos para remover usuarios.', 403);
-      if (error.message === 'SIN_MEMBRESIA') return err('UNAUTHORIZED', 'No tienes acceso a esta empresa.', 401);
+      if (error.message === 'EMPRESA_REQUERIDA')
+        return err('UNAUTHORIZED', 'No tienes una empresa activa.', 401);
+      if (error.message === 'FORBIDDEN')
+        return err('FORBIDDEN', 'No tienes permisos para remover usuarios.', 403);
+      if (error.message === 'SIN_MEMBRESIA')
+        return err('UNAUTHORIZED', 'No tienes acceso a esta empresa.', 401);
     }
     return handleApiError(error, 'DELETE /api/usuarios/[id]');
   }

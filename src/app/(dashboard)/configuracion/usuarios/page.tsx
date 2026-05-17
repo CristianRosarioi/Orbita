@@ -21,18 +21,25 @@ import {
 import { useUser } from '@clerk/nextjs';
 
 const ROLES_INVITABLES = [
-  { value: 'ADMIN',    label: 'Administrador' },
+  { value: 'ADMIN', label: 'Administrador' },
   { value: 'VENDEDOR', label: 'Vendedor' },
   { value: 'CONTADOR', label: 'Contador' },
-  { value: 'CAJERO',   label: 'Cajero' },
-  { value: 'VIEWER',   label: 'Solo lectura' },
+  { value: 'CAJERO', label: 'Cajero' },
+  { value: 'VIEWER', label: 'Solo lectura' },
 ] as const;
 
 interface Miembro {
   id: string;
   rol: string;
   activo: boolean;
-  usuario: { id: string; email: string; nombre: string | null; apellido: string | null; avatar: string | null; clerkId: string };
+  usuario: {
+    id: string;
+    email: string;
+    nombre: string | null;
+    apellido: string | null;
+    avatar: string | null;
+    clerkId: string;
+  };
 }
 
 interface Invitacion {
@@ -43,7 +50,10 @@ interface Invitacion {
   token: string;
 }
 
-interface Mensaje { tipo: 'ok' | 'error'; texto: string }
+interface Mensaje {
+  tipo: 'ok' | 'error';
+  texto: string;
+}
 
 function iniciales(m: Miembro) {
   const n = m.usuario.nombre?.[0] ?? '';
@@ -87,8 +97,12 @@ export default function UsuariosPage() {
           setCargando(false);
         }
       })
-      .catch(() => { if (!cancelled) setCargando(false); });
-    return () => { cancelled = true; };
+      .catch(() => {
+        if (!cancelled) setCargando(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const miRol = clerkId ? (miembros.find((m) => m.usuario.clerkId === clerkId)?.rol ?? null) : null;
@@ -108,7 +122,7 @@ export default function UsuariosPage() {
     });
     const d = await res.json();
     if (d.success) {
-      setMiembros((prev) => prev.map((m) => m.id === miembroId ? { ...m, rol: nuevoRol } : m));
+      setMiembros((prev) => prev.map((m) => (m.id === miembroId ? { ...m, rol: nuevoRol } : m)));
       mostrarMensaje('ok', 'Rol actualizado correctamente.');
     } else {
       mostrarMensaje('error', d.error?.message ?? 'Error al cambiar el rol.');
@@ -186,20 +200,24 @@ export default function UsuariosPage() {
       <div className="flex items-center gap-3">
         <Users className="h-6 w-6 text-slate-700" />
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Usuarios</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Usuarios</h1>
           <p className="text-slate-500 text-sm mt-0.5">Gestiona los miembros de tu empresa</p>
         </div>
       </div>
 
       {mensaje && (
-        <div className={`rounded-lg border px-4 py-3 flex items-center gap-3 text-sm ${
-          mensaje.tipo === 'ok'
-            ? 'border-green-200 bg-green-50 text-green-800'
-            : 'border-red-200 bg-red-50 text-red-800'
-        }`}>
-          {mensaje.tipo === 'ok'
-            ? <CheckCircle2 className="h-4 w-4 shrink-0" />
-            : <AlertCircle className="h-4 w-4 shrink-0" />}
+        <div
+          className={`rounded-lg border px-4 py-3 flex items-center gap-3 text-sm ${
+            mensaje.tipo === 'ok'
+              ? 'border-green-200 bg-green-50 text-green-800'
+              : 'border-red-200 bg-red-50 text-red-800'
+          }`}
+        >
+          {mensaje.tipo === 'ok' ? (
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
+          ) : (
+            <AlertCircle className="h-4 w-4 shrink-0" />
+          )}
           {mensaje.texto}
         </div>
       )}
@@ -213,52 +231,64 @@ export default function UsuariosPage() {
         </CardHeader>
         <CardContent className="p-0">
           <div className="divide-y divide-slate-100">
-            {miembros.filter((m) => m.activo).map((m) => {
-              const esYo = m.usuario.clerkId === clerkId;
-              const esOwnerMiembro = m.rol === 'OWNER';
-              return (
-                <div key={m.id} className="flex items-center gap-3 px-4 py-3">
-                  {/* Avatar iniciales */}
-                  <div className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center text-sm font-semibold text-slate-600 shrink-0">
-                    {iniciales(m)}
-                  </div>
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-medium text-slate-800 truncate">{nombreCompleto(m)}</p>
-                      {esOwnerMiembro && <Crown className="h-3.5 w-3.5 text-amber-500 shrink-0" />}
-                      {esYo && <Badge variant="secondary" className="text-xs">Tú</Badge>}
+            {miembros
+              .filter((m) => m.activo)
+              .map((m) => {
+                const esYo = m.usuario.clerkId === clerkId;
+                const esOwnerMiembro = m.rol === 'OWNER';
+                return (
+                  <div key={m.id} className="flex items-center gap-3 px-4 py-3">
+                    {/* Avatar iniciales */}
+                    <div className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center text-sm font-semibold text-slate-600 shrink-0">
+                      {iniciales(m)}
                     </div>
-                    <p className="text-xs text-slate-400 truncate">{m.usuario.email}</p>
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium text-slate-800 truncate">
+                          {nombreCompleto(m)}
+                        </p>
+                        {esOwnerMiembro && (
+                          <Crown className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+                        )}
+                        {esYo && (
+                          <Badge variant="secondary" className="text-xs">
+                            Tú
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-400 truncate">{m.usuario.email}</p>
+                    </div>
+                    {/* Rol */}
+                    <div className="flex items-center gap-2 shrink-0">
+                      {esOwnerOAdmin && !esOwnerMiembro && !esYo ? (
+                        <select
+                          value={m.rol}
+                          onChange={(e) => cambiarRol(m.id, e.target.value)}
+                          className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-slate-300"
+                        >
+                          {ROLES_INVITABLES.map((r) => (
+                            <option key={r.value} value={r.value}>
+                              {r.label}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <RolBadge rol={m.rol} />
+                      )}
+                      {esOwner && !esOwnerMiembro && !esYo && (
+                        <button
+                          onClick={() => removerMiembro(m.id, nombreCompleto(m))}
+                          className="text-slate-300 hover:text-red-500 transition-colors"
+                          title="Remover usuario"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  {/* Rol */}
-                  <div className="flex items-center gap-2 shrink-0">
-                    {esOwnerOAdmin && !esOwnerMiembro && !esYo ? (
-                      <select
-                        value={m.rol}
-                        onChange={(e) => cambiarRol(m.id, e.target.value)}
-                        className="text-xs border border-slate-200 rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-slate-300"
-                      >
-                        {ROLES_INVITABLES.map((r) => (
-                          <option key={r.value} value={r.value}>{r.label}</option>
-                        ))}
-                      </select>
-                    ) : (
-                      <RolBadge rol={m.rol} />
-                    )}
-                    {esOwner && !esOwnerMiembro && !esYo && (
-                      <button
-                        onClick={() => removerMiembro(m.id, nombreCompleto(m))}
-                        className="text-slate-300 hover:text-red-500 transition-colors"
-                        title="Remover usuario"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </CardContent>
       </Card>
@@ -271,7 +301,9 @@ export default function UsuariosPage() {
           </CardHeader>
           <CardContent>
             {invitaciones.length === 0 ? (
-              <p className="text-slate-400 text-sm text-center py-4">No hay invitaciones pendientes.</p>
+              <p className="text-slate-400 text-sm text-center py-4">
+                No hay invitaciones pendientes.
+              </p>
             ) : (
               <div className="space-y-2">
                 {invitaciones.map((inv) => {
@@ -295,7 +327,11 @@ export default function UsuariosPage() {
                         className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-800 transition-colors shrink-0"
                         title="Copiar link"
                       >
-                        {yaCopiado ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
+                        {yaCopiado ? (
+                          <Check className="h-3.5 w-3.5 text-green-500" />
+                        ) : (
+                          <Copy className="h-3.5 w-3.5" />
+                        )}
                         {yaCopiado ? 'Copiado' : 'Copiar link'}
                       </button>
                       <button
@@ -346,7 +382,9 @@ export default function UsuariosPage() {
                     className="w-full border border-slate-200 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-slate-300"
                   >
                     {ROLES_INVITABLES.map((r) => (
-                      <option key={r.value} value={r.value}>{r.label}</option>
+                      <option key={r.value} value={r.value}>
+                        {r.label}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -359,7 +397,9 @@ export default function UsuariosPage() {
 
             {linkGenerado && (
               <div className="rounded-lg border border-green-200 bg-green-50 p-4 space-y-2">
-                <p className="text-sm font-medium text-green-800">Link generado — cópialo y compártelo</p>
+                <p className="text-sm font-medium text-green-800">
+                  Link generado — cópialo y compártelo
+                </p>
                 <div className="flex items-center gap-2">
                   <code className="flex-1 text-xs bg-white border border-green-200 rounded px-2 py-1.5 text-green-700 truncate">
                     {linkGenerado}
@@ -368,7 +408,11 @@ export default function UsuariosPage() {
                     onClick={() => copiar(linkGenerado, 'nuevo')}
                     className="flex items-center gap-1 text-xs text-green-700 hover:text-green-900 shrink-0 font-medium"
                   >
-                    {copiado === 'nuevo' ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                    {copiado === 'nuevo' ? (
+                      <Check className="h-3.5 w-3.5" />
+                    ) : (
+                      <Copy className="h-3.5 w-3.5" />
+                    )}
                     {copiado === 'nuevo' ? 'Copiado' : 'Copiar'}
                   </button>
                 </div>

@@ -12,7 +12,12 @@ vi.mock('@clerk/nextjs/server', () => ({
   }),
 }));
 
-const mockUsuarioOwner = { id: 'user_owner', clerkId: 'clerk_owner', email: 'ana@test.com', deletedAt: null };
+const mockUsuarioOwner = {
+  id: 'user_owner',
+  clerkId: 'clerk_owner',
+  email: 'ana@test.com',
+  deletedAt: null,
+};
 const mockMembresiaOwner = {
   id: 'memb_owner',
   usuarioId: 'user_owner',
@@ -44,17 +49,29 @@ const mockPrisma = prisma as any;
 
 function setupOwnerSession() {
   mockPrisma.usuario.findFirst.mockResolvedValue(mockUsuarioOwner);
-  mockPrisma.sesionUsuarioEmpresa.findUnique.mockResolvedValue({ usuarioId: 'user_owner', empresaActivaId: 'emp_1' });
+  mockPrisma.sesionUsuarioEmpresa.findUnique.mockResolvedValue({
+    usuarioId: 'user_owner',
+    empresaActivaId: 'emp_1',
+  });
   mockPrisma.miembroEmpresa.findFirst.mockResolvedValue(mockMembresiaOwner);
 }
 
 describe('GET /api/invitaciones', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('retorna invitaciones pendientes para OWNER', async () => {
     setupOwnerSession();
     mockPrisma.invitacion.findMany.mockResolvedValue([
-      { id: 'inv_1', email: 'nuevo@test.com', rol: 'VENDEDOR', estado: 'PENDIENTE', token: 'tok_1', expiresAt: new Date() },
+      {
+        id: 'inv_1',
+        email: 'nuevo@test.com',
+        rol: 'VENDEDOR',
+        estado: 'PENDIENTE',
+        token: 'tok_1',
+        expiresAt: new Date(),
+      },
     ]);
 
     const { GET } = await import('@/app/api/invitaciones/route');
@@ -67,7 +84,9 @@ describe('GET /api/invitaciones', () => {
 });
 
 describe('POST /api/invitaciones', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('crea invitación correctamente', async () => {
     setupOwnerSession();
@@ -75,7 +94,13 @@ describe('POST /api/invitaciones', () => {
       .mockResolvedValueOnce(mockMembresiaOwner) // requireRole
       .mockResolvedValueOnce(null); // no es miembro
     mockPrisma.invitacion.findFirst.mockResolvedValue(null); // no hay invitación pendiente
-    const invCreada = { id: 'inv_1', email: 'nuevo@test.com', rol: 'VENDEDOR', token: 'tok-uuid', expiresAt: new Date() };
+    const invCreada = {
+      id: 'inv_1',
+      email: 'nuevo@test.com',
+      rol: 'VENDEDOR',
+      token: 'tok-uuid',
+      expiresAt: new Date(),
+    };
     mockPrisma.invitacion.create.mockResolvedValue(invCreada);
 
     const { POST } = await import('@/app/api/invitaciones/route');
@@ -145,14 +170,21 @@ describe('POST /api/invitaciones', () => {
 });
 
 describe('GET /api/invitaciones/aceptar', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('retorna info de invitación válida', async () => {
     const empresa = { id: 'emp_1', nombre: 'Empresa Test', nombreComercial: null };
     mockPrisma.invitacion.findUnique.mockResolvedValue({
-      id: 'inv_1', email: 'invitado@test.com', rol: 'VENDEDOR',
-      estado: 'PENDIENTE', token: 'tok_1', invitadoPor: 'clerk_owner',
-      expiresAt: new Date(Date.now() + 3600000), empresa,
+      id: 'inv_1',
+      email: 'invitado@test.com',
+      rol: 'VENDEDOR',
+      estado: 'PENDIENTE',
+      token: 'tok_1',
+      invitadoPor: 'clerk_owner',
+      expiresAt: new Date(Date.now() + 3600000),
+      empresa,
     });
     mockPrisma.usuario.findFirst.mockResolvedValue(mockUsuarioOwner);
 
@@ -177,8 +209,12 @@ describe('GET /api/invitaciones/aceptar', () => {
 
   it('rechaza invitación expirada', async () => {
     mockPrisma.invitacion.findUnique.mockResolvedValue({
-      id: 'inv_exp', email: 'test@test.com', rol: 'ADMIN',
-      estado: 'PENDIENTE', token: 'tok_exp', invitadoPor: 'clerk_owner',
+      id: 'inv_exp',
+      email: 'test@test.com',
+      rol: 'ADMIN',
+      estado: 'PENDIENTE',
+      token: 'tok_exp',
+      invitadoPor: 'clerk_owner',
       expiresAt: new Date(Date.now() - 1000), // ya expiró
       empresa: { id: 'emp_1', nombre: 'Empresa' },
     });

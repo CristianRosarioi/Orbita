@@ -12,8 +12,18 @@ vi.mock('@clerk/nextjs/server', () => ({
   }),
 }));
 
-const mockUsuarioOwner = { id: 'user_owner', clerkId: 'clerk_owner', email: 'ana@test.com', deletedAt: null };
-const mockUsuarioAdmin = { id: 'user_admin', clerkId: 'clerk_admin', email: 'admin@test.com', deletedAt: null };
+const mockUsuarioOwner = {
+  id: 'user_owner',
+  clerkId: 'clerk_owner',
+  email: 'ana@test.com',
+  deletedAt: null,
+};
+const mockUsuarioAdmin = {
+  id: 'user_admin',
+  clerkId: 'clerk_admin',
+  email: 'admin@test.com',
+  deletedAt: null,
+};
 const mockMembresiaOwner = {
   id: 'memb_owner',
   usuarioId: 'user_owner',
@@ -59,12 +69,17 @@ const mockPrisma = prisma as typeof prisma & {
 
 function setupOwnerSession() {
   mockPrisma.usuario.findFirst.mockResolvedValue(mockUsuarioOwner);
-  mockPrisma.sesionUsuarioEmpresa.findUnique.mockResolvedValue({ usuarioId: 'user_owner', empresaActivaId: 'emp_1' });
+  mockPrisma.sesionUsuarioEmpresa.findUnique.mockResolvedValue({
+    usuarioId: 'user_owner',
+    empresaActivaId: 'emp_1',
+  });
   mockPrisma.miembroEmpresa.findFirst.mockResolvedValue(mockMembresiaOwner);
 }
 
 describe('GET /api/usuarios', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('retorna lista de miembros para OWNER', async () => {
     setupOwnerSession();
@@ -81,13 +96,20 @@ describe('GET /api/usuarios', () => {
 });
 
 describe('PATCH /api/usuarios/[id]', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('cambia el rol de un miembro correctamente', async () => {
     setupOwnerSession();
-    mockPrisma.miembroEmpresa.findFirst.mockResolvedValueOnce(mockMembresiaOwner) // requireRole
+    mockPrisma.miembroEmpresa.findFirst
+      .mockResolvedValueOnce(mockMembresiaOwner) // requireRole
       .mockResolvedValueOnce({ ...mockMembresiaAdmin, rol: 'ADMIN' }); // buscar miembro
-    mockPrisma.miembroEmpresa.update.mockResolvedValue({ ...mockMembresiaAdmin, rol: 'CONTADOR', usuario: mockUsuarioAdmin });
+    mockPrisma.miembroEmpresa.update.mockResolvedValue({
+      ...mockMembresiaAdmin,
+      rol: 'CONTADOR',
+      usuario: mockUsuarioAdmin,
+    });
 
     const { PATCH } = await import('@/app/api/usuarios/[id]/route');
     const req = new Request('http://localhost/api/usuarios/memb_admin', {
@@ -105,7 +127,7 @@ describe('PATCH /api/usuarios/[id]', () => {
     setupOwnerSession();
     // requireRole devuelve OWNER para la autenticación
     mockPrisma.miembroEmpresa.findFirst
-      .mockResolvedValueOnce(mockMembresiaOwner)  // requireRole
+      .mockResolvedValueOnce(mockMembresiaOwner) // requireRole
       .mockResolvedValueOnce({ ...mockMembresiaOwner }); // buscar miembro — también es OWNER
 
     const { PATCH } = await import('@/app/api/usuarios/[id]/route');
@@ -139,7 +161,9 @@ describe('PATCH /api/usuarios/[id]', () => {
 });
 
 describe('DELETE /api/usuarios/[id]', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('remueve un miembro correctamente', async () => {
     setupOwnerSession();
@@ -149,7 +173,9 @@ describe('DELETE /api/usuarios/[id]', () => {
     mockPrisma.miembroEmpresa.update.mockResolvedValue({ ...mockMembresiaAdmin, activo: false });
 
     const { DELETE } = await import('@/app/api/usuarios/[id]/route');
-    const res = await DELETE(new Request('http://localhost') as never, { params: Promise.resolve({ id: 'memb_admin' }) });
+    const res = await DELETE(new Request('http://localhost') as never, {
+      params: Promise.resolve({ id: 'memb_admin' }),
+    });
     expect(res.status).toBe(200);
   });
 
@@ -160,7 +186,9 @@ describe('DELETE /api/usuarios/[id]', () => {
       .mockResolvedValueOnce({ ...mockMembresiaOwner, usuario: { id: 'user_owner' } }); // buscar miembro (también OWNER)
 
     const { DELETE } = await import('@/app/api/usuarios/[id]/route');
-    const res = await DELETE(new Request('http://localhost') as never, { params: Promise.resolve({ id: 'memb_owner' }) });
+    const res = await DELETE(new Request('http://localhost') as never, {
+      params: Promise.resolve({ id: 'memb_owner' }),
+    });
     expect(res.status).toBe(403);
     const body = await res.json();
     expect(body.error.message).toContain('Propietario');
@@ -168,11 +196,16 @@ describe('DELETE /api/usuarios/[id]', () => {
 
   it('no permite que ADMIN llame DELETE', async () => {
     mockPrisma.usuario.findFirst.mockResolvedValue(mockUsuarioAdmin);
-    mockPrisma.sesionUsuarioEmpresa.findUnique.mockResolvedValue({ usuarioId: 'user_admin', empresaActivaId: 'emp_1' });
+    mockPrisma.sesionUsuarioEmpresa.findUnique.mockResolvedValue({
+      usuarioId: 'user_admin',
+      empresaActivaId: 'emp_1',
+    });
     mockPrisma.miembroEmpresa.findFirst.mockResolvedValue(mockMembresiaAdmin); // ADMIN
 
     const { DELETE } = await import('@/app/api/usuarios/[id]/route');
-    const res = await DELETE(new Request('http://localhost') as never, { params: Promise.resolve({ id: 'memb_otro' }) });
+    const res = await DELETE(new Request('http://localhost') as never, {
+      params: Promise.resolve({ id: 'memb_otro' }),
+    });
     expect(res.status).toBe(403);
   });
 });

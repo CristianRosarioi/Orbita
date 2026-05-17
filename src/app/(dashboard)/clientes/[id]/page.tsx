@@ -53,7 +53,7 @@ export default async function ClienteDetallePage({ params }: { params: Promise<{
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
               {cliente.nombreComercial ?? cliente.nombre}
             </h1>
             {cliente.nombreComercial && <p className="text-slate-500 text-sm">{cliente.nombre}</p>}

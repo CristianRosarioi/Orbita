@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import { esMX } from '@clerk/localizations'; // No existe esDO — esMX es la opción más cercana para el Caribe
@@ -15,9 +15,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Órbita — Sistema de Gestión Empresarial',
+  title: {
+    default: 'Órbita — Gestión Empresarial',
+    template: '%s — Órbita',
+  },
   description:
-    'Facturación, inventario y gestión empresarial para República Dominicana. Cumplimiento DGII incluido.',
+    'Facturación, inventario y cumplimiento DGII para negocios dominicanos. Todo en un solo lugar.',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({

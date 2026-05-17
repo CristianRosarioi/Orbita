@@ -60,7 +60,7 @@ export default async function HistorialCajaPage() {
           <ChevronLeft className="h-5 w-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Historial de caja</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Historial de caja</h1>
           <p className="text-slate-500 text-sm">Todas las sesiones de caja registradas</p>
         </div>
       </div>

@@ -25,9 +25,12 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     return ok({ mensaje: 'Invitación cancelada.' });
   } catch (error) {
     if (error instanceof Error) {
-      if (error.message === 'EMPRESA_REQUERIDA') return err('UNAUTHORIZED', 'No tienes una empresa activa.', 401);
-      if (error.message === 'FORBIDDEN') return err('FORBIDDEN', 'No tienes permisos para cancelar invitaciones.', 403);
-      if (error.message === 'SIN_MEMBRESIA') return err('UNAUTHORIZED', 'No tienes acceso a esta empresa.', 401);
+      if (error.message === 'EMPRESA_REQUERIDA')
+        return err('UNAUTHORIZED', 'No tienes una empresa activa.', 401);
+      if (error.message === 'FORBIDDEN')
+        return err('FORBIDDEN', 'No tienes permisos para cancelar invitaciones.', 403);
+      if (error.message === 'SIN_MEMBRESIA')
+        return err('UNAUTHORIZED', 'No tienes acceso a esta empresa.', 401);
     }
     return handleApiError(error, 'DELETE /api/invitaciones/[id]');
   }

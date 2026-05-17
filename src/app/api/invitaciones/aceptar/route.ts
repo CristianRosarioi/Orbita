@@ -50,7 +50,8 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const { userId } = await auth();
-    if (!userId) return err('UNAUTHORIZED', 'Debes iniciar sesión para aceptar la invitación.', 401);
+    if (!userId)
+      return err('UNAUTHORIZED', 'Debes iniciar sesión para aceptar la invitación.', 401);
 
     const body = await req.json();
     const token = body?.token as string | undefined;
@@ -94,7 +95,10 @@ export async function POST(req: Request) {
     });
     if (yaEsMiembro) {
       if (!yaEsMiembro.activo) {
-        await prisma.miembroEmpresa.update({ where: { id: yaEsMiembro.id }, data: { activo: true, rol: invitacion.rol } });
+        await prisma.miembroEmpresa.update({
+          where: { id: yaEsMiembro.id },
+          data: { activo: true, rol: invitacion.rol },
+        });
       } else {
         return err('CONFLICT', 'Ya eres miembro de esta empresa.', 409);
       }

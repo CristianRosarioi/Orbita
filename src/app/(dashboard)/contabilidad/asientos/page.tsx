@@ -114,11 +114,11 @@ export default function AsientosPage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 space-y-4 md:p-6 md:space-y-6">
       <div className="flex items-center gap-3">
         <BookOpen className="h-6 w-6 text-slate-700" />
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Libro Diario</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Libro Diario</h1>
           <p className="text-slate-500 text-sm mt-0.5">Asientos contables de doble partida</p>
         </div>
         <Badge variant="secondary" className="ml-auto">

@@ -56,7 +56,7 @@ export default async function ProveedorDetallePage({
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
               {proveedor.nombreComercial ?? proveedor.nombre}
             </h1>
             {proveedor.nombreComercial && (

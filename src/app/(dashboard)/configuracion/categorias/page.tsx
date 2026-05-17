@@ -244,7 +244,7 @@ export default function CategoriasPage() {
     <div className="p-6 lg:p-8 max-w-3xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Categorías</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Categorías</h1>
           <p className="text-slate-500 text-sm mt-1">Organiza tus productos en categorías</p>
         </div>
         <Button

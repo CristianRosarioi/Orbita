@@ -15,7 +15,7 @@ export default async function NuevaFacturaPage() {
           <ChevronLeft className="h-5 w-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Nueva factura</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Nueva factura</h1>
           <p className="text-slate-500 text-sm mt-0.5">
             Completa los datos y emite o guarda como borrador
           </p>

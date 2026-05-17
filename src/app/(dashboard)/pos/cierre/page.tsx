@@ -165,7 +165,7 @@ export default function CierreCajaPage() {
           <ChevronLeft className="h-5 w-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Cierre de caja</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Cierre de caja</h1>
           <p className="text-slate-500 text-sm">
             Turno desde {fmtFecha(resumen.sesion.fechaApertura)}
           </p>
