@@ -29,6 +29,8 @@ import {
   Tag,
   ShoppingBag,
   Receipt,
+  UserCheck,
+  Wallet,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -72,6 +74,11 @@ const NAV_ITEMS = [
 const COMPRAS_ITEMS = [
   { href: '/compras/ordenes', label: 'Órdenes', icon: ShoppingBag },
   { href: '/compras/gastos', label: 'Gastos', icon: Receipt },
+];
+
+const NOMINA_ITEMS = [
+  { href: '/nomina/empleados', label: 'Empleados', icon: UserCheck },
+  { href: '/nomina/nominas', label: 'Nóminas', icon: Wallet },
 ];
 
 const CONTABILIDAD_ITEMS = [
@@ -276,6 +283,12 @@ function SidebarContent({
         {/* Compras */}
         <SectionDivider label="Compras" />
         {COMPRAS_ITEMS.map(({ href, label, icon }) => (
+          <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+        ))}
+
+        {/* Nómina */}
+        <SectionDivider label="Nómina" />
+        {NOMINA_ITEMS.map(({ href, label, icon }) => (
           <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
         ))}
 

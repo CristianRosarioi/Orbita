@@ -173,6 +173,8 @@ model Empresa {
   movimientosFiado MovimientoFiado[]
   ordenes         OrdenCompra[]
   gastos          Gasto[]
+  empleados       Empleado[]
+  nominas         Nomina[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -1032,3 +1034,136 @@ model Gasto {
   @@map("gastos")
 }
 
+
+// ============================================================
+// FASE 9 — NÓMINA DOMINICANA
+// ============================================================
+
+enum TipoContrato {
+  INDEFINIDO
+  DETERMINADO
+  POR_OBRA
+  TEMPORAL
+
+  @@map("tipo_contrato")
+}
+
+enum EstadoEmpleado {
+  ACTIVO
+  INACTIVO
+  SUSPENDIDO
+  TERMINADO
+
+  @@map("estado_empleado")
+}
+
+enum FrecuenciaPago {
+  SEMANAL
+  QUINCENAL
+  MENSUAL
+
+  @@map("frecuencia_pago")
+}
+
+enum EstadoNomina {
+  BORRADOR
+  PROCESADA
+  PAGADA
+  ANULADA
+
+  @@map("estado_nomina")
+}
+
+// ============================================================
+// MODELO: Empleado
+// ============================================================
+model Empleado {
+  id             String         @id @default(cuid())
+  empresaId      String         @map("empresa_id")
+  nombre         String
+  apellido       String
+  cedula         String
+  cargo          String
+  departamento   String?
+  salarioBase    Decimal        @map("salario_base")
+  tipoContrato   TipoContrato   @map("tipo_contrato")
+  frecuenciaPago FrecuenciaPago @map("frecuencia_pago")
+  estado         EstadoEmpleado @default(ACTIVO)
+  fechaIngreso   DateTime       @map("fecha_ingreso")
+  fechaSalida    DateTime?      @map("fecha_salida")
+  email          String?
+  telefono       String?
+  numeroCuenta   String?        @map("numero_cuenta")
+  banco          String?
+  notas          String?
+  creadoPor      String         @map("creado_por")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  deletedAt      DateTime?      @map("deleted_at")
+
+  empresa    Empresa      @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  itemNomina ItemNomina[]
+
+  @@unique([empresaId, cedula])
+  @@index([empresaId, estado])
+  @@map("empleados")
+}
+
+// ============================================================
+// MODELO: Nomina
+// ============================================================
+model Nomina {
+  id             String       @id @default(cuid())
+  empresaId      String       @map("empresa_id")
+  periodo        String
+  fechaInicio    DateTime     @map("fecha_inicio")
+  fechaFin       DateTime     @map("fecha_fin")
+  estado         EstadoNomina @default(BORRADOR)
+  totalBruto     Decimal      @default(0) @map("total_bruto")
+  totalTSS       Decimal      @default(0) @map("total_tss")
+  totalISR       Decimal      @default(0) @map("total_isr")
+  totalOtros     Decimal      @default(0) @map("total_otros")
+  totalNeto      Decimal      @default(0) @map("total_neto")
+  notas          String?
+  creadoPor      String       @map("creado_por")
+  procesadaEn    DateTime?    @map("procesada_en")
+  pagadaEn       DateTime?    @map("pagada_en")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  deletedAt      DateTime?    @map("deleted_at")
+
+  empresa Empresa      @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  items   ItemNomina[]
+
+  @@index([empresaId, estado])
+  @@index([empresaId, periodo])
+  @@map("nominas")
+}
+
+// ============================================================
+// MODELO: ItemNomina
+// ============================================================
+model ItemNomina {
+  id              String   @id @default(cuid())
+  nominaId        String   @map("nomina_id")
+  empleadoId      String   @map("empleado_id")
+  salarioBase     Decimal  @map("salario_base")
+  diasTrabajados  Decimal  @default(23.83) @map("dias_trabajados")
+  salarioBruto    Decimal  @map("salario_bruto")
+  tssTrabajador   Decimal  @map("tss_trabajador")
+  tssEmpleador    Decimal  @map("tss_empleador")
+  isr             Decimal  @default(0)
+  otrosDescuentos Decimal  @default(0) @map("otros_descuentos")
+  otrosIngresos   Decimal  @default(0) @map("otros_ingresos")
+  salarioNeto     Decimal  @map("salario_neto")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  nomina   Nomina   @relation(fields: [nominaId], references: [id], onDelete: Cascade)
+  empleado Empleado @relation(fields: [empleadoId], references: [id])
+
+  @@unique([nominaId, empleadoId])
+  @@index([nominaId])
+  @@index([empleadoId])
+  @@map("items_nomina")
+}

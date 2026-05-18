@@ -206,3 +206,36 @@ export const CATEGORIAS_GASTO = [
   'OTROS',
 ] as const;
 export type CategoriaGasto = (typeof CATEGORIAS_GASTO)[number];
+
+// Fase 9 — Nómina Dominicana
+
+export const TipoContrato = {
+  INDEFINIDO: 'INDEFINIDO',
+  DETERMINADO: 'DETERMINADO',
+  POR_OBRA: 'POR_OBRA',
+  TEMPORAL: 'TEMPORAL',
+} as const;
+export type TipoContrato = (typeof TipoContrato)[keyof typeof TipoContrato];
+
+export const EstadoEmpleado = {
+  ACTIVO: 'ACTIVO',
+  INACTIVO: 'INACTIVO',
+  SUSPENDIDO: 'SUSPENDIDO',
+  TERMINADO: 'TERMINADO',
+} as const;
+export type EstadoEmpleado = (typeof EstadoEmpleado)[keyof typeof EstadoEmpleado];
+
+export const FrecuenciaPago = {
+  SEMANAL: 'SEMANAL',
+  QUINCENAL: 'QUINCENAL',
+  MENSUAL: 'MENSUAL',
+} as const;
+export type FrecuenciaPago = (typeof FrecuenciaPago)[keyof typeof FrecuenciaPago];
+
+export const EstadoNomina = {
+  BORRADOR: 'BORRADOR',
+  PROCESADA: 'PROCESADA',
+  PAGADA: 'PAGADA',
+  ANULADA: 'ANULADA',
+} as const;
+export type EstadoNomina = (typeof EstadoNomina)[keyof typeof EstadoNomina];
