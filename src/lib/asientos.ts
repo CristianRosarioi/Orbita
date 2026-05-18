@@ -242,7 +242,12 @@ export async function crearAsientoCompra(
 
   const numero = await siguienteNumeroAsiento(empresaId, tx);
 
-  const lineas: { cuentaId: string; tipo: 'DEBITO' | 'CREDITO'; monto: number; descripcion: string }[] = [];
+  const lineas: {
+    cuentaId: string;
+    tipo: 'DEBITO' | 'CREDITO';
+    monto: number;
+    descripcion: string;
+  }[] = [];
 
   // DÉBITO: 1105 Inventario (bienes recibidos)
   if (subtotal > 0) {
@@ -313,7 +318,12 @@ export async function crearAsientoGasto(
 
   const numero = await siguienteNumeroAsiento(empresaId, tx);
 
-  const lineas: { cuentaId: string; tipo: 'DEBITO' | 'CREDITO'; monto: number; descripcion: string }[] = [];
+  const lineas: {
+    cuentaId: string;
+    tipo: 'DEBITO' | 'CREDITO';
+    monto: number;
+    descripcion: string;
+  }[] = [];
 
   // DÉBITO: 5002 Gastos operacionales
   if (monto > 0) {

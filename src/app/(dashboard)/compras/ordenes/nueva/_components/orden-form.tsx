@@ -67,11 +67,7 @@ export function OrdenForm({ proveedores }: { proveedores: Proveedor[] }) {
   const totales = calcTotales(items);
 
   function updateItem(id: string, field: keyof ItemRow, value: string | number) {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item,
-      ),
-    );
+    setItems((prev) => prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)));
   }
 
   function removeItem(id: string) {
@@ -203,7 +199,9 @@ export function OrdenForm({ proveedores }: { proveedores: Proveedor[] }) {
                         min="0.01"
                         step="0.01"
                         value={item.cantidad}
-                        onChange={(e) => updateItem(item.id, 'cantidad', parseFloat(e.target.value) || 0)}
+                        onChange={(e) =>
+                          updateItem(item.id, 'cantidad', parseFloat(e.target.value) || 0)
+                        }
                         className="h-8 text-sm text-right w-20"
                       />
                     </td>
@@ -213,14 +211,18 @@ export function OrdenForm({ proveedores }: { proveedores: Proveedor[] }) {
                         min="0"
                         step="0.01"
                         value={item.costoUnitario}
-                        onChange={(e) => updateItem(item.id, 'costoUnitario', parseFloat(e.target.value) || 0)}
+                        onChange={(e) =>
+                          updateItem(item.id, 'costoUnitario', parseFloat(e.target.value) || 0)
+                        }
                         className="h-8 text-sm text-right w-28"
                       />
                     </td>
                     <td className="px-4 py-2">
                       <Select
                         value={String(item.itbisPorcentaje)}
-                        onValueChange={(v) => updateItem(item.id, 'itbisPorcentaje', parseFloat(v ?? '0'))}
+                        onValueChange={(v) =>
+                          updateItem(item.id, 'itbisPorcentaje', parseFloat(v ?? '0'))
+                        }
                       >
                         <SelectTrigger className="h-8 text-sm w-20">
                           <SelectValue />
@@ -285,12 +287,7 @@ export function OrdenForm({ proveedores }: { proveedores: Proveedor[] }) {
 
       {/* Acciones */}
       <div className="flex justify-end gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.back()}
-          disabled={loading}
-        >
+        <Button type="button" variant="outline" onClick={() => router.back()} disabled={loading}>
           Cancelar
         </Button>
         <Button type="submit" disabled={loading}>

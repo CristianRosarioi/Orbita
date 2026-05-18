@@ -22,12 +22,15 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       include: { items: true },
     });
     if (!comanda) return err('NOT_FOUND', 'Comanda no encontrada.', 404);
-    if (comanda.estado === 'CANCELADA') return err('VALIDATION_ERROR', 'No se puede agregar ítems a una comanda cancelada.', 422);
-    if (comanda.estado === 'SERVIDA') return err('VALIDATION_ERROR', 'No se puede modificar una comanda ya servida.', 422);
+    if (comanda.estado === 'CANCELADA')
+      return err('VALIDATION_ERROR', 'No se puede agregar ítems a una comanda cancelada.', 422);
+    if (comanda.estado === 'SERVIDA')
+      return err('VALIDATION_ERROR', 'No se puede modificar una comanda ya servida.', 422);
 
     const body = await req.json();
     const parsed = AddItemComandaSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     const item = await prisma.$transaction(async (tx) => {
       const nuevoItem = await tx.itemComanda.create({

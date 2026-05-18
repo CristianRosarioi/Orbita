@@ -28,7 +28,12 @@ export function CrearComandaModal({ mesaId, mesaNumero, onClose }: CrearComandaM
       const res = await fetch('/api/restaurante/comandas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mesaId, mesero: mesero || undefined, personas, notas: notas || undefined }),
+        body: JSON.stringify({
+          mesaId,
+          mesero: mesero || undefined,
+          personas,
+          notas: notas || undefined,
+        }),
       });
 
       const data = await res.json();
@@ -50,7 +55,9 @@ export function CrearComandaModal({ mesaId, mesaNumero, onClose }: CrearComandaM
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-semibold text-slate-900">Nueva comanda — Mesa {mesaNumero}</h2>
+          <h2 className="text-lg font-semibold text-slate-900">
+            Nueva comanda — Mesa {mesaNumero}
+          </h2>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
             <X className="h-5 w-5" />
           </button>

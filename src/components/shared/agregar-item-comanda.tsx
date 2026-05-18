@@ -27,7 +27,10 @@ export function AgregarItemComanda({ comandaId, onItemAgregado }: AgregarItemCom
   const [error, setError] = useState('');
 
   async function buscarProductos(q: string) {
-    if (q.length < 2) { setResultados([]); return; }
+    if (q.length < 2) {
+      setResultados([]);
+      return;
+    }
     setBuscando(true);
     try {
       const res = await fetch(`/api/productos?search=${encodeURIComponent(q)}&limit=8`);
@@ -57,7 +60,10 @@ export function AgregarItemComanda({ comandaId, onItemAgregado }: AgregarItemCom
       });
 
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error al agregar el ítem.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error al agregar el ítem.');
+        return;
+      }
 
       setSeleccionado(null);
       setBusqueda('');
@@ -83,7 +89,10 @@ export function AgregarItemComanda({ comandaId, onItemAgregado }: AgregarItemCom
             <input
               type="text"
               value={busqueda}
-              onChange={(e) => { setBusqueda(e.target.value); buscarProductos(e.target.value); }}
+              onChange={(e) => {
+                setBusqueda(e.target.value);
+                buscarProductos(e.target.value);
+              }}
               placeholder="Buscar producto por nombre o SKU..."
               className="w-full pl-8 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
             />
@@ -94,11 +103,18 @@ export function AgregarItemComanda({ comandaId, onItemAgregado }: AgregarItemCom
               {resultados.map((p) => (
                 <button
                   key={p.id}
-                  onClick={() => { setSeleccionado(p); setResultados([]); setBusqueda(''); }}
+                  onClick={() => {
+                    setSeleccionado(p);
+                    setResultados([]);
+                    setBusqueda('');
+                  }}
                   className="w-full text-left px-3 py-2 hover:bg-slate-50 text-sm flex justify-between"
                 >
                   <span className="font-medium text-slate-800">{p.nombre}</span>
-                  <span className="text-slate-500">RD$ {Number(p.precioVenta).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</span>
+                  <span className="text-slate-500">
+                    RD${' '}
+                    {Number(p.precioVenta).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                  </span>
                 </button>
               ))}
             </div>
@@ -111,9 +127,17 @@ export function AgregarItemComanda({ comandaId, onItemAgregado }: AgregarItemCom
           <div className="flex items-center justify-between bg-white rounded-lg border border-slate-200 px-3 py-2">
             <div>
               <p className="text-sm font-medium text-slate-800">{seleccionado.nombre}</p>
-              <p className="text-xs text-slate-500">RD$ {Number(seleccionado.precioVenta).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</p>
+              <p className="text-xs text-slate-500">
+                RD${' '}
+                {Number(seleccionado.precioVenta).toLocaleString('es-DO', {
+                  minimumFractionDigits: 2,
+                })}
+              </p>
             </div>
-            <button onClick={() => setSeleccionado(null)} className="text-slate-400 hover:text-slate-600 text-xs">
+            <button
+              onClick={() => setSeleccionado(null)}
+              className="text-slate-400 hover:text-slate-600 text-xs"
+            >
               Cambiar
             </button>
           </div>
@@ -130,7 +154,9 @@ export function AgregarItemComanda({ comandaId, onItemAgregado }: AgregarItemCom
               />
             </div>
             <div className="flex-1">
-              <label className="block text-xs font-medium text-slate-600 mb-1">Notas (sin cebolla, etc.)</label>
+              <label className="block text-xs font-medium text-slate-600 mb-1">
+                Notas (sin cebolla, etc.)
+              </label>
               <input
                 type="text"
                 value={notas}

@@ -19,7 +19,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     const cuenta = await prisma.cuentaFiado.findFirst({
       where: { id, empresaId: sesion.empresaActivaId },
       include: {
-        cliente: { select: { id: true, nombre: true, nombreComercial: true, telefono: true, email: true } },
+        cliente: {
+          select: { id: true, nombre: true, nombreComercial: true, telefono: true, email: true },
+        },
         movimientos: { orderBy: { createdAt: 'desc' } },
       },
     });

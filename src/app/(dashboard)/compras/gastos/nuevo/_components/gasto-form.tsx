@@ -240,12 +240,7 @@ export function GastoForm({ proveedores }: { proveedores: Proveedor[] }) {
 
       {/* Acciones */}
       <div className="flex justify-end gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => router.back()}
-          disabled={loading}
-        >
+        <Button type="button" variant="outline" onClick={() => router.back()} disabled={loading}>
           Cancelar
         </Button>
         <Button type="submit" disabled={loading}>

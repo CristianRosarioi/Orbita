@@ -68,12 +68,17 @@ export default function FiadoDetallePage() {
     }
   }, [id]);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
   async function registrarCargo(e: React.FormEvent) {
     e.preventDefault();
     const monto = parseFloat(montoCargo);
-    if (!monto || monto <= 0) { setError('Ingresa un monto válido.'); return; }
+    if (!monto || monto <= 0) {
+      setError('Ingresa un monto válido.');
+      return;
+    }
     setCargando(true);
     setError('');
     try {
@@ -83,7 +88,10 @@ export default function FiadoDetallePage() {
         body: JSON.stringify({ monto, descripcion: descCargo || undefined }),
       });
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error al registrar el cargo.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error al registrar el cargo.');
+        return;
+      }
       setMostrarCargo(false);
       setMontoCargo('');
       setDescCargo('');
@@ -97,8 +105,11 @@ export default function FiadoDetallePage() {
 
   function formatFecha(iso: string) {
     return new Date(iso).toLocaleDateString('es-DO', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   }
 
@@ -132,9 +143,13 @@ export default function FiadoDetallePage() {
           <ArrowLeft className="h-4 w-4" />
         </button>
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">{cuenta.cliente.nombre}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            {cuenta.cliente.nombre}
+          </h1>
           <div className="flex items-center gap-2 mt-0.5">
-            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${ESTADO_BADGE[cuenta.estado]}`}>
+            <span
+              className={`px-2 py-0.5 rounded-full text-xs font-semibold ${ESTADO_BADGE[cuenta.estado]}`}
+            >
               {ESTADO_LABEL[cuenta.estado]}
             </span>
             {cuenta.cliente.telefono && (
@@ -147,13 +162,16 @@ export default function FiadoDetallePage() {
       {/* KPIs y acciones */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-red-50 border border-red-100 rounded-2xl p-4 sm:col-span-1">
-          <p className="text-xs font-semibold text-red-500 uppercase tracking-wide">Saldo pendiente</p>
+          <p className="text-xs font-semibold text-red-500 uppercase tracking-wide">
+            Saldo pendiente
+          </p>
           <p className="text-2xl font-bold text-red-700 mt-1">
             RD$ {Number(cuenta.saldo).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
           </p>
           {cuenta.limite && Number(cuenta.limite) > 0 && (
             <p className="text-xs text-red-400 mt-1">
-              Límite: RD$ {Number(cuenta.limite).toLocaleString('es-DO', { minimumFractionDigits: 0 })}
+              Límite: RD${' '}
+              {Number(cuenta.limite).toLocaleString('es-DO', { minimumFractionDigits: 0 })}
             </p>
           )}
         </div>
@@ -162,7 +180,10 @@ export default function FiadoDetallePage() {
           <Button
             className="flex-1"
             variant="outline"
-            onClick={() => { setMostrarCargo(true); setError(''); }}
+            onClick={() => {
+              setMostrarCargo(true);
+              setError('');
+            }}
             disabled={esPagado}
           >
             <Plus className="h-4 w-4 mr-1.5" />
@@ -195,13 +216,16 @@ export default function FiadoDetallePage() {
           <div className="divide-y divide-slate-100">
             {cuenta.movimientos.map((mov) => (
               <div key={mov.id} className="px-4 py-3 flex items-center gap-3">
-                <div className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                  mov.tipo === 'CARGO' ? 'bg-red-100' : 'bg-emerald-100'
-                }`}>
-                  {mov.tipo === 'CARGO'
-                    ? <Plus className="h-4 w-4 text-red-600" />
-                    : <Minus className="h-4 w-4 text-emerald-600" />
-                  }
+                <div
+                  className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                    mov.tipo === 'CARGO' ? 'bg-red-100' : 'bg-emerald-100'
+                  }`}
+                >
+                  {mov.tipo === 'CARGO' ? (
+                    <Plus className="h-4 w-4 text-red-600" />
+                  ) : (
+                    <Minus className="h-4 w-4 text-emerald-600" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-slate-800">
@@ -210,8 +234,11 @@ export default function FiadoDetallePage() {
                   <p className="text-xs text-slate-400">{formatFecha(mov.createdAt)}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className={`text-sm font-bold ${mov.tipo === 'CARGO' ? 'text-red-600' : 'text-emerald-600'}`}>
-                    {mov.tipo === 'CARGO' ? '+' : '−'} RD$ {Number(mov.monto).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                  <p
+                    className={`text-sm font-bold ${mov.tipo === 'CARGO' ? 'text-red-600' : 'text-emerald-600'}`}
+                  >
+                    {mov.tipo === 'CARGO' ? '+' : '−'} RD${' '}
+                    {Number(mov.monto).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
                   </p>
                 </div>
               </div>
@@ -240,7 +267,9 @@ export default function FiadoDetallePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Descripción (opcional)</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Descripción (opcional)
+                </label>
                 <input
                   type="text"
                   value={descCargo}
@@ -251,7 +280,12 @@ export default function FiadoDetallePage() {
               </div>
               {error && <p className="text-sm text-red-600">{error}</p>}
               <div className="flex gap-3 pt-1">
-                <Button type="button" variant="outline" className="flex-1" onClick={() => setMostrarCargo(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setMostrarCargo(false)}
+                >
                   Cancelar
                 </Button>
                 <Button type="submit" className="flex-1" disabled={cargando}>
@@ -269,7 +303,10 @@ export default function FiadoDetallePage() {
           cuentaId={id}
           clienteNombre={cuenta.cliente.nombre}
           saldoActual={Number(cuenta.saldo)}
-          onClose={() => { setMostrarAbono(false); cargar(); }}
+          onClose={() => {
+            setMostrarAbono(false);
+            cargar();
+          }}
         />
       )}
     </div>

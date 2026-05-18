@@ -62,7 +62,9 @@ export default function ComandasPage() {
     }
   }, [filtro]);
 
-  useEffect(() => { cargarComandas(); }, [cargarComandas]);
+  useEffect(() => {
+    cargarComandas();
+  }, [cargarComandas]);
 
   function formatHora(iso: string) {
     return new Date(iso).toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' });
@@ -120,7 +122,9 @@ export default function ComandasPage() {
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <p className="font-semibold text-slate-700">Sin comandas</p>
           <p className="text-sm text-slate-400 mt-1">
-            {filtro === 'TODAS' ? 'Aún no hay comandas registradas.' : `No hay comandas con estado "${ESTADO_LABEL[filtro as EstadoComanda]}".`}
+            {filtro === 'TODAS'
+              ? 'Aún no hay comandas registradas.'
+              : `No hay comandas con estado "${ESTADO_LABEL[filtro as EstadoComanda]}".`}
           </p>
         </div>
       ) : (
@@ -147,7 +151,9 @@ export default function ComandasPage() {
                 >
                   <td className="px-4 py-3 font-semibold text-slate-800">#{c.numero}</td>
                   <td className="px-4 py-3 text-slate-600">
-                    {c.mesa ? `Mesa ${c.mesa.numero}${c.mesa.nombre ? ` — ${c.mesa.nombre}` : ''}` : 'Sin mesa'}
+                    {c.mesa
+                      ? `Mesa ${c.mesa.numero}${c.mesa.nombre ? ` — ${c.mesa.nombre}` : ''}`
+                      : 'Sin mesa'}
                   </td>
                   <td className="px-4 py-3 text-slate-600">{c.mesero ?? '—'}</td>
                   <td className="px-4 py-3 text-center text-slate-600">{c.personas}</td>
@@ -156,7 +162,9 @@ export default function ComandasPage() {
                     RD$ {Number(c.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${ESTADO_BADGE[c.estado]}`}>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-xs font-semibold ${ESTADO_BADGE[c.estado]}`}
+                    >
                       {ESTADO_LABEL[c.estado]}
                     </span>
                   </td>

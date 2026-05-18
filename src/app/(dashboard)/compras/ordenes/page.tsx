@@ -45,13 +45,7 @@ function EstadoBadge({ estado }: { estado: string }) {
 
 const ESTADOS_FILTER = ['', 'BORRADOR', 'ENVIADA', 'RECIBIDA_PARCIAL', 'RECIBIDA', 'CANCELADA'];
 
-async function TablaOrdenes({
-  empresaId,
-  estado,
-}: {
-  empresaId: string;
-  estado: string;
-}) {
+async function TablaOrdenes({ empresaId, estado }: { empresaId: string; estado: string }) {
   const ordenes = await prisma.ordenCompra.findMany({
     where: {
       empresaId,

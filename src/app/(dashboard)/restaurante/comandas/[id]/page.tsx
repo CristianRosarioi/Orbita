@@ -71,7 +71,9 @@ export default function ComandaDetallePage() {
     }
   }, [id]);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
   async function actualizarEstado(estado: EstadoComanda) {
     setAccionando(true);
@@ -88,7 +90,10 @@ export default function ComandaDetallePage() {
         body: JSON.stringify(body),
       });
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error al actualizar.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error al actualizar.');
+        return;
+      }
       await cargar();
       if (estado === 'CANCELADA') router.push('/restaurante/mesas');
     } catch {
@@ -111,7 +116,10 @@ export default function ComandaDetallePage() {
         body: JSON.stringify(body),
       });
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error al facturar.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error al facturar.');
+        return;
+      }
       router.push('/restaurante/mesas');
     } catch {
       setError('Error de conexión.');
@@ -158,18 +166,16 @@ export default function ComandaDetallePage() {
               Comanda #{comanda.numero}
             </h1>
             <p className="text-slate-500 text-sm mt-0.5">
-              {comanda.mesa ? `Mesa ${comanda.mesa.numero}${comanda.mesa.nombre ? ` — ${comanda.mesa.nombre}` : ''}` : 'Sin mesa'}
+              {comanda.mesa
+                ? `Mesa ${comanda.mesa.numero}${comanda.mesa.nombre ? ` — ${comanda.mesa.nombre}` : ''}`
+                : 'Sin mesa'}
               {comanda.mesero ? ` · ${comanda.mesero}` : ''}
               {` · ${comanda.personas} persona${comanda.personas !== 1 ? 's' : ''}`}
             </p>
           </div>
         </div>
         {comanda.estado === 'ABIERTA' && (
-          <Button
-            variant="outline"
-            onClick={() => actualizarEstado('LISTA')}
-            disabled={accionando}
-          >
+          <Button variant="outline" onClick={() => actualizarEstado('LISTA')} disabled={accionando}>
             <CheckCircle2 className="h-4 w-4 mr-1.5" />
             Marcar lista
           </Button>
@@ -195,18 +201,23 @@ export default function ComandaDetallePage() {
                       {item.cantidad}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium text-slate-800 truncate ${item.estado === 'CANCELADO' ? 'line-through text-slate-400' : ''}`}>
+                      <p
+                        className={`text-sm font-medium text-slate-800 truncate ${item.estado === 'CANCELADO' ? 'line-through text-slate-400' : ''}`}
+                      >
                         {item.nombre}
                       </p>
                       {item.notas && (
                         <p className="text-xs text-slate-400 truncate">{item.notas}</p>
                       )}
                     </div>
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold flex-shrink-0 ${ESTADO_ITEM_BADGE[item.estado]}`}>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-xs font-semibold flex-shrink-0 ${ESTADO_ITEM_BADGE[item.estado]}`}
+                    >
                       {ESTADO_ITEM_LABEL[item.estado]}
                     </span>
                     <p className="text-sm font-semibold text-slate-700 flex-shrink-0 w-24 text-right">
-                      RD$ {Number(item.subtotal).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                      RD${' '}
+                      {Number(item.subtotal).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
                     </p>
                   </div>
                 ))}
@@ -214,9 +225,7 @@ export default function ComandaDetallePage() {
             )}
           </div>
 
-          {esEditable && (
-            <AgregarItemComanda comandaId={id} onItemAgregado={cargar} />
-          )}
+          {esEditable && <AgregarItemComanda comandaId={id} onItemAgregado={cargar} />}
         </div>
 
         {/* Panel lateral — Totales y acciones */}
@@ -227,27 +236,39 @@ export default function ComandaDetallePage() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between text-slate-600">
                 <span>Subtotal</span>
-                <span>RD$ {Number(comanda.subtotal).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</span>
+                <span>
+                  RD${' '}
+                  {Number(comanda.subtotal).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                </span>
               </div>
               <div className="flex justify-between text-slate-600">
                 <span>ITBIS (18%)</span>
-                <span>RD$ {Number(comanda.itbis).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</span>
+                <span>
+                  RD$ {Number(comanda.itbis).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                </span>
               </div>
               {comanda.propina > 0 && (
                 <div className="flex justify-between text-slate-600">
                   <span>Propina</span>
-                  <span>RD$ {Number(comanda.propina).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</span>
+                  <span>
+                    RD${' '}
+                    {Number(comanda.propina).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                  </span>
                 </div>
               )}
               <div className="flex justify-between font-bold text-slate-900 pt-2 border-t border-slate-100">
                 <span>Total</span>
-                <span>RD$ {Number(comanda.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</span>
+                <span>
+                  RD$ {Number(comanda.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                </span>
               </div>
             </div>
 
             {(esEditable || comanda.estado === 'LISTA') && (
               <div className="pt-2">
-                <label className="block text-xs font-medium text-slate-600 mb-1">Propina (RD$)</label>
+                <label className="block text-xs font-medium text-slate-600 mb-1">
+                  Propina (RD$)
+                </label>
                 <input
                   type="number"
                   min="0"

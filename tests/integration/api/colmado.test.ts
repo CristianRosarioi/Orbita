@@ -60,7 +60,11 @@ import { prisma } from '@/lib/prisma';
 const mockPrisma = prisma as any;
 
 function setupSession(industria = 'COLMADO') {
-  mockPrisma.usuario.findFirst.mockResolvedValue({ id: 'user_1', clerkId: 'clerk_1', deletedAt: null });
+  mockPrisma.usuario.findFirst.mockResolvedValue({
+    id: 'user_1',
+    clerkId: 'clerk_1',
+    deletedAt: null,
+  });
   mockPrisma.sesionUsuarioEmpresa.findUnique.mockResolvedValue({
     usuarioId: 'user_1',
     empresaActivaId: 'emp_1',
@@ -117,7 +121,10 @@ describe('GET /api/colmado/fiado/resumen', () => {
   });
 
   it('retorna métricas de fiado', async () => {
-    mockPrisma.cuentaFiado.aggregate.mockResolvedValue({ _sum: { saldoActual: 5000 }, _count: { id: 3 } });
+    mockPrisma.cuentaFiado.aggregate.mockResolvedValue({
+      _sum: { saldoActual: 5000 },
+      _count: { id: 3 },
+    });
     mockPrisma.cuentaFiado.count.mockResolvedValue(2);
     mockPrisma.cuentaFiado.findMany.mockResolvedValue([
       { ...mockCuentaFiado, saldoActual: 3000, cliente: { nombre: 'Top Deudor' } },
@@ -144,9 +151,11 @@ describe('POST /api/colmado/fiado/[id]/abono', () => {
 
   it('registra abono correctamente', async () => {
     mockPrisma.cuentaFiado.findFirst.mockResolvedValue(mockCuentaFiado);
-    mockPrisma.$transaction.mockImplementation(async (cb: (tx: typeof mockPrisma) => Promise<unknown>) => {
-      return cb(mockPrisma);
-    });
+    mockPrisma.$transaction.mockImplementation(
+      async (cb: (tx: typeof mockPrisma) => Promise<unknown>) => {
+        return cb(mockPrisma);
+      },
+    );
     mockPrisma.movimientoFiado.create.mockResolvedValue({
       id: 'mov_1',
       tipo: 'ABONO',

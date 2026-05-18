@@ -28,13 +28,31 @@ const ESTADO_LABELS: Record<string, string> = {
 };
 
 const MESES = [
-  'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
 ];
 
 const CATEGORIAS = [
-  'ALQUILER', 'SERVICIOS_PUBLICOS', 'NOMINA', 'MARKETING',
-  'EQUIPOS', 'TRANSPORTE', 'COMUNICACIONES', 'SEGUROS', 'IMPUESTOS', 'OTROS',
+  'ALQUILER',
+  'SERVICIOS_PUBLICOS',
+  'NOMINA',
+  'MARKETING',
+  'EQUIPOS',
+  'TRANSPORTE',
+  'COMUNICACIONES',
+  'SEGUROS',
+  'IMPUESTOS',
+  'OTROS',
 ];
 
 const CATEGORIA_LABELS: Record<string, string> = {
@@ -143,9 +161,7 @@ async function TablaGastos({
                   {g.descripcion}
                 </TableCell>
                 <TableCell className="text-slate-500 text-sm">
-                  {g.proveedor
-                    ? (g.proveedor.nombreComercial ?? g.proveedor.nombre)
-                    : '—'}
+                  {g.proveedor ? (g.proveedor.nombreComercial ?? g.proveedor.nombre) : '—'}
                 </TableCell>
                 <TableCell className="text-slate-500 text-sm">
                   {g.categoria ? (CATEGORIA_LABELS[g.categoria] ?? g.categoria) : '—'}

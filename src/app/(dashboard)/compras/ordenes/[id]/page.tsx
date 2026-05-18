@@ -21,11 +21,7 @@ const ESTADO_CLASSES: Record<string, string> = {
   CANCELADA: 'bg-red-100 text-red-700',
 };
 
-export default async function OrdenDetalleePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function OrdenDetalleePage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
 
@@ -62,7 +58,10 @@ export default async function OrdenDetalleePage({
       {/* Encabezado */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Link href="/compras/ordenes" className="text-slate-400 hover:text-slate-600 transition-colors">
+          <Link
+            href="/compras/ordenes"
+            className="text-slate-400 hover:text-slate-600 transition-colors"
+          >
             <ChevronLeft className="h-5 w-5" />
           </Link>
           <div>
@@ -98,9 +97,7 @@ export default async function OrdenDetalleePage({
             <p className="text-sm text-slate-500">{orden.proveedor.nombre}</p>
           )}
           {orden.proveedor.identificacion && (
-            <p className="text-sm text-slate-500 mt-0.5">
-              RNC: {orden.proveedor.identificacion}
-            </p>
+            <p className="text-sm text-slate-500 mt-0.5">RNC: {orden.proveedor.identificacion}</p>
           )}
         </div>
 
@@ -162,9 +159,7 @@ export default async function OrdenDetalleePage({
                       <p className="text-xs text-slate-400">SKU: {item.producto.sku}</p>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-right text-slate-700">
-                    {Number(item.cantidad)}
-                  </td>
+                  <td className="px-4 py-3 text-right text-slate-700">{Number(item.cantidad)}</td>
                   <td className="px-4 py-3 text-right">
                     <span
                       className={

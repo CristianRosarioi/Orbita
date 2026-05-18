@@ -129,3 +129,8 @@
     font-size: 15px;
   }
 }
+
+.sidebar-dark {
+  background-color: #020617; /* slate-950 */
+  color: white;
+}

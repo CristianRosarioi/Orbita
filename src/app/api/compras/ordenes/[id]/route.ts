@@ -17,7 +17,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     const orden = await prisma.ordenCompra.findFirst({
       where: { id, empresaId: sesion.empresaActivaId, deletedAt: null },
       include: {
-        proveedor: { select: { id: true, nombre: true, nombreComercial: true, identificacion: true } },
+        proveedor: {
+          select: { id: true, nombre: true, nombreComercial: true, identificacion: true },
+        },
         items: { include: { producto: { select: { id: true, nombre: true, sku: true } } } },
       },
     });
@@ -42,11 +44,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       where: { id, empresaId: sesion.empresaActivaId, deletedAt: null },
     });
     if (!orden) return err('NOT_FOUND', 'Orden de compra no encontrada.', 404);
-    if (orden.estado !== 'BORRADOR') return err('VALIDATION_ERROR', 'Solo se pueden editar órdenes en borrador.', 422);
+    if (orden.estado !== 'BORRADOR')
+      return err('VALIDATION_ERROR', 'Solo se pueden editar órdenes en borrador.', 422);
 
     const body = await req.json();
     const parsed = UpdateOrdenCompraSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     const actualizada = await prisma.ordenCompra.update({
       where: { id },
@@ -81,7 +85,8 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
       where: { id, empresaId: sesion.empresaActivaId, deletedAt: null },
     });
     if (!orden) return err('NOT_FOUND', 'Orden de compra no encontrada.', 404);
-    if (orden.estado !== 'BORRADOR') return err('VALIDATION_ERROR', 'Solo se pueden eliminar órdenes en borrador.', 422);
+    if (orden.estado !== 'BORRADOR')
+      return err('VALIDATION_ERROR', 'Solo se pueden eliminar órdenes en borrador.', 422);
 
     await prisma.ordenCompra.update({
       where: { id },

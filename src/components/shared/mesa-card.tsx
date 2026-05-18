@@ -33,7 +33,14 @@ const ESTADO_LABEL = {
   INACTIVA: 'Inactiva',
 };
 
-export function MesaCard({ numero, nombre, capacidad, estado, comandaNumero, onClick }: MesaCardProps) {
+export function MesaCard({
+  numero,
+  nombre,
+  capacidad,
+  estado,
+  comandaNumero,
+  onClick,
+}: MesaCardProps) {
   return (
     <div
       onClick={estado !== 'INACTIVA' ? onClick : undefined}
@@ -56,9 +63,7 @@ export function MesaCard({ numero, nombre, capacidad, estado, comandaNumero, onC
         {ESTADO_LABEL[estado]}
       </span>
 
-      {comandaNumero && (
-        <span className="text-xs text-slate-500">Comanda #{comandaNumero}</span>
-      )}
+      {comandaNumero && <span className="text-xs text-slate-500">Comanda #{comandaNumero}</span>}
     </div>
   );
 }

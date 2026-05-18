@@ -21,16 +21,22 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       where: { id, empresaId: sesion.empresaActivaId },
     });
     if (!cuenta) return err('NOT_FOUND', 'Cuenta de fiado no encontrada.', 404);
-    if (cuenta.estado === 'PAGADO') return err('VALIDATION_ERROR', 'No se pueden agregar cargos a una cuenta saldada.', 422);
+    if (cuenta.estado === 'PAGADO')
+      return err('VALIDATION_ERROR', 'No se pueden agregar cargos a una cuenta saldada.', 422);
 
     const body = await req.json();
     const parsed = CargoFiadoSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     // Verificar límite de crédito
     const nuevoSaldo = Number(cuenta.saldo) + parsed.data.monto;
     if (Number(cuenta.limite) > 0 && nuevoSaldo > Number(cuenta.limite)) {
-      return err('VALIDATION_ERROR', `El cargo supera el límite de crédito (RD$ ${Number(cuenta.limite).toLocaleString('es-DO', { minimumFractionDigits: 2 })}).`, 422);
+      return err(
+        'VALIDATION_ERROR',
+        `El cargo supera el límite de crédito (RD$ ${Number(cuenta.limite).toLocaleString('es-DO', { minimumFractionDigits: 2 })}).`,
+        422,
+      );
     }
 
     const movimiento = await prisma.$transaction(async (tx) => {

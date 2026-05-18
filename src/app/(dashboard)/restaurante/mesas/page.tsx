@@ -33,7 +33,9 @@ export default function MesasPage() {
     }
   }, []);
 
-  useEffect(() => { cargarMesas(); }, [cargarMesas]);
+  useEffect(() => {
+    cargarMesas();
+  }, [cargarMesas]);
 
   function handleClickMesa(mesa: Mesa) {
     if (mesa.estado === 'OCUPADA' && mesa.comandas[0]) {
@@ -129,7 +131,10 @@ export default function MesasPage() {
         <CrearComandaModal
           mesaId={modalMesa.id}
           mesaNumero={modalMesa.numero}
-          onClose={() => { setModalMesa(null); cargarMesas(); }}
+          onClose={() => {
+            setModalMesa(null);
+            cargarMesas();
+          }}
         />
       )}
     </div>

@@ -60,7 +60,8 @@ export async function POST(req: NextRequest) {
     const empresaId = sesion.empresaActivaId;
     const body = await req.json();
     const parsed = CreateGastoSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     if (parsed.data.proveedorId) {
       const proveedor = await prisma.proveedor.findFirst({

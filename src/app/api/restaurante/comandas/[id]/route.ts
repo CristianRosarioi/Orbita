@@ -7,7 +7,10 @@ import { UpdateComandaSchema } from '@/lib/validations/restaurante';
 
 const INDUSTRIAS_RESTAURANTE = ['RESTAURANTE'];
 
-function calcularTotales(items: { cantidad: number | { toNumber(): number }; precio: number | { toNumber(): number } }[], propina: number) {
+function calcularTotales(
+  items: { cantidad: number | { toNumber(): number }; precio: number | { toNumber(): number } }[],
+  propina: number,
+) {
   const subtotal = items.reduce((s, i) => s + Number(i.cantidad) * Number(i.precio), 0);
   const itbis = Math.round(subtotal * 0.18 * 100) / 100;
   const total = Math.round((subtotal + itbis + propina) * 100) / 100;
@@ -54,11 +57,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       include: { items: true },
     });
     if (!comanda) return err('NOT_FOUND', 'Comanda no encontrada.', 404);
-    if (comanda.estado === 'CANCELADA') return err('VALIDATION_ERROR', 'No se puede modificar una comanda cancelada.', 422);
+    if (comanda.estado === 'CANCELADA')
+      return err('VALIDATION_ERROR', 'No se puede modificar una comanda cancelada.', 422);
 
     const body = await req.json();
     const parsed = UpdateComandaSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     const { propina, ...resto } = parsed.data;
     const propinaFinal = propina !== undefined ? propina : Number(comanda.propina);

@@ -75,7 +75,11 @@ import { prisma } from '@/lib/prisma';
 const mockPrisma = prisma as any;
 
 function setupSession(industria = 'RESTAURANTE') {
-  mockPrisma.usuario.findFirst.mockResolvedValue({ id: 'user_1', clerkId: 'clerk_1', deletedAt: null });
+  mockPrisma.usuario.findFirst.mockResolvedValue({
+    id: 'user_1',
+    clerkId: 'clerk_1',
+    deletedAt: null,
+  });
   mockPrisma.sesionUsuarioEmpresa.findUnique.mockResolvedValue({
     usuarioId: 'user_1',
     empresaActivaId: 'emp_1',
@@ -193,7 +197,16 @@ describe('GET /api/restaurante/cocina', () => {
       estado: 'ABIERTA',
       createdAt: new Date(),
       mesa: { numero: 1, nombre: null },
-      items: [{ id: 'item_1', nombre: 'Pollo guisado', cantidad: 2, estado: 'PENDIENTE', notas: null, createdAt: new Date() }],
+      items: [
+        {
+          id: 'item_1',
+          nombre: 'Pollo guisado',
+          cantidad: 2,
+          estado: 'PENDIENTE',
+          notas: null,
+          createdAt: new Date(),
+        },
+      ],
     };
     mockPrisma.comanda.findMany.mockResolvedValue([mockComandaCocina]);
 

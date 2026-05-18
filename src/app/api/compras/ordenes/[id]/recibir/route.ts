@@ -23,12 +23,17 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     });
     if (!orden) return err('NOT_FOUND', 'Orden de compra no encontrada.', 404);
     if (!['ENVIADA', 'RECIBIDA_PARCIAL'].includes(orden.estado)) {
-      return err('VALIDATION_ERROR', 'Solo se puede recibir una orden enviada o parcialmente recibida.', 422);
+      return err(
+        'VALIDATION_ERROR',
+        'Solo se puede recibir una orden enviada o parcialmente recibida.',
+        422,
+      );
     }
 
     const body = await req.json();
     const parsed = RecibirOrdenSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     const ordenActualizada = await prisma.$transaction(async (tx) => {
       for (const recepcion of parsed.data.items) {

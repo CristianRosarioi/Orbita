@@ -48,7 +48,8 @@ export async function POST(req: NextRequest) {
     const empresaId = sesion.empresaActivaId;
     const body = await req.json();
     const parsed = CreateOrdenCompraSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     const proveedor = await prisma.proveedor.findFirst({
       where: { id: parsed.data.proveedorId, empresaId, deletedAt: null },
@@ -96,7 +97,9 @@ export async function POST(req: NextRequest) {
           itbis: itbisTotal,
           total,
           notas: parsed.data.notas,
-          fechaEsperada: parsed.data.fechaEsperada ? new Date(parsed.data.fechaEsperada) : undefined,
+          fechaEsperada: parsed.data.fechaEsperada
+            ? new Date(parsed.data.fechaEsperada)
+            : undefined,
           creadoPor: userId,
           items: { create: itemsData },
         },

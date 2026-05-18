@@ -50,7 +50,8 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const parsed = CreateComandaSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     const { mesaId, mesero, personas, notas } = parsed.data;
     const empresaId = sesion.empresaActivaId;
@@ -61,7 +62,8 @@ export async function POST(req: NextRequest) {
         where: { id: mesaId, empresaId, activa: true },
       });
       if (!mesa) return err('NOT_FOUND', 'Mesa no encontrada.', 404);
-      if (mesa.estado === 'INACTIVA') return err('VALIDATION_ERROR', 'No se puede crear una comanda en una mesa inactiva.', 422);
+      if (mesa.estado === 'INACTIVA')
+        return err('VALIDATION_ERROR', 'No se puede crear una comanda en una mesa inactiva.', 422);
     }
 
     // Número correlativo por empresa

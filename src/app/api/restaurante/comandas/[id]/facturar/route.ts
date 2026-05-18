@@ -32,13 +32,16 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     });
 
     if (!comanda) return err('NOT_FOUND', 'Comanda no encontrada.', 404);
-    if (comanda.estado === 'CANCELADA') return err('VALIDATION_ERROR', 'No se puede facturar una comanda cancelada.', 422);
+    if (comanda.estado === 'CANCELADA')
+      return err('VALIDATION_ERROR', 'No se puede facturar una comanda cancelada.', 422);
     if (comanda.facturaId) return err('VALIDATION_ERROR', 'Esta comanda ya fue facturada.', 422);
-    if (comanda.items.length === 0) return err('VALIDATION_ERROR', 'La comanda no tiene ítems activos.', 422);
+    if (comanda.items.length === 0)
+      return err('VALIDATION_ERROR', 'La comanda no tiene ítems activos.', 422);
 
     const body = await req.json();
     const parsed = FacturarComandaSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     const factura = await prisma.$transaction(async (tx) => {
       const { numero, numeroInt, anio } = await generarNumeroFactura(empresaId, tx as never);
@@ -66,7 +69,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
               cantidad: item.cantidad,
               precioUnitario: item.precio,
               itbisPorcentaje: 18,
-              itbisMonto: Math.round(Number(item.cantidad) * Number(item.precio) * 0.18 * 100) / 100,
+              itbisMonto:
+                Math.round(Number(item.cantidad) * Number(item.precio) * 0.18 * 100) / 100,
               descuento: 0,
               subtotal: Math.round(Number(item.cantidad) * Number(item.precio) * 100) / 100,
               total: Math.round(Number(item.cantidad) * Number(item.precio) * 1.18 * 100) / 100,

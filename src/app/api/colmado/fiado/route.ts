@@ -49,7 +49,8 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const parsed = CreateCuentaFiadoSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     const empresaId = sesion.empresaActivaId;
 

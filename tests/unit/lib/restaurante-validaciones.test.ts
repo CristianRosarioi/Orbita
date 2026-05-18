@@ -61,7 +61,11 @@ describe('CreateComandaSchema', () => {
   });
 
   it('válido: con mesaId y mesero', () => {
-    const result = CreateComandaSchema.safeParse({ mesaId: 'abc123', mesero: 'Carlos', personas: 3 });
+    const result = CreateComandaSchema.safeParse({
+      mesaId: 'abc123',
+      mesero: 'Carlos',
+      personas: 3,
+    });
     expect(result.success).toBe(true);
   });
 
@@ -95,7 +99,11 @@ describe('UpdateComandaSchema', () => {
 
 describe('AddItemComandaSchema', () => {
   it('válido: nombre, cantidad y precio', () => {
-    const result = AddItemComandaSchema.safeParse({ nombre: 'Pollo guisado', cantidad: 2, precio: 350 });
+    const result = AddItemComandaSchema.safeParse({
+      nombre: 'Pollo guisado',
+      cantidad: 2,
+      precio: 350,
+    });
     expect(result.success).toBe(true);
   });
 

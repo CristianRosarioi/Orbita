@@ -31,7 +31,8 @@ export async function PATCH(
 
     const body = await req.json();
     const parsed = UpdateItemComandaSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     const actualizado = await prisma.$transaction(async (tx) => {
       const updated = await tx.itemComanda.update({

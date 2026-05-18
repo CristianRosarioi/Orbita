@@ -11,10 +11,7 @@ const EstadoItemSchema = z.object({
   estado: z.enum(['PENDIENTE', 'EN_PREPARACION', 'LISTO', 'CANCELADO']),
 });
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ itemId: string }> },
-) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ itemId: string }> }) {
   try {
     const { userId } = await auth();
     if (!userId) return err('UNAUTHORIZED', 'Tu sesión expiró.', 401);
@@ -35,7 +32,8 @@ export async function PATCH(
 
     const body = await req.json();
     const parsed = EstadoItemSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Estado inválido.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Estado inválido.', 422);
 
     const actualizado = await prisma.itemComanda.update({
       where: { id: itemId },

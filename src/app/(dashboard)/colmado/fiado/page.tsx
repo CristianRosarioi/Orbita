@@ -67,11 +67,16 @@ export default function FiadoPage() {
     }
   }, [busqueda]);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
   async function crearCuenta(e: React.FormEvent) {
     e.preventDefault();
-    if (!nuevoClienteId.trim()) { setErrorCrear('Ingresa el ID del cliente.'); return; }
+    if (!nuevoClienteId.trim()) {
+      setErrorCrear('Ingresa el ID del cliente.');
+      return;
+    }
     setCreando(true);
     setErrorCrear('');
     try {
@@ -84,7 +89,10 @@ export default function FiadoPage() {
         }),
       });
       const data = await res.json();
-      if (!data.success) { setErrorCrear(data.error?.message ?? 'Error al crear la cuenta.'); return; }
+      if (!data.success) {
+        setErrorCrear(data.error?.message ?? 'Error al crear la cuenta.');
+        return;
+      }
       setMostrarFormulario(false);
       setNuevoClienteId('');
       setNuevoLimite('');
@@ -119,17 +127,23 @@ export default function FiadoPage() {
       {resumen && (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-red-50 border border-red-100 rounded-2xl p-4">
-            <p className="text-xs font-semibold text-red-500 uppercase tracking-wide">Total pendiente</p>
+            <p className="text-xs font-semibold text-red-500 uppercase tracking-wide">
+              Total pendiente
+            </p>
             <p className="text-2xl font-bold text-red-700 mt-1">
               RD$ {resumen.totalPendiente.toLocaleString('es-DO', { minimumFractionDigits: 2 })}
             </p>
           </div>
           <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4">
-            <p className="text-xs font-semibold text-amber-500 uppercase tracking-wide">Cuentas activas</p>
+            <p className="text-xs font-semibold text-amber-500 uppercase tracking-wide">
+              Cuentas activas
+            </p>
             <p className="text-2xl font-bold text-amber-700 mt-1">{resumen.cuentasActivas}</p>
           </div>
           <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 col-span-2 lg:col-span-1">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Total cuentas</p>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+              Total cuentas
+            </p>
             <p className="text-2xl font-bold text-slate-700 mt-1">{resumen.totalCuentas}</p>
           </div>
         </div>
@@ -182,9 +196,12 @@ export default function FiadoPage() {
                   </div>
                   <div className="text-right">
                     <p className="font-bold text-red-600 text-lg">
-                      RD$ {Number(cuenta.saldo).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                      RD${' '}
+                      {Number(cuenta.saldo).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
                     </p>
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${ESTADO_BADGE[cuenta.estado]}`}>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-xs font-semibold ${ESTADO_BADGE[cuenta.estado]}`}
+                    >
                       {ESTADO_LABEL[cuenta.estado]}
                     </span>
                   </div>
@@ -195,7 +212,11 @@ export default function FiadoPage() {
                     <div className="flex justify-between text-xs text-slate-400 mb-1">
                       <span>Crédito usado</span>
                       <span>
-                        RD$ {Number(cuenta.limite!).toLocaleString('es-DO', { minimumFractionDigits: 0 })} límite
+                        RD${' '}
+                        {Number(cuenta.limite!).toLocaleString('es-DO', {
+                          minimumFractionDigits: 0,
+                        })}{' '}
+                        límite
                       </span>
                     </div>
                     <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
@@ -219,7 +240,9 @@ export default function FiadoPage() {
             <h2 className="text-lg font-semibold text-slate-900 mb-4">Nueva cuenta de fiado</h2>
             <form onSubmit={crearCuenta} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">ID del cliente</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  ID del cliente
+                </label>
                 <input
                   type="text"
                   value={nuevoClienteId}
@@ -230,7 +253,9 @@ export default function FiadoPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Límite de crédito (RD$) — opcional</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Límite de crédito (RD$) — opcional
+                </label>
                 <input
                   type="number"
                   min="0"
@@ -243,7 +268,12 @@ export default function FiadoPage() {
               </div>
               {errorCrear && <p className="text-sm text-red-600">{errorCrear}</p>}
               <div className="flex gap-3 pt-1">
-                <Button type="button" variant="outline" className="flex-1" onClick={() => setMostrarFormulario(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setMostrarFormulario(false)}
+                >
                   Cancelar
                 </Button>
                 <Button type="submit" className="flex-1" disabled={creando}>

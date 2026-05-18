@@ -109,9 +109,7 @@ describe('POST /api/compras/ordenes', () => {
 
   const bodyValido = {
     proveedorId: 'prov_1',
-    items: [
-      { descripcion: 'Producto A', cantidad: 10, costoUnitario: 100, itbisPorcentaje: 0 },
-    ],
+    items: [{ descripcion: 'Producto A', cantidad: 10, costoUnitario: 100, itbisPorcentaje: 0 }],
   };
 
   it('crea orden en BORRADOR', async () => {

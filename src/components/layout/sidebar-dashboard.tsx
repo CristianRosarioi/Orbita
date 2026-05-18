@@ -172,7 +172,7 @@ function SidebarContent({
   const nombreEmpresa = empresa.nombreComercial ?? empresa.nombre;
 
   return (
-    <div className="flex flex-col h-full bg-slate-950">
+    <div className="flex flex-col h-full" style={{ backgroundColor: '#020617', color: 'white' }}>
       {/* Cabecera empresa */}
       <div className="border-b border-slate-800 p-3 xl:p-4">
         <div className="flex items-center gap-2.5">
@@ -335,7 +335,8 @@ export function SidebarDashboard(props: SidebarProps) {
     <>
       {/* Botón hamburguesa — solo visible en móvil */}
       <button
-        className="fixed left-4 top-4 z-50 flex items-center justify-center rounded-lg bg-slate-950 p-2 text-white shadow-lg md:hidden"
+        className="fixed left-4 top-4 z-50 flex items-center justify-center rounded-lg p-2 text-white shadow-lg md:hidden"
+        style={{ backgroundColor: '#020617' }}
         onClick={() => setMobileOpen(true)}
         aria-label="Abrir menú"
       >
@@ -352,7 +353,10 @@ export function SidebarDashboard(props: SidebarProps) {
 
       {/* Sidebar móvil — slide-in */}
       {mobileOpen && (
-        <aside className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-slate-950 text-white md:hidden">
+        <aside
+          className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col text-white md:hidden"
+          style={{ backgroundColor: '#020617' }}
+        >
           <button
             className="absolute right-3 top-3 p-1 text-slate-400 hover:text-white"
             onClick={() => setMobileOpen(false)}
@@ -366,7 +370,10 @@ export function SidebarDashboard(props: SidebarProps) {
 
       {/* Sidebar desktop — responsivo con CSS */}
       {/* md: w-14 (solo íconos), xl: w-56 (íconos + texto) */}
-      <aside className="sticky top-0 hidden h-screen w-14 shrink-0 flex-col bg-slate-950 text-white md:flex xl:w-60">
+      <aside
+        className="sticky top-0 hidden h-screen w-14 shrink-0 flex-col text-white md:flex xl:w-60"
+        style={{ backgroundColor: '#020617' }}
+      >
         <SidebarContent {...props} />
       </aside>
     </>

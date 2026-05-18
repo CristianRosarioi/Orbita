@@ -12,7 +12,12 @@ interface FiadoAbonoModalProps {
   onClose: () => void;
 }
 
-export function FiadoAbonoModal({ cuentaId, clienteNombre, saldoActual, onClose }: FiadoAbonoModalProps) {
+export function FiadoAbonoModal({
+  cuentaId,
+  clienteNombre,
+  saldoActual,
+  onClose,
+}: FiadoAbonoModalProps) {
   const router = useRouter();
   const [monto, setMonto] = useState('');
   const [descripcion, setDescripcion] = useState('');
@@ -22,7 +27,10 @@ export function FiadoAbonoModal({ cuentaId, clienteNombre, saldoActual, onClose 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const montoNum = parseFloat(monto);
-    if (!montoNum || montoNum <= 0) { setError('Ingresa un monto válido.'); return; }
+    if (!montoNum || montoNum <= 0) {
+      setError('Ingresa un monto válido.');
+      return;
+    }
 
     setLoading(true);
     setError('');
@@ -35,7 +43,10 @@ export function FiadoAbonoModal({ cuentaId, clienteNombre, saldoActual, onClose 
       });
 
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error al registrar el abono.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error al registrar el abono.');
+        return;
+      }
 
       router.refresh();
       onClose();
@@ -59,7 +70,8 @@ export function FiadoAbonoModal({ cuentaId, clienteNombre, saldoActual, onClose 
         <div className="bg-slate-50 rounded-xl p-3 mb-4">
           <p className="text-sm text-slate-600">{clienteNombre}</p>
           <p className="text-xs text-slate-400 mt-0.5">
-            Saldo pendiente: <span className="font-semibold text-red-600">
+            Saldo pendiente:{' '}
+            <span className="font-semibold text-red-600">
               RD$ {saldoActual.toLocaleString('es-DO', { minimumFractionDigits: 2 })}
             </span>
           </p>
@@ -67,7 +79,9 @@ export function FiadoAbonoModal({ cuentaId, clienteNombre, saldoActual, onClose 
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Monto del abono (RD$)</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Monto del abono (RD$)
+            </label>
             <input
               type="number"
               min="0.01"
@@ -81,7 +95,9 @@ export function FiadoAbonoModal({ cuentaId, clienteNombre, saldoActual, onClose 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Descripción (opcional)</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Descripción (opcional)
+            </label>
             <input
               type="text"
               value={descripcion}

@@ -111,11 +111,7 @@ export function OrdenAcciones({ ordenId, estado, items }: Props) {
         )}
 
         {(estado === 'ENVIADA' || estado === 'RECIBIDA_PARCIAL') && (
-          <Button
-            onClick={() => setShowRecibirModal(true)}
-            disabled={loading !== null}
-            size="sm"
-          >
+          <Button onClick={() => setShowRecibirModal(true)} disabled={loading !== null} size="sm">
             <Package className="h-4 w-4 mr-2" />
             Registrar recepción
           </Button>
@@ -164,8 +160,7 @@ export function OrdenAcciones({ ordenId, estado, items }: Props) {
                         {item.descripcion}
                       </p>
                       <p className="text-xs text-slate-500">
-                        Pendiente:{' '}
-                        {Number(item.cantidad) - Number(item.cantidadRecibida)} /{' '}
+                        Pendiente: {Number(item.cantidad) - Number(item.cantidadRecibida)} /{' '}
                         {Number(item.cantidad)}
                       </p>
                     </div>

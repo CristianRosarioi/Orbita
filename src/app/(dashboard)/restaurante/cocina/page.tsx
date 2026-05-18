@@ -20,9 +20,24 @@ interface ItemCocina {
 }
 
 const COLUMNAS: { estado: EstadoItem; label: string; color: string; bg: string }[] = [
-  { estado: 'PENDIENTE', label: 'Pendiente', color: 'text-amber-700', bg: 'bg-amber-50 border-amber-200' },
-  { estado: 'EN_PREPARACION', label: 'En preparación', color: 'text-blue-700', bg: 'bg-blue-50 border-blue-200' },
-  { estado: 'LISTO', label: 'Listo', color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200' },
+  {
+    estado: 'PENDIENTE',
+    label: 'Pendiente',
+    color: 'text-amber-700',
+    bg: 'bg-amber-50 border-amber-200',
+  },
+  {
+    estado: 'EN_PREPARACION',
+    label: 'En preparación',
+    color: 'text-blue-700',
+    bg: 'bg-blue-50 border-blue-200',
+  },
+  {
+    estado: 'LISTO',
+    label: 'Listo',
+    color: 'text-emerald-700',
+    bg: 'bg-emerald-50 border-emerald-200',
+  },
 ];
 
 const SIGUIENTE_ESTADO: Partial<Record<EstadoItem, EstadoItem>> = {
@@ -124,7 +139,9 @@ export default function CocinaPage() {
             return (
               <div key={estado} className="flex flex-col gap-3">
                 {/* Header columna */}
-                <div className={`rounded-xl border px-4 py-2.5 flex items-center justify-between ${bg}`}>
+                <div
+                  className={`rounded-xl border px-4 py-2.5 flex items-center justify-between ${bg}`}
+                >
                   <span className={`font-semibold text-sm ${color}`}>{label}</span>
                   <span className={`text-xs font-bold ${color} bg-white rounded-full px-2 py-0.5`}>
                     {columnaItems.length}
@@ -146,8 +163,12 @@ export default function CocinaPage() {
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
-                              <span className="text-lg font-bold text-slate-800">{item.cantidad}×</span>
-                              <span className="font-semibold text-slate-800 text-sm truncate">{item.nombre}</span>
+                              <span className="text-lg font-bold text-slate-800">
+                                {item.cantidad}×
+                              </span>
+                              <span className="font-semibold text-slate-800 text-sm truncate">
+                                {item.nombre}
+                              </span>
                             </div>
                             {item.notas && (
                               <p className="text-xs text-amber-600 mt-0.5 bg-amber-50 rounded px-1.5 py-0.5">

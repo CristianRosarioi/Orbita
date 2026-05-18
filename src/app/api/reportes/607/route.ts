@@ -73,7 +73,11 @@ export async function GET(req: Request) {
 
     return ok({
       periodo: { mes, anio },
-      empresa: { rnc: empresa?.rnc ?? '', nombre: empresa?.nombre ?? '', modoFiscal: empresa?.modoFiscal },
+      empresa: {
+        rnc: empresa?.rnc ?? '',
+        nombre: empresa?.nombre ?? '',
+        modoFiscal: empresa?.modoFiscal,
+      },
       cantidadRegistros: registros.length,
       totalCompras: Math.round(totalCompras * 100) / 100,
       totalITBIS: Math.round(totalITBIS * 100) / 100,

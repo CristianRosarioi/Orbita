@@ -50,7 +50,8 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     const parsed = CreateMesaSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     const { numero, nombre, capacidad } = parsed.data;
 

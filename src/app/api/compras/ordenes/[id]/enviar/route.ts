@@ -17,7 +17,8 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
       where: { id, empresaId: sesion.empresaActivaId, deletedAt: null },
     });
     if (!orden) return err('NOT_FOUND', 'Orden de compra no encontrada.', 404);
-    if (orden.estado !== 'BORRADOR') return err('VALIDATION_ERROR', 'Solo se pueden enviar órdenes en borrador.', 422);
+    if (orden.estado !== 'BORRADOR')
+      return err('VALIDATION_ERROR', 'Solo se pueden enviar órdenes en borrador.', 422);
 
     const actualizada = await prisma.ordenCompra.update({
       where: { id },

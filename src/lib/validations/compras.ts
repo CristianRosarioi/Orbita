@@ -21,12 +21,14 @@ export const UpdateOrdenCompraSchema = z.object({
 });
 
 export const RecibirOrdenSchema = z.object({
-  items: z.array(
-    z.object({
-      itemId: z.string().min(1),
-      cantidadRecibida: z.coerce.number().min(0, 'La cantidad recibida no puede ser negativa.'),
-    }),
-  ).min(1),
+  items: z
+    .array(
+      z.object({
+        itemId: z.string().min(1),
+        cantidadRecibida: z.coerce.number().min(0, 'La cantidad recibida no puede ser negativa.'),
+      }),
+    )
+    .min(1),
   notas: z.string().max(500).optional(),
 });
 

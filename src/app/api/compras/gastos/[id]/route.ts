@@ -17,7 +17,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     const gasto = await prisma.gasto.findFirst({
       where: { id, empresaId: sesion.empresaActivaId, deletedAt: null },
       include: {
-        proveedor: { select: { id: true, nombre: true, nombreComercial: true, identificacion: true } },
+        proveedor: {
+          select: { id: true, nombre: true, nombreComercial: true, identificacion: true },
+        },
       },
     });
 
@@ -44,7 +46,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
     const body = await req.json();
     const parsed = UpdateGastoSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
     void userId;
 
@@ -52,11 +55,12 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       where: { id },
       data: {
         estado: parsed.data.estado,
-        fechaPago: parsed.data.estado === 'PAGADO' && parsed.data.fechaPago
-          ? new Date(parsed.data.fechaPago)
-          : parsed.data.estado === 'PAGADO'
-            ? new Date()
-            : undefined,
+        fechaPago:
+          parsed.data.estado === 'PAGADO' && parsed.data.fechaPago
+            ? new Date(parsed.data.fechaPago)
+            : parsed.data.estado === 'PAGADO'
+              ? new Date()
+              : undefined,
         notas: parsed.data.notas,
       },
       include: { proveedor: { select: { nombre: true } } },

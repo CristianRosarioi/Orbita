@@ -15,8 +15,18 @@ import {
 } from '@/components/ui/table';
 
 const MESES = [
-  'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
 ];
 
 function formatFecha(d: Date) {
@@ -56,7 +66,9 @@ async function Tabla607({
       <div className="bg-white rounded-lg border border-slate-200 py-16 text-center text-slate-500">
         <Receipt className="mx-auto h-10 w-10 mb-3 text-slate-300" />
         <p className="font-medium">Sin registros para este período</p>
-        <p className="text-sm mt-1">No hay gastos registrados en {MESES[mes - 1]} {anio}.</p>
+        <p className="text-sm mt-1">
+          No hay gastos registrados en {MESES[mes - 1]} {anio}.
+        </p>
         <Link
           href="/compras/gastos/nuevo"
           className="mt-4 inline-flex items-center gap-1.5 text-sm text-indigo-600 hover:underline"
@@ -112,9 +124,7 @@ async function Tabla607({
                   {formatFecha(g.fechaGasto)}
                 </TableCell>
                 <TableCell className="text-slate-700 text-sm">
-                  {g.proveedor
-                    ? (g.proveedor.nombreComercial ?? g.proveedor.nombre)
-                    : '—'}
+                  {g.proveedor ? (g.proveedor.nombreComercial ?? g.proveedor.nombre) : '—'}
                 </TableCell>
                 <TableCell className="text-slate-400 text-xs font-mono">
                   {g.proveedor?.identificacion ?? '—'}
