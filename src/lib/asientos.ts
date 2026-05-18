@@ -221,6 +221,149 @@ export async function crearAsientoPago(
   });
 }
 
+// ---- crearAsientoCompra ----
+// Al recibir una orden de compra: Inventario/ITBIS por Cobrar ← Cuentas por Pagar
+export async function crearAsientoCompra(
+  ordenCompraId: string,
+  empresaId: string,
+  usuarioClerkId: string,
+  tx: Prisma.TransactionClient,
+): Promise<void> {
+  const orden = await tx.ordenCompra.findFirst({
+    where: { id: ordenCompraId, empresaId },
+    include: { items: { include: { producto: true } } },
+  });
+  if (!orden) return;
+
+  const subtotal = Number(orden.subtotal);
+  const itbis = Number(orden.itbis);
+  const total = Number(orden.total);
+  if (total <= 0) return;
+
+  const numero = await siguienteNumeroAsiento(empresaId, tx);
+
+  const lineas: { cuentaId: string; tipo: 'DEBITO' | 'CREDITO'; monto: number; descripcion: string }[] = [];
+
+  // DÉBITO: 1105 Inventario (bienes recibidos)
+  if (subtotal > 0) {
+    lineas.push({
+      cuentaId: await encontrarCuenta(empresaId, '1105', tx),
+      tipo: 'DEBITO',
+      monto: subtotal,
+      descripcion: `Compra OC-${orden.numero} — inventario`,
+    });
+  }
+
+  // DÉBITO: 1104 ITBIS por cobrar
+  if (itbis > 0) {
+    lineas.push({
+      cuentaId: await encontrarCuenta(empresaId, '1104', tx),
+      tipo: 'DEBITO',
+      monto: itbis,
+      descripcion: `ITBIS compra OC-${orden.numero}`,
+    });
+  }
+
+  // CRÉDITO: 2101 Cuentas por pagar proveedores
+  lineas.push({
+    cuentaId: await encontrarCuenta(empresaId, '2101', tx),
+    tipo: 'CREDITO',
+    monto: total,
+    descripcion: `Proveedor OC-${orden.numero}`,
+  });
+
+  const asiento = await tx.asientoContable.create({
+    data: {
+      empresaId,
+      numero,
+      descripcion: `Recepción orden de compra OC-${orden.numero}`,
+      ordenCompraId,
+      creadoPor: usuarioClerkId,
+    },
+  });
+
+  await tx.lineaAsiento.createMany({
+    data: lineas.map((l) => ({
+      asientoId: asiento.id,
+      cuentaId: l.cuentaId,
+      tipo: l.tipo,
+      monto: l.monto,
+      descripcion: l.descripcion,
+    })),
+  });
+}
+
+// ---- crearAsientoGasto ----
+// Al registrar un gasto: Gastos/ITBIS por Cobrar ← Cuentas por Pagar
+export async function crearAsientoGasto(
+  gastoId: string,
+  empresaId: string,
+  usuarioClerkId: string,
+  tx: Prisma.TransactionClient,
+): Promise<void> {
+  const gasto = await tx.gasto.findFirst({
+    where: { id: gastoId, empresaId },
+  });
+  if (!gasto) return;
+
+  const monto = Number(gasto.monto);
+  const itbis = Number(gasto.itbis);
+  const total = Number(gasto.total);
+  if (total <= 0) return;
+
+  const numero = await siguienteNumeroAsiento(empresaId, tx);
+
+  const lineas: { cuentaId: string; tipo: 'DEBITO' | 'CREDITO'; monto: number; descripcion: string }[] = [];
+
+  // DÉBITO: 5002 Gastos operacionales
+  if (monto > 0) {
+    lineas.push({
+      cuentaId: await encontrarCuenta(empresaId, '5002', tx),
+      tipo: 'DEBITO',
+      monto,
+      descripcion: `Gasto: ${gasto.descripcion}`,
+    });
+  }
+
+  // DÉBITO: 1104 ITBIS por cobrar
+  if (itbis > 0) {
+    lineas.push({
+      cuentaId: await encontrarCuenta(empresaId, '1104', tx),
+      tipo: 'DEBITO',
+      monto: itbis,
+      descripcion: `ITBIS gasto: ${gasto.descripcion}`,
+    });
+  }
+
+  // CRÉDITO: 2101 Cuentas por pagar proveedores
+  lineas.push({
+    cuentaId: await encontrarCuenta(empresaId, '2101', tx),
+    tipo: 'CREDITO',
+    monto: total,
+    descripcion: `Por pagar: ${gasto.descripcion}`,
+  });
+
+  const asiento = await tx.asientoContable.create({
+    data: {
+      empresaId,
+      numero,
+      descripcion: `Gasto registrado — ${gasto.descripcion}`,
+      gastoId,
+      creadoPor: usuarioClerkId,
+    },
+  });
+
+  await tx.lineaAsiento.createMany({
+    data: lineas.map((l) => ({
+      asientoId: asiento.id,
+      cuentaId: l.cuentaId,
+      tipo: l.tipo,
+      monto: l.monto,
+      descripcion: l.descripcion,
+    })),
+  });
+}
+
 // ---- crearAsientoAnulacion ----
 // Reverso exacto del asiento original de la factura.
 export async function crearAsientoAnulacion(

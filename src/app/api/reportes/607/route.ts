@@ -9,8 +9,7 @@ const FiltrosSchema = z.object({
   anio: z.coerce.number().min(2020).max(2100),
 });
 
-// Reporte 607 — Compras a proveedores
-// El módulo de compras se implementará en Fase 6. Por ahora retorna vacío con advertencia.
+// Reporte 607 — Compras y gastos del período con NCF del proveedor
 export async function GET(req: Request) {
   try {
     const { userId } = await auth();
@@ -25,21 +24,61 @@ export async function GET(req: Request) {
     }
 
     const { mes, anio } = parsed.data;
+    const inicio = new Date(anio, mes - 1, 1);
+    const fin = new Date(anio, mes, 0, 23, 59, 59);
 
-    const empresa = await prisma.empresa.findFirst({
-      where: { id: empresaId },
-      select: { modoFiscal: true },
-    });
+    const [empresa, gastos] = await Promise.all([
+      prisma.empresa.findFirst({
+        where: { id: empresaId },
+        select: { rnc: true, nombre: true, modoFiscal: true },
+      }),
+      prisma.gasto.findMany({
+        where: {
+          empresaId,
+          deletedAt: null,
+          fechaGasto: { gte: inicio, lte: fin },
+        },
+        orderBy: { fechaGasto: 'asc' },
+        include: {
+          proveedor: {
+            select: {
+              nombre: true,
+              nombreComercial: true,
+              identificacion: true,
+              tipoIdentificacion: true,
+            },
+          },
+        },
+      }),
+    ]);
+
+    const totalCompras = gastos.reduce((s, g) => s + Number(g.monto), 0);
+    const totalITBIS = gastos.reduce((s, g) => s + Number(g.itbis), 0);
+    const totalGeneral = gastos.reduce((s, g) => s + Number(g.total), 0);
+
+    const registros = gastos.map((g) => ({
+      id: g.id,
+      fechaGasto: g.fechaGasto,
+      descripcion: g.descripcion,
+      categoria: g.categoria,
+      proveedorNombre: g.proveedor?.nombre ?? g.descripcion,
+      proveedorRnc: g.proveedor?.identificacion ?? '',
+      ncfProveedor: g.ncfProveedor ?? '',
+      comprobante: g.comprobante ?? '',
+      monto: Number(g.monto),
+      itbis: Number(g.itbis),
+      total: Number(g.total),
+      estado: g.estado,
+    }));
 
     return ok({
       periodo: { mes, anio },
-      modoFiscal: empresa?.modoFiscal,
-      advertencia:
-        'El módulo de compras (Fase 6) aún no está disponible. El reporte 607 estará completo cuando se implemente.',
-      cantidadRegistros: 0,
-      totalCompras: 0,
-      totalITBIS: 0,
-      registros: [],
+      empresa: { rnc: empresa?.rnc ?? '', nombre: empresa?.nombre ?? '', modoFiscal: empresa?.modoFiscal },
+      cantidadRegistros: registros.length,
+      totalCompras: Math.round(totalCompras * 100) / 100,
+      totalITBIS: Math.round(totalITBIS * 100) / 100,
+      totalGeneral: Math.round(totalGeneral * 100) / 100,
+      registros,
     });
   } catch (error) {
     return handleApiError(error, 'GET /api/reportes/607');

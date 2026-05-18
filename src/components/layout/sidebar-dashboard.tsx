@@ -27,6 +27,8 @@ import {
   ChefHat,
   CreditCard,
   Tag,
+  ShoppingBag,
+  Receipt,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -65,6 +67,11 @@ const NAV_ITEMS = [
   { href: '/productos', label: 'Productos', icon: Package },
   { href: '/proveedores', label: 'Proveedores', icon: Truck },
   { href: '/facturas', label: 'Facturas', icon: FileText },
+];
+
+const COMPRAS_ITEMS = [
+  { href: '/compras/ordenes', label: 'Órdenes', icon: ShoppingBag },
+  { href: '/compras/gastos', label: 'Gastos', icon: Receipt },
 ];
 
 const CONTABILIDAD_ITEMS = [
@@ -265,6 +272,12 @@ function SidebarContent({
             ))}
           </>
         )}
+
+        {/* Compras */}
+        <SectionDivider label="Compras" />
+        {COMPRAS_ITEMS.map(({ href, label, icon }) => (
+          <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+        ))}
 
         {/* Contabilidad */}
         <SectionDivider label="Contabilidad" />

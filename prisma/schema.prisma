@@ -171,6 +171,8 @@ model Empresa {
   comandas        Comanda[]
   cuentasFiado    CuentaFiado[]
   movimientosFiado MovimientoFiado[]
+  ordenes         OrdenCompra[]
+  gastos          Gasto[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -346,7 +348,9 @@ model Proveedor {
   updatedAt          DateTime           @updatedAt @map("updated_at")
   deletedAt          DateTime?          @map("deleted_at")
 
-  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  empresa        Empresa       @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  ordenesCompra  OrdenCompra[]
+  gastos         Gasto[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, identificacion])
@@ -382,9 +386,10 @@ model Producto {
   categoria     Categoria?       @relation(fields: [categoriaId], references: [id])
   unidadMedida  UnidadMedida     @relation(fields: [unidadMedidaId], references: [id])
   precios       PrecioProducto[]
-  itemsFactura  ItemFactura[]
-  movimientos   MovimientoInventario[]
-  itemsComanda  ItemComanda[]
+  itemsFactura      ItemFactura[]
+  movimientos       MovimientoInventario[]
+  itemsComanda      ItemComanda[]
+  itemsOrdenCompra  ItemOrdenCompra[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, sku])
@@ -616,12 +621,16 @@ model MovimientoInventario {
   creadoPor    String                   @map("creado_por")
   createdAt    DateTime                 @default(now()) @map("created_at")
 
-  empresa  Empresa   @relation(fields: [empresaId], references: [id], onDelete: Cascade)
-  producto Producto  @relation(fields: [productoId], references: [id])
-  factura  Factura?  @relation(fields: [facturaId], references: [id])
+  ordenCompraId String?  @map("orden_compra_id")
+
+  empresa     Empresa      @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  producto    Producto     @relation(fields: [productoId], references: [id])
+  factura     Factura?     @relation(fields: [facturaId], references: [id])
+  ordenCompra OrdenCompra? @relation(fields: [ordenCompraId], references: [id])
 
   @@index([empresaId, productoId])
   @@index([facturaId])
+  @@index([ordenCompraId])
   @@map("movimientos_inventario")
 }
 
@@ -717,17 +726,21 @@ model AsientoContable {
   numero      Int
   descripcion String
   fecha       DateTime  @default(now())
-  facturaId   String?   @map("factura_id")
-  pagoId      String?   @map("pago_id")
-  creadoPor   String    @map("creado_por")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  facturaId     String?   @map("factura_id")
+  pagoId        String?   @map("pago_id")
+  ordenCompraId String?   @map("orden_compra_id")
+  gastoId       String?   @map("gasto_id")
+  creadoPor     String    @map("creado_por")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
 
   empresa Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
   lineas  LineaAsiento[]
 
   @@index([empresaId, fecha])
   @@index([facturaId])
+  @@index([ordenCompraId])
+  @@index([gastoId])
   @@map("asientos_contables")
 }
 
@@ -908,5 +921,114 @@ model MovimientoFiado {
   @@index([cuentaFiadoId])
   @@index([empresaId])
   @@map("movimientos_fiado")
+}
+
+// ============================================================
+// ENUMS — Fase 8: Compras y Gastos
+// ============================================================
+
+enum EstadoOrdenCompra {
+  BORRADOR
+  ENVIADA
+  RECIBIDA_PARCIAL
+  RECIBIDA
+  CANCELADA
+
+  @@map("estado_orden_compra")
+}
+
+enum EstadoGasto {
+  PENDIENTE
+  PAGADO
+  VENCIDO
+
+  @@map("estado_gasto")
+}
+
+// ============================================================
+// MODELO: OrdenCompra
+// ============================================================
+model OrdenCompra {
+  id            String            @id @default(cuid())
+  empresaId     String            @map("empresa_id")
+  proveedorId   String            @map("proveedor_id")
+  numero        Int
+  estado        EstadoOrdenCompra @default(BORRADOR)
+  subtotal      Decimal           @default(0)
+  itbis         Decimal           @default(0)
+  total         Decimal           @default(0)
+  notas         String?
+  fechaEsperada DateTime?         @map("fecha_esperada")
+  fechaRecibida DateTime?         @map("fecha_recibida")
+  creadoPor     String            @map("creado_por")
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+  deletedAt     DateTime?         @map("deleted_at")
+
+  empresa         Empresa              @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  proveedor       Proveedor            @relation(fields: [proveedorId], references: [id])
+  items           ItemOrdenCompra[]
+  movimientos     MovimientoInventario[]
+
+  @@unique([empresaId, numero])
+  @@index([empresaId, estado])
+  @@index([empresaId, proveedorId])
+  @@map("ordenes_compra")
+}
+
+// ============================================================
+// MODELO: ItemOrdenCompra
+// ============================================================
+model ItemOrdenCompra {
+  id               String   @id @default(cuid())
+  ordenCompraId    String   @map("orden_compra_id")
+  productoId       String?  @map("producto_id")
+  descripcion      String
+  cantidad         Decimal
+  cantidadRecibida Decimal  @default(0) @map("cantidad_recibida")
+  costoUnitario    Decimal  @map("costo_unitario")
+  itbisPorcentaje  Decimal  @default(0) @map("itbis_porcentaje")
+  itbisMonto       Decimal  @default(0) @map("itbis_monto")
+  subtotal         Decimal
+  total            Decimal
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  ordenCompra OrdenCompra @relation(fields: [ordenCompraId], references: [id], onDelete: Cascade)
+  producto    Producto?   @relation(fields: [productoId], references: [id])
+
+  @@index([ordenCompraId])
+  @@map("items_orden_compra")
+}
+
+// ============================================================
+// MODELO: Gasto
+// ============================================================
+model Gasto {
+  id           String      @id @default(cuid())
+  empresaId    String      @map("empresa_id")
+  proveedorId  String?     @map("proveedor_id")
+  descripcion  String
+  monto        Decimal
+  itbis        Decimal     @default(0)
+  total        Decimal
+  categoria    String?
+  estado       EstadoGasto @default(PENDIENTE)
+  fechaGasto   DateTime    @map("fecha_gasto")
+  fechaPago    DateTime?   @map("fecha_pago")
+  comprobante  String?
+  ncfProveedor String?     @map("ncf_proveedor")
+  notas        String?
+  creadoPor    String      @map("creado_por")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  deletedAt    DateTime?   @map("deleted_at")
+
+  empresa   Empresa    @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  proveedor Proveedor? @relation(fields: [proveedorId], references: [id])
+
+  @@index([empresaId, estado])
+  @@index([empresaId, fechaGasto])
+  @@map("gastos")
 }
 

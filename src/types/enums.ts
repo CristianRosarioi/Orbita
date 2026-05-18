@@ -174,3 +174,35 @@ export const TipoMovimientoFiado = {
   ABONO: 'ABONO',
 } as const;
 export type TipoMovimientoFiado = (typeof TipoMovimientoFiado)[keyof typeof TipoMovimientoFiado];
+
+// Fase 8 — Compras y Gastos
+
+export const EstadoOrdenCompra = {
+  BORRADOR: 'BORRADOR',
+  ENVIADA: 'ENVIADA',
+  RECIBIDA_PARCIAL: 'RECIBIDA_PARCIAL',
+  RECIBIDA: 'RECIBIDA',
+  CANCELADA: 'CANCELADA',
+} as const;
+export type EstadoOrdenCompra = (typeof EstadoOrdenCompra)[keyof typeof EstadoOrdenCompra];
+
+export const EstadoGasto = {
+  PENDIENTE: 'PENDIENTE',
+  PAGADO: 'PAGADO',
+  VENCIDO: 'VENCIDO',
+} as const;
+export type EstadoGasto = (typeof EstadoGasto)[keyof typeof EstadoGasto];
+
+export const CATEGORIAS_GASTO = [
+  'ALQUILER',
+  'SERVICIOS_PUBLICOS',
+  'NOMINA',
+  'MARKETING',
+  'EQUIPOS',
+  'TRANSPORTE',
+  'COMUNICACIONES',
+  'SEGUROS',
+  'IMPUESTOS',
+  'OTROS',
+] as const;
+export type CategoriaGasto = (typeof CATEGORIAS_GASTO)[number];
