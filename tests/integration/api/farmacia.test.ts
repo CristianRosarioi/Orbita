@@ -197,9 +197,7 @@ describe('GET /api/farmacia/vencimientos', () => {
 
   it('devuelve lotes próximos a vencer con diasRestantes', async () => {
     setupSession();
-    mockPrisma.lote.findMany.mockResolvedValue([
-      { ...mockLote, fechaVencimiento: en60dias },
-    ]);
+    mockPrisma.lote.findMany.mockResolvedValue([{ ...mockLote, fechaVencimiento: en60dias }]);
 
     const { GET } = await import('@/app/api/farmacia/vencimientos/route');
     const req = new NextRequest('http://localhost/api/farmacia/vencimientos?dias=90');
@@ -213,9 +211,7 @@ describe('GET /api/farmacia/vencimientos', () => {
 
   it('devuelve lotes ya vencidos con días negativos', async () => {
     setupSession();
-    mockPrisma.lote.findMany.mockResolvedValue([
-      { ...mockLote, fechaVencimiento: ayer },
-    ]);
+    mockPrisma.lote.findMany.mockResolvedValue([{ ...mockLote, fechaVencimiento: ayer }]);
 
     const { GET } = await import('@/app/api/farmacia/vencimientos/route');
     const req = new NextRequest('http://localhost/api/farmacia/vencimientos?vencidos=true');

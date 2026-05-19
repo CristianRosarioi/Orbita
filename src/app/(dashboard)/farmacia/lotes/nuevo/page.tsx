@@ -23,14 +23,19 @@ export default function NuevoLotePage() {
   });
 
   const [buscando, setBuscando] = useState(false);
-  const [resultados, setResultados] = useState<{ id: string; nombre: string; sku: string | null }[]>([]);
+  const [resultados, setResultados] = useState<
+    { id: string; nombre: string; sku: string | null }[]
+  >([]);
 
   function set(f: string, v: string) {
     setForm((p) => ({ ...p, [f]: v }));
   }
 
   async function buscarProducto(q: string) {
-    if (q.length < 2) { setResultados([]); return; }
+    if (q.length < 2) {
+      setResultados([]);
+      return;
+    }
     setBuscando(true);
     try {
       const res = await fetch(`/api/productos?q=${encodeURIComponent(q)}&limit=10`);
@@ -49,7 +54,10 @@ export default function NuevoLotePage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!form.productoId) { setError('Selecciona un producto.'); return; }
+    if (!form.productoId) {
+      setError('Selecciona un producto.');
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch('/api/farmacia/lotes', {
@@ -66,7 +74,10 @@ export default function NuevoLotePage() {
         }),
       });
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error al crear el lote.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error al crear el lote.');
+        return;
+      }
       router.push('/farmacia/lotes');
       router.refresh();
     } catch {
@@ -80,10 +91,15 @@ export default function NuevoLotePage() {
     <div className="p-4 md:p-6 max-w-xl space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">Nuevo lote</h1>
-        <p className="text-slate-500 text-sm mt-1">Registra un lote de producto con fecha de vencimiento.</p>
+        <p className="text-slate-500 text-sm mt-1">
+          Registra un lote de producto con fecha de vencimiento.
+        </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5 bg-white rounded-lg border border-slate-200 p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-5 bg-white rounded-lg border border-slate-200 p-6"
+      >
         {/* Producto */}
         <div className="space-y-4">
           <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Producto</h2>
@@ -122,7 +138,9 @@ export default function NuevoLotePage() {
 
         {/* Lote */}
         <div className="space-y-4 border-t border-slate-100 pt-4">
-          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Información del lote</h2>
+          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+            Información del lote
+          </h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="numeroLote">Número de lote *</Label>

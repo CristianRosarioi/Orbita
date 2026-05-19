@@ -17,7 +17,7 @@ describe('CreateLoteSchema', () => {
   it('acepta todos los campos opcionales', () => {
     const result = CreateLoteSchema.safeParse({
       ...baseLote,
-      precioCompra: 25.50,
+      precioCompra: 25.5,
       proveedor: 'Farmacéutica Nacional',
       notas: 'Refrigeración requerida',
     });
@@ -132,8 +132,8 @@ describe('Cálculo de días restantes', () => {
       { fechaVencimiento: new Date('2026-03-15') },
       { fechaVencimiento: new Date('2026-12-31') },
     ];
-    const ordenados = [...lotes].sort((a, b) =>
-      a.fechaVencimiento.getTime() - b.fechaVencimiento.getTime()
+    const ordenados = [...lotes].sort(
+      (a, b) => a.fechaVencimiento.getTime() - b.fechaVencimiento.getTime(),
     );
     expect(ordenados[0].fechaVencimiento.toISOString().slice(0, 10)).toBe('2026-03-15');
     expect(ordenados[1].fechaVencimiento.toISOString().slice(0, 10)).toBe('2026-06-01');

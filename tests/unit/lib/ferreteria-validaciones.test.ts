@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { CreatePedidoSchema, UpdatePedidoSchema, AddItemPedidoSchema } from '@/lib/validations/ferreteria';
+import {
+  CreatePedidoSchema,
+  UpdatePedidoSchema,
+  AddItemPedidoSchema,
+} from '@/lib/validations/ferreteria';
 
 describe('CreatePedidoSchema', () => {
   it('acepta datos mínimos requeridos', () => {
@@ -22,7 +26,10 @@ describe('CreatePedidoSchema', () => {
   });
 
   it('rechaza fecha de entrega con formato inválido', () => {
-    const result = CreatePedidoSchema.safeParse({ proveedorId: 'prov_1', fechaEntrega: '15/06/2026' });
+    const result = CreatePedidoSchema.safeParse({
+      proveedorId: 'prov_1',
+      fechaEntrega: '15/06/2026',
+    });
     expect(result.success).toBe(false);
   });
 

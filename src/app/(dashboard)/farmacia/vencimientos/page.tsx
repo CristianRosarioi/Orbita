@@ -19,10 +19,25 @@ interface SearchParams {
 }
 
 function colorDias(dias: number) {
-  if (dias < 0) return { card: 'border-red-200 bg-red-50', badge: 'bg-red-100 text-red-700', texto: 'Vencido' };
-  if (dias <= 7) return { card: 'border-red-200 bg-red-50', badge: 'bg-red-100 text-red-700', texto: `${dias}d` };
-  if (dias <= 30) return { card: 'border-amber-200 bg-amber-50', badge: 'bg-amber-100 text-amber-700', texto: `${dias}d` };
-  return { card: 'border-emerald-200 bg-emerald-50', badge: 'bg-emerald-100 text-emerald-700', texto: `${dias}d` };
+  if (dias < 0)
+    return { card: 'border-red-200 bg-red-50', badge: 'bg-red-100 text-red-700', texto: 'Vencido' };
+  if (dias <= 7)
+    return {
+      card: 'border-red-200 bg-red-50',
+      badge: 'bg-red-100 text-red-700',
+      texto: `${dias}d`,
+    };
+  if (dias <= 30)
+    return {
+      card: 'border-amber-200 bg-amber-50',
+      badge: 'bg-amber-100 text-amber-700',
+      texto: `${dias}d`,
+    };
+  return {
+    card: 'border-emerald-200 bg-emerald-50',
+    badge: 'bg-emerald-100 text-emerald-700',
+    texto: `${dias}d`,
+  };
 }
 
 export default async function VencimientosPage({
@@ -60,7 +75,9 @@ export default async function VencimientosPage({
 
   const lotesConDias = lotes.map((l) => ({
     ...l,
-    diasRestantes: Math.ceil((l.fechaVencimiento.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24)),
+    diasRestantes: Math.ceil(
+      (l.fechaVencimiento.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24),
+    ),
   }));
 
   return (
@@ -107,7 +124,9 @@ export default async function VencimientosPage({
         </div>
       ) : (
         <div className="space-y-3">
-          <p className="text-sm text-slate-500">{lotesConDias.length} lote{lotesConDias.length !== 1 ? 's' : ''}</p>
+          <p className="text-sm text-slate-500">
+            {lotesConDias.length} lote{lotesConDias.length !== 1 ? 's' : ''}
+          </p>
           {lotesConDias.map((lote) => {
             const color = colorDias(lote.diasRestantes);
             return (
@@ -132,8 +151,11 @@ export default async function VencimientosPage({
                     {lote.proveedor && ` · ${lote.proveedor}`}
                   </p>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    Vence: {lote.fechaVencimiento.toLocaleDateString('es-DO', {
-                      day: '2-digit', month: 'long', year: 'numeric',
+                    Vence:{' '}
+                    {lote.fechaVencimiento.toLocaleDateString('es-DO', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
                     })}
                     {' · '}Disponible: {Number(lote.cantidadActual)} uds.
                   </p>

@@ -25,11 +25,7 @@ const ESTADO_COLORS: Record<string, string> = {
   CANCELADO: 'bg-red-100 text-red-600',
 };
 
-export default async function PedidoDetallePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function PedidoDetallePage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
   if (!INDUSTRIAS_FERRETERIA.includes(sesion.empresaActiva.industria)) redirect('/dashboard');
@@ -100,25 +96,40 @@ export default async function PedidoDetallePage({
                       <td className="px-4 py-2.5 text-slate-900">
                         {item.descripcion}
                         {item.producto && (
-                          <span className="text-xs text-slate-400 block">{item.producto.nombre}</span>
+                          <span className="text-xs text-slate-400 block">
+                            {item.producto.nombre}
+                          </span>
                         )}
                       </td>
-                      <td className="px-4 py-2.5 text-center text-slate-500">{item.unidadMedida}</td>
-                      <td className="px-4 py-2.5 text-right text-slate-700">{Number(item.cantidad)}</td>
+                      <td className="px-4 py-2.5 text-center text-slate-500">
+                        {item.unidadMedida}
+                      </td>
                       <td className="px-4 py-2.5 text-right text-slate-700">
-                        RD$ {Number(item.precioUnitario).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                        {Number(item.cantidad)}
+                      </td>
+                      <td className="px-4 py-2.5 text-right text-slate-700">
+                        RD${' '}
+                        {Number(item.precioUnitario).toLocaleString('es-DO', {
+                          minimumFractionDigits: 2,
+                        })}
                       </td>
                       <td className="px-4 py-2.5 text-right font-medium text-slate-900">
-                        RD$ {Number(item.subtotal).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                        RD${' '}
+                        {Number(item.subtotal).toLocaleString('es-DO', {
+                          minimumFractionDigits: 2,
+                        })}
                       </td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr className="border-t-2 border-slate-200 bg-slate-50">
-                    <td colSpan={4} className="px-4 py-3 text-right font-semibold text-slate-700">Total</td>
+                    <td colSpan={4} className="px-4 py-3 text-right font-semibold text-slate-700">
+                      Total
+                    </td>
                     <td className="px-4 py-3 text-right font-bold text-slate-900 text-base">
-                      RD$ {Number(pedido.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                      RD${' '}
+                      {Number(pedido.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
                 </tfoot>
@@ -128,7 +139,9 @@ export default async function PedidoDetallePage({
 
           {/* Acciones */}
           <div className="bg-white rounded-lg border border-slate-200 p-4 space-y-3">
-            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Acciones</h2>
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+              Acciones
+            </h2>
             <PedidoAcciones
               pedidoId={pedido.id}
               estado={pedido.estado}
@@ -145,7 +158,9 @@ export default async function PedidoDetallePage({
         {/* Panel lateral */}
         <div className="space-y-4">
           <div className="bg-white rounded-lg border border-slate-200 p-4 space-y-3">
-            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Proveedor</h2>
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+              Proveedor
+            </h2>
             <p className="font-medium text-slate-900">{pedido.proveedor.nombre}</p>
             {pedido.proveedor.telefono && (
               <p className="text-sm text-slate-500">{pedido.proveedor.telefono}</p>
@@ -175,7 +190,9 @@ export default async function PedidoDetallePage({
 
           {pedido.notas && (
             <div className="bg-white rounded-lg border border-slate-200 p-4 space-y-1">
-              <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Notas</h2>
+              <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+                Notas
+              </h2>
               <p className="text-sm text-slate-600">{pedido.notas}</p>
             </div>
           )}

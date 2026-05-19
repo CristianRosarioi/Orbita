@@ -26,18 +26,12 @@ function colorFila(dias: number): string {
 }
 
 function badgeDias(dias: number) {
-  if (dias < 0)
-    return <Badge className="bg-red-100 text-red-700">Vencido</Badge>;
-  if (dias <= 30)
-    return <Badge className="bg-amber-100 text-amber-700">{dias}d</Badge>;
+  if (dias < 0) return <Badge className="bg-red-100 text-red-700">Vencido</Badge>;
+  if (dias <= 30) return <Badge className="bg-amber-100 text-amber-700">{dias}d</Badge>;
   return <Badge className="bg-emerald-100 text-emerald-700">{dias}d</Badge>;
 }
 
-export default async function LotesPage({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
+export default async function LotesPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
   if (!INDUSTRIAS_FARMACIA.includes(sesion.empresaActiva.industria)) redirect('/dashboard');
@@ -86,7 +80,9 @@ export default async function LotesPage({
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Control de lotes</h1>
-          <p className="text-slate-500 text-sm mt-1">{lotes.length} lote{lotes.length !== 1 ? 's' : ''}</p>
+          <p className="text-slate-500 text-sm mt-1">
+            {lotes.length} lote{lotes.length !== 1 ? 's' : ''}
+          </p>
         </div>
         <Link href="/farmacia/lotes/nuevo" className={buttonVariants()}>
           <Plus className="h-4 w-4 mr-1.5" />
@@ -134,11 +130,17 @@ export default async function LotesPage({
             <option value="vencido">Vencido</option>
           </select>
         </div>
-        <button type="submit" className="px-4 py-1.5 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700">
+        <button
+          type="submit"
+          className="px-4 py-1.5 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700"
+        >
           Filtrar
         </button>
         {(q || estado) && (
-          <Link href="/farmacia/lotes" className="px-4 py-1.5 text-sm border border-slate-200 rounded-md hover:bg-slate-50">
+          <Link
+            href="/farmacia/lotes"
+            className="px-4 py-1.5 text-sm border border-slate-200 rounded-md hover:bg-slate-50"
+          >
             Limpiar
           </Link>
         )}
@@ -184,8 +186,12 @@ export default async function LotesPage({
                     <td className="px-4 py-3 text-slate-700">
                       {lote.fechaVencimiento.toLocaleDateString('es-DO')}
                     </td>
-                    <td className="px-4 py-3 text-right text-slate-700">{Number(lote.cantidadInicial)}</td>
-                    <td className="px-4 py-3 text-right font-medium text-slate-900">{Number(lote.cantidadActual)}</td>
+                    <td className="px-4 py-3 text-right text-slate-700">
+                      {Number(lote.cantidadInicial)}
+                    </td>
+                    <td className="px-4 py-3 text-right font-medium text-slate-900">
+                      {Number(lote.cantidadActual)}
+                    </td>
                     <td className="px-4 py-3 text-center">{badgeDias(dias)}</td>
                   </tr>
                 );

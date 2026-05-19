@@ -52,7 +52,10 @@ export default async function UnidadesPage() {
         </div>
         <Link
           href="/configuracion/unidades-medida"
-          className={buttonVariants({ variant: 'outline', size: 'sm' }) + ' shrink-0 border-indigo-300 text-indigo-700 hover:bg-indigo-100'}
+          className={
+            buttonVariants({ variant: 'outline', size: 'sm' }) +
+            ' shrink-0 border-indigo-300 text-indigo-700 hover:bg-indigo-100'
+          }
         >
           Ir a Configuración
           <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
@@ -76,7 +79,10 @@ export default async function UnidadesPage() {
           </thead>
           <tbody>
             {UNIDADES_FERRETERIA.map(({ unidad, descripcion, usos }) => (
-              <tr key={unidad} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+              <tr
+                key={unidad}
+                className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
+              >
                 <td className="px-4 py-3 font-mono font-bold text-indigo-600">{unidad}</td>
                 <td className="px-4 py-3 text-slate-900">{descripcion}</td>
                 <td className="px-4 py-3 text-slate-500 text-xs">{usos}</td>

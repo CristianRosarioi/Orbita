@@ -29,8 +29,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (!parsed.success)
       return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 422);
 
-    const subtotal =
-      Math.round(parsed.data.cantidad * parsed.data.precioUnitario * 100) / 100;
+    const subtotal = Math.round(parsed.data.cantidad * parsed.data.precioUnitario * 100) / 100;
 
     const item = await prisma.$transaction(async (tx) => {
       const nuevoItem = await tx.itemPedidoProveedor.create({

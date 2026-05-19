@@ -13,7 +13,12 @@ const SIGUIENTE_ESTADO: Record<string, { estado: string; label: string }> = {
 interface PedidoAccionesProps {
   pedidoId: string;
   estado: string;
-  items: { productoId: string | null; descripcion: string; cantidad: number; precioUnitario: number }[];
+  items: {
+    productoId: string | null;
+    descripcion: string;
+    cantidad: number;
+    precioUnitario: number;
+  }[];
 }
 
 export default function PedidoAcciones({ pedidoId, estado, items }: PedidoAccionesProps) {
@@ -34,7 +39,10 @@ export default function PedidoAcciones({ pedidoId, estado, items }: PedidoAccion
         body: JSON.stringify({ estado: nuevoEstado }),
       });
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error.');
+        return;
+      }
 
       if (nuevoEstado === 'RECIBIDO') {
         setActualizandoStock(true);
@@ -58,7 +66,10 @@ export default function PedidoAcciones({ pedidoId, estado, items }: PedidoAccion
         body: JSON.stringify({ estado: 'CANCELADO' }),
       });
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error.');
+        return;
+      }
       router.refresh();
     } catch {
       setError('Error de conexión.');
@@ -111,13 +122,21 @@ export default function PedidoAcciones({ pedidoId, estado, items }: PedidoAccion
             ¿Deseas actualizar el inventario con los productos recibidos?
           </p>
           <p className="text-xs text-emerald-700">
-            Solo se actualizarán los ítems que tienen producto vinculado ({items.filter(i => i.productoId).length} de {items.length}).
+            Solo se actualizarán los ítems que tienen producto vinculado (
+            {items.filter((i) => i.productoId).length} de {items.length}).
           </p>
           <div className="flex gap-2">
             <Button size="sm" onClick={actualizarInventario} disabled={loading !== null}>
               {loading === 'INVENTARIO' ? 'Actualizando...' : 'Sí, actualizar stock'}
             </Button>
-            <Button size="sm" variant="outline" onClick={() => { setActualizandoStock(false); router.refresh(); }}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                setActualizandoStock(false);
+                router.refresh();
+              }}
+            >
               No, omitir
             </Button>
           </div>
@@ -125,10 +144,7 @@ export default function PedidoAcciones({ pedidoId, estado, items }: PedidoAccion
       ) : (
         <div className="flex flex-wrap gap-2">
           {siguiente && (
-            <Button
-              onClick={() => cambiarEstado(siguiente.estado)}
-              disabled={loading !== null}
-            >
+            <Button onClick={() => cambiarEstado(siguiente.estado)} disabled={loading !== null}>
               {loading === siguiente.estado ? 'Procesando...' : siguiente.label}
             </Button>
           )}

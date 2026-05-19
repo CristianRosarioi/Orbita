@@ -58,8 +58,12 @@ export default async function PedidosPage({
     <div className="p-4 space-y-4 md:p-6 md:space-y-6 max-w-5xl">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Pedidos a proveedores</h1>
-          <p className="text-slate-500 text-sm mt-1">{pedidos.length} pedido{pedidos.length !== 1 ? 's' : ''}</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            Pedidos a proveedores
+          </h1>
+          <p className="text-slate-500 text-sm mt-1">
+            {pedidos.length} pedido{pedidos.length !== 1 ? 's' : ''}
+          </p>
         </div>
         <Link href="/ferreteria/pedidos/nuevo" className={buttonVariants()}>
           <Plus className="h-4 w-4 mr-1.5" />
@@ -72,7 +76,9 @@ export default async function PedidosPage({
         <Link
           href="/ferreteria/pedidos"
           className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
-            !estado ? 'bg-slate-900 text-white border-slate-900' : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+            !estado
+              ? 'bg-slate-900 text-white border-slate-900'
+              : 'border-slate-200 text-slate-600 hover:bg-slate-50'
           }`}
         >
           Todos
@@ -82,7 +88,9 @@ export default async function PedidosPage({
             key={e}
             href={`/ferreteria/pedidos?estado=${e}`}
             className={`px-3 py-1.5 text-sm rounded-full border transition-colors ${
-              estado === e ? 'bg-slate-900 text-white border-slate-900' : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+              estado === e
+                ? 'bg-slate-900 text-white border-slate-900'
+                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
             {ESTADO_LABELS[e]}
@@ -135,7 +143,10 @@ export default async function PedidosPage({
                     <Badge className={ESTADO_COLORS[p.estado]}>{ESTADO_LABELS[p.estado]}</Badge>
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/ferreteria/pedidos/${p.id}`} className="text-xs text-indigo-600 hover:underline">
+                    <Link
+                      href={`/ferreteria/pedidos/${p.id}`}
+                      className="text-xs text-indigo-600 hover:underline"
+                    >
                       Ver
                     </Link>
                   </td>

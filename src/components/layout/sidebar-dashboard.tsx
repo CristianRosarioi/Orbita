@@ -37,6 +37,7 @@ import {
   Clock,
   AlertTriangle,
   Ruler,
+  ArrowRightLeft,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -111,6 +112,10 @@ const FERRETERIA_ITEMS = [
   { href: '/ferreteria/unidades', label: 'Unidades', icon: Ruler },
 ];
 
+const INVENTARIO_ITEMS = [
+  { href: '/transferencias', label: 'Transferencias', icon: ArrowRightLeft },
+];
+
 const CONTABILIDAD_ITEMS = [
   { href: '/contabilidad', label: 'Balance general', icon: Scale },
   { href: '/contabilidad/cuentas', label: 'Plan de cuentas', icon: BookMarked },
@@ -131,6 +136,7 @@ const CONFIG_ITEMS = [
   { href: '/configuracion/usuarios', label: 'Usuarios' },
   { href: '/configuracion/categorias', label: 'Categorías' },
   { href: '/configuracion/unidades-medida', label: 'Unidades de medida' },
+  { href: '/sucursales', label: 'Sucursales' },
 ];
 
 const ROL_LABELS: Record<string, string> = {
@@ -353,6 +359,12 @@ function SidebarContent({
         {/* Compras */}
         <SectionDivider label="Compras" />
         {COMPRAS_ITEMS.map(({ href, label, icon }) => (
+          <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+        ))}
+
+        {/* Inventario */}
+        <SectionDivider label="Inventario" />
+        {INVENTARIO_ITEMS.map(({ href, label, icon }) => (
           <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
         ))}
 

@@ -177,8 +177,10 @@ model Empresa {
   nominas         Nomina[]
   ordenesTrabajo  OrdenTrabajo[]
   citas           Cita[]
-  lotes           Lote[]
+  lotes            Lote[]
   pedidosProveedor PedidoProveedor[]
+  stockSucursal    StockSucursal[]
+  transferencias   TransferenciaInventario[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -218,14 +220,22 @@ model Sucursal {
   codigo      String
   direccion   String?
   telefono    String?
+  ciudad      String?
+  encargado   String?
   esPrincipal Boolean   @default(false) @map("es_principal")
   activa      Boolean   @default(true)
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at")
 
-  empresa         Empresa                @relation(fields: [empresaId], references: [id], onDelete: Cascade)
-  sesionesActivas SesionUsuarioEmpresa[]
+  empresa                Empresa                  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  sesionesActivas        SesionUsuarioEmpresa[]
+  facturas               Factura[]
+  sesionCaja             SesionCaja[]
+  stockSucursal          StockSucursal[]
+  transferenciasOrigen   TransferenciaInventario[] @relation("TransferenciaOrigen")
+  transferenciasDestino  TransferenciaInventario[] @relation("TransferenciaDestino")
+  movimientos            MovimientoInventario[]
 
   @@unique([empresaId, codigo])
   @@index([empresaId])
@@ -402,6 +412,8 @@ model Producto {
   itemsOrdenTrabajo    ItemOrdenTrabajo[]
   lotes                Lote[]
   itemsPedidoProveedor ItemPedidoProveedor[]
+  stockSucursal        StockSucursal[]
+  transferencias       TransferenciaInventario[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, sku])
@@ -515,6 +527,7 @@ model Factura {
 
   empresa     Empresa               @relation(fields: [empresaId], references: [id], onDelete: Cascade)
   cliente     Cliente?              @relation(fields: [clienteId], references: [id])
+  sucursal    Sucursal?             @relation(fields: [sucursalId], references: [id])
   sesionCaja  SesionCaja?           @relation(fields: [sesionCajaId], references: [id])
   items       ItemFactura[]
   pagos       PagoFactura[]
@@ -610,6 +623,7 @@ model SesionCaja {
   updatedAt             DateTime    @updatedAt @map("updated_at")
 
   empresa  Empresa   @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  sucursal Sucursal? @relation(fields: [sucursalId], references: [id])
   facturas Factura[]
 
   @@index([empresaId, estado])
@@ -621,27 +635,30 @@ model SesionCaja {
 // MODELO: MovimientoInventario
 // ============================================================
 model MovimientoInventario {
-  id           String                   @id @default(cuid())
-  empresaId    String                   @map("empresa_id")
-  productoId   String                   @map("producto_id")
-  facturaId    String?                  @map("factura_id")
-  tipo         TipoMovimientoInventario
-  cantidad     Decimal
-  stockAntes   Decimal                  @map("stock_antes")
-  stockDespues Decimal                  @map("stock_despues")
-  notas        String?
-  creadoPor    String                   @map("creado_por")
-  createdAt    DateTime                 @default(now()) @map("created_at")
+  id            String                   @id @default(cuid())
+  empresaId     String                   @map("empresa_id")
+  productoId    String                   @map("producto_id")
+  facturaId     String?                  @map("factura_id")
+  sucursalId    String?                  @map("sucursal_id")
+  tipo          TipoMovimientoInventario
+  cantidad      Decimal
+  stockAntes    Decimal                  @map("stock_antes")
+  stockDespues  Decimal                  @map("stock_despues")
+  notas         String?
+  creadoPor     String                   @map("creado_por")
+  createdAt     DateTime                 @default(now()) @map("created_at")
 
   ordenCompraId String?  @map("orden_compra_id")
 
   empresa     Empresa      @relation(fields: [empresaId], references: [id], onDelete: Cascade)
   producto    Producto     @relation(fields: [productoId], references: [id])
   factura     Factura?     @relation(fields: [facturaId], references: [id])
+  sucursal    Sucursal?    @relation(fields: [sucursalId], references: [id])
   ordenCompra OrdenCompra? @relation(fields: [ordenCompraId], references: [id])
 
   @@index([empresaId, productoId])
   @@index([facturaId])
+  @@index([sucursalId])
   @@index([ordenCompraId])
   @@map("movimientos_inventario")
 }
@@ -1387,4 +1404,66 @@ model ItemPedidoProveedor {
 
   @@index([pedidoId])
   @@map("items_pedido_proveedor")
+}
+
+// ============================================================
+// FASE 12 — MULTI-SUCURSAL
+// ============================================================
+
+enum EstadoTransferencia {
+  PENDIENTE
+  COMPLETADA
+  CANCELADA
+
+  @@map("estado_transferencia")
+}
+
+// ============================================================
+// MODELO: StockSucursal
+// ============================================================
+model StockSucursal {
+  id         String   @id @default(cuid())
+  empresaId  String   @map("empresa_id")
+  sucursalId String   @map("sucursal_id")
+  productoId String   @map("producto_id")
+  cantidad   Decimal  @default(0)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  sucursal Sucursal @relation(fields: [sucursalId], references: [id], onDelete: Cascade)
+  producto Producto @relation(fields: [productoId], references: [id])
+
+  @@unique([sucursalId, productoId])
+  @@index([empresaId, sucursalId])
+  @@index([productoId])
+  @@map("stock_sucursal")
+}
+
+// ============================================================
+// MODELO: TransferenciaInventario
+// ============================================================
+model TransferenciaInventario {
+  id                String               @id @default(cuid())
+  empresaId         String               @map("empresa_id")
+  sucursalOrigenId  String               @map("sucursal_origen_id")
+  sucursalDestinoId String               @map("sucursal_destino_id")
+  productoId        String               @map("producto_id")
+  cantidad          Decimal
+  notas             String?
+  estado            EstadoTransferencia  @default(COMPLETADA)
+  creadoPor         String               @map("creado_por")
+  createdAt         DateTime             @default(now()) @map("created_at")
+  updatedAt         DateTime             @updatedAt @map("updated_at")
+
+  empresa         Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  sucursalOrigen  Sucursal @relation("TransferenciaOrigen", fields: [sucursalOrigenId], references: [id])
+  sucursalDestino Sucursal @relation("TransferenciaDestino", fields: [sucursalDestinoId], references: [id])
+  producto        Producto @relation(fields: [productoId], references: [id])
+
+  @@index([empresaId])
+  @@index([sucursalOrigenId])
+  @@index([sucursalDestinoId])
+  @@index([productoId])
+  @@map("transferencias_inventario")
 }

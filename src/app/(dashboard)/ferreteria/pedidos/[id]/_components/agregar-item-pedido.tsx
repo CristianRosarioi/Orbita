@@ -14,7 +14,20 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const UNIDADES = ['und', 'kg', 'ton', 'm²', 'm³', 'saco', 'rollo', 'galón', 'cubo', 'varilla', 'caja', 'bolsa'];
+const UNIDADES = [
+  'und',
+  'kg',
+  'ton',
+  'm²',
+  'm³',
+  'saco',
+  'rollo',
+  'galón',
+  'cubo',
+  'varilla',
+  'caja',
+  'bolsa',
+];
 
 export default function AgregarItemPedido({ pedidoId }: { pedidoId: string }) {
   const router = useRouter();
@@ -48,12 +61,18 @@ export default function AgregarItemPedido({ pedidoId }: { pedidoId: string }) {
         }),
       });
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error.');
+        return;
+      }
       setOpen(false);
       setForm({ descripcion: '', unidadMedida: 'und', cantidad: '1', precioUnitario: '' });
       router.refresh();
-    } catch { setError('Error de conexión.'); }
-    finally { setLoading(false); }
+    } catch {
+      setError('Error de conexión.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -81,12 +100,19 @@ export default function AgregarItemPedido({ pedidoId }: { pedidoId: string }) {
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label>Unidad de medida</Label>
-                  <Select value={form.unidadMedida} onValueChange={(v) => set('unidadMedida', v ?? 'und')}>
+                  <Select
+                    value={form.unidadMedida}
+                    onValueChange={(v) => set('unidadMedida', v ?? 'und')}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {UNIDADES.map((u) => <SelectItem key={u} value={u}>{u}</SelectItem>)}
+                      {UNIDADES.map((u) => (
+                        <SelectItem key={u} value={u}>
+                          {u}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -120,7 +146,13 @@ export default function AgregarItemPedido({ pedidoId }: { pedidoId: string }) {
                 <Button type="submit" size="sm" disabled={loading} className="flex-1">
                   {loading ? 'Agregando...' : 'Agregar'}
                 </Button>
-                <Button type="button" size="sm" variant="outline" onClick={() => setOpen(false)} className="flex-1">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setOpen(false)}
+                  className="flex-1"
+                >
                   Cancelar
                 </Button>
               </div>

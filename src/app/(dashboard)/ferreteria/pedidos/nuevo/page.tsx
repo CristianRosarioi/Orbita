@@ -14,7 +14,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-interface Proveedor { id: string; nombre: string }
+interface Proveedor {
+  id: string;
+  nombre: string;
+}
 interface ItemLocal {
   descripcion: string;
   unidadMedida: string;
@@ -22,7 +25,20 @@ interface ItemLocal {
   precioUnitario: string;
 }
 
-const UNIDADES = ['und', 'kg', 'ton', 'm²', 'm³', 'saco', 'rollo', 'galón', 'cubo', 'varilla', 'caja', 'bolsa'];
+const UNIDADES = [
+  'und',
+  'kg',
+  'ton',
+  'm²',
+  'm³',
+  'saco',
+  'rollo',
+  'galón',
+  'cubo',
+  'varilla',
+  'caja',
+  'bolsa',
+];
 
 export default function NuevoPedidoPage() {
   const router = useRouter();
@@ -43,7 +59,9 @@ export default function NuevoPedidoPage() {
   useEffect(() => {
     fetch('/api/proveedores?limit=100')
       .then((r) => r.json())
-      .then((d) => { if (d.success) setProveedores(d.data ?? []); });
+      .then((d) => {
+        if (d.success) setProveedores(d.data ?? []);
+      });
   }, []);
 
   function setField(f: string, v: string) {
@@ -51,11 +69,14 @@ export default function NuevoPedidoPage() {
   }
 
   function setItem(i: number, f: keyof ItemLocal, v: string) {
-    setItems((prev) => prev.map((item, idx) => idx === i ? { ...item, [f]: v } : item));
+    setItems((prev) => prev.map((item, idx) => (idx === i ? { ...item, [f]: v } : item)));
   }
 
   function agregarItem() {
-    setItems((prev) => [...prev, { descripcion: '', unidadMedida: 'und', cantidad: '1', precioUnitario: '' }]);
+    setItems((prev) => [
+      ...prev,
+      { descripcion: '', unidadMedida: 'und', cantidad: '1', precioUnitario: '' },
+    ]);
   }
 
   function eliminarItem(i: number) {
@@ -71,9 +92,15 @@ export default function NuevoPedidoPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!form.proveedorId) { setError('Selecciona un proveedor.'); return; }
+    if (!form.proveedorId) {
+      setError('Selecciona un proveedor.');
+      return;
+    }
     const itemsValidos = items.filter((i) => i.descripcion && parseFloat(i.precioUnitario) > 0);
-    if (itemsValidos.length === 0) { setError('Agrega al menos un ítem válido.'); return; }
+    if (itemsValidos.length === 0) {
+      setError('Agrega al menos un ítem válido.');
+      return;
+    }
     setLoading(true);
     try {
       // Crear pedido
@@ -87,7 +114,10 @@ export default function NuevoPedidoPage() {
         }),
       });
       const dataPedido = await resPedido.json();
-      if (!dataPedido.success) { setError(dataPedido.error?.message ?? 'Error al crear el pedido.'); return; }
+      if (!dataPedido.success) {
+        setError(dataPedido.error?.message ?? 'Error al crear el pedido.');
+        return;
+      }
 
       const pedidoId = dataPedido.data.id;
 
@@ -124,17 +154,24 @@ export default function NuevoPedidoPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Proveedor y fecha */}
         <div className="bg-white rounded-lg border border-slate-200 p-5 space-y-4">
-          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Proveedor</h2>
+          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+            Proveedor
+          </h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label>Proveedor *</Label>
-              <Select value={form.proveedorId} onValueChange={(v) => setField('proveedorId', v ?? '')}>
+              <Select
+                value={form.proveedorId}
+                onValueChange={(v) => setField('proveedorId', v ?? '')}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecciona proveedor..." />
                 </SelectTrigger>
                 <SelectContent>
                   {proveedores.map((p) => (
-                    <SelectItem key={p.id} value={p.id}>{p.nombre}</SelectItem>
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.nombre}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -164,7 +201,9 @@ export default function NuevoPedidoPage() {
         {/* Ítems */}
         <div className="bg-white rounded-lg border border-slate-200 p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Ítems del pedido</h2>
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+              Ítems del pedido
+            </h2>
             <Button type="button" size="sm" variant="outline" onClick={agregarItem}>
               <Plus className="h-3.5 w-3.5 mr-1" />
               Agregar ítem
@@ -184,12 +223,19 @@ export default function NuevoPedidoPage() {
                 </div>
                 <div className="col-span-2 space-y-1">
                   {i === 0 && <Label className="text-xs">Unidad</Label>}
-                  <Select value={item.unidadMedida} onValueChange={(v) => setItem(i, 'unidadMedida', v ?? 'und')}>
+                  <Select
+                    value={item.unidadMedida}
+                    onValueChange={(v) => setItem(i, 'unidadMedida', v ?? 'und')}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {UNIDADES.map((u) => <SelectItem key={u} value={u}>{u}</SelectItem>)}
+                      {UNIDADES.map((u) => (
+                        <SelectItem key={u} value={u}>
+                          {u}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -217,7 +263,9 @@ export default function NuevoPedidoPage() {
                 <div className="col-span-1 space-y-1">
                   {i === 0 && <Label className="text-xs">Subtotal</Label>}
                   <p className="text-sm font-medium text-slate-700 py-2">
-                    {((parseFloat(item.cantidad) || 0) * (parseFloat(item.precioUnitario) || 0)).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                    {(
+                      (parseFloat(item.cantidad) || 0) * (parseFloat(item.precioUnitario) || 0)
+                    ).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
                   </p>
                 </div>
                 <div className="col-span-1 flex justify-end">
