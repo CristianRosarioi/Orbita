@@ -23,11 +23,7 @@ const ESTADO_LABELS: Record<string, string> = {
 const fmt = (n: unknown) =>
   `RD$ ${Number(n).toLocaleString('es-DO', { minimumFractionDigits: 2 })}`;
 
-export default async function NominaDetallePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function NominaDetallePage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
 
@@ -122,7 +118,9 @@ export default async function NominaDetallePage({
                   <td className="px-4 py-3 text-right text-slate-700">{fmt(item.salarioBruto)}</td>
                   <td className="px-4 py-3 text-right text-amber-600">{fmt(item.tssTrabajador)}</td>
                   <td className="px-4 py-3 text-right text-amber-600">{fmt(item.isr)}</td>
-                  <td className="px-4 py-3 text-right text-slate-500">{fmt(item.otrosDescuentos)}</td>
+                  <td className="px-4 py-3 text-right text-slate-500">
+                    {fmt(item.otrosDescuentos)}
+                  </td>
                   <td className="px-4 py-3 text-right font-semibold text-emerald-700">
                     {fmt(item.salarioNeto)}
                   </td>

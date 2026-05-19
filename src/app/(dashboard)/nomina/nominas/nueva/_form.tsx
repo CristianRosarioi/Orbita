@@ -175,7 +175,9 @@ export default function NuevaNominaForm({ empleados }: { empleados: EmpleadoSele
                   <tr className="bg-slate-50 border-b border-slate-200">
                     <th className="px-4 py-3 text-left w-8" />
                     <th className="px-4 py-3 text-left font-medium text-slate-600">Empleado</th>
-                    <th className="px-4 py-3 text-right font-medium text-slate-600">Salario base</th>
+                    <th className="px-4 py-3 text-right font-medium text-slate-600">
+                      Salario base
+                    </th>
                     <th className="px-4 py-3 text-center font-medium text-slate-600 w-24">
                       Días trab.
                     </th>

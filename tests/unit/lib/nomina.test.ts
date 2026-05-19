@@ -54,10 +54,7 @@ describe('calcularItemNomina', () => {
       otrosDescuentos: 1_000,
     });
     const esperado =
-      resultado.salarioBruto -
-      resultado.tssTrabajador -
-      resultado.isr -
-      resultado.otrosDescuentos;
+      resultado.salarioBruto - resultado.tssTrabajador - resultado.isr - resultado.otrosDescuentos;
     expect(resultado.salarioNeto).toBeCloseTo(esperado, 1);
   });
 

@@ -50,7 +50,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       where: { id },
       data: {
         ...rest,
-        email: email !== undefined ? (email || null) : undefined,
+        email: email !== undefined ? email || null : undefined,
         salarioBase: salarioBase !== undefined ? salarioBase : undefined,
         fechaIngreso: fechaIngreso ? new Date(fechaIngreso) : undefined,
         fechaSalida: fechaSalida ? new Date(fechaSalida) : undefined,
@@ -81,11 +81,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
       where: { empleadoId: id },
     });
     if (tieneNominas)
-      return err(
-        'VALIDATION_ERROR',
-        'No puedes eliminar un empleado con nóminas procesadas.',
-        422,
-      );
+      return err('VALIDATION_ERROR', 'No puedes eliminar un empleado con nóminas procesadas.', 422);
 
     await prisma.empleado.update({
       where: { id },

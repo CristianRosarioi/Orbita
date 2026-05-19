@@ -47,11 +47,7 @@ export default function NominaAcciones({ nominaId, estado }: Props) {
       <div className="flex gap-2">
         {estado === 'BORRADOR' && (
           <>
-            <Button
-              size="sm"
-              onClick={() => accion('procesar')}
-              disabled={loading !== null}
-            >
+            <Button size="sm" onClick={() => accion('procesar')} disabled={loading !== null}>
               <CheckCircle className="h-4 w-4 mr-1.5" />
               {loading === 'procesar' ? 'Procesando...' : 'Procesar nómina'}
             </Button>

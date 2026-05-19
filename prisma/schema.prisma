@@ -175,6 +175,8 @@ model Empresa {
   gastos          Gasto[]
   empleados       Empleado[]
   nominas         Nomina[]
+  ordenesTrabajo  OrdenTrabajo[]
+  citas           Cita[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -316,9 +318,11 @@ model Cliente {
   updatedAt          DateTime           @updatedAt @map("updated_at")
   deletedAt          DateTime?          @map("deleted_at")
 
-  empresa      Empresa      @relation(fields: [empresaId], references: [id], onDelete: Cascade)
-  facturas     Factura[]
-  cuentaFiado  CuentaFiado?
+  empresa        Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  facturas       Factura[]
+  cuentaFiado    CuentaFiado?
+  ordenesTrabajo OrdenTrabajo[]
+  citas          Cita[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, identificacion])
@@ -392,6 +396,7 @@ model Producto {
   movimientos       MovimientoInventario[]
   itemsComanda      ItemComanda[]
   itemsOrdenCompra  ItemOrdenCompra[]
+  itemsOrdenTrabajo ItemOrdenTrabajo[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, sku])
@@ -1166,4 +1171,129 @@ model ItemNomina {
   @@index([nominaId])
   @@index([empleadoId])
   @@map("items_nomina")
+}
+
+// ============================================================
+// FASE 10 — VERTICALES: TALLER MECÁNICO Y SALÓN DE BELLEZA
+// ============================================================
+
+enum EstadoOrdenTrabajo {
+  RECIBIDO
+  EN_DIAGNOSTICO
+  ESPERANDO_REPUESTOS
+  EN_REPARACION
+  LISTO
+  ENTREGADO
+  CANCELADO
+
+  @@map("estado_orden_trabajo")
+}
+
+enum EstadoCita {
+  PENDIENTE
+  CONFIRMADA
+  EN_PROCESO
+  COMPLETADA
+  CANCELADA
+  NO_SHOW
+
+  @@map("estado_cita")
+}
+
+// ============================================================
+// MODELO: OrdenTrabajo
+// ============================================================
+model OrdenTrabajo {
+  id               String             @id @default(cuid())
+  empresaId        String             @map("empresa_id")
+  numero           Int
+  clienteId        String?            @map("cliente_id")
+  clienteNombre    String             @map("cliente_nombre")
+  clienteTelefono  String?            @map("cliente_telefono")
+  vehiculoMarca    String             @map("vehiculo_marca")
+  vehiculoModelo   String             @map("vehiculo_modelo")
+  vehiculoAnio     Int?               @map("vehiculo_anio")
+  vehiculoPlaca    String             @map("vehiculo_placa")
+  vehiculoColor    String?            @map("vehiculo_color")
+  kilometraje      Int?
+  estado           EstadoOrdenTrabajo @default(RECIBIDO)
+  descripcionFalla String             @map("descripcion_falla")
+  diagnostico      String?
+  trabajoRealizado String?            @map("trabajo_realizado")
+  subtotal         Decimal            @default(0)
+  itbis            Decimal            @default(0)
+  total            Decimal            @default(0)
+  facturaId        String?            @map("factura_id")
+  tecnico          String?
+  fechaRecepcion   DateTime           @default(now()) @map("fecha_recepcion")
+  fechaPromesa     DateTime?          @map("fecha_promesa")
+  fechaEntrega     DateTime?          @map("fecha_entrega")
+  notas            String?
+  creadoPor        String             @map("creado_por")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+  deletedAt        DateTime?          @map("deleted_at")
+
+  empresa Empresa            @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente Cliente?           @relation(fields: [clienteId], references: [id])
+  items   ItemOrdenTrabajo[]
+
+  @@unique([empresaId, numero])
+  @@index([empresaId, estado])
+  @@index([empresaId, vehiculoPlaca])
+  @@map("ordenes_trabajo")
+}
+
+// ============================================================
+// MODELO: ItemOrdenTrabajo
+// ============================================================
+model ItemOrdenTrabajo {
+  id              String   @id @default(cuid())
+  ordenTrabajoId  String   @map("orden_trabajo_id")
+  tipo            String
+  descripcion     String
+  productoId      String?  @map("producto_id")
+  cantidad        Decimal
+  precioUnitario  Decimal  @map("precio_unitario")
+  itbisPorcentaje Decimal  @default(18) @map("itbis_porcentaje")
+  itbisMonto      Decimal  @default(0) @map("itbis_monto")
+  subtotal        Decimal
+  total           Decimal
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  ordenTrabajo OrdenTrabajo @relation(fields: [ordenTrabajoId], references: [id], onDelete: Cascade)
+  producto     Producto?    @relation(fields: [productoId], references: [id])
+
+  @@index([ordenTrabajoId])
+  @@map("items_orden_trabajo")
+}
+
+// ============================================================
+// MODELO: Cita
+// ============================================================
+model Cita {
+  id              String     @id @default(cuid())
+  empresaId       String     @map("empresa_id")
+  clienteId       String?    @map("cliente_id")
+  clienteNombre   String     @map("cliente_nombre")
+  clienteTelefono String?    @map("cliente_telefono")
+  empleadoId      String?    @map("empleado_id")
+  servicio        String
+  fecha           DateTime
+  duracionMin     Int        @default(60) @map("duracion_min")
+  precio          Decimal
+  estado          EstadoCita @default(PENDIENTE)
+  notas           String?
+  facturaId       String?    @map("factura_id")
+  creadoPor       String     @map("creado_por")
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+
+  empresa Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente Cliente? @relation(fields: [clienteId], references: [id])
+
+  @@index([empresaId, fecha])
+  @@index([empresaId, estado])
+  @@map("citas")
 }

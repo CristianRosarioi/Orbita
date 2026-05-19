@@ -18,11 +18,7 @@ export async function POST(_req: NextRequest, { params }: { params: Promise<{ id
     });
     if (!nomina) return err('NOT_FOUND', 'Nómina no encontrada.', 404);
     if (nomina.estado !== 'PROCESADA')
-      return err(
-        'VALIDATION_ERROR',
-        'Solo se pueden pagar nóminas en estado PROCESADA.',
-        422,
-      );
+      return err('VALIDATION_ERROR', 'Solo se pueden pagar nóminas en estado PROCESADA.', 422);
 
     const actualizada = await prisma.nomina.update({
       where: { id },

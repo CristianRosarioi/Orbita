@@ -239,3 +239,26 @@ export const EstadoNomina = {
   ANULADA: 'ANULADA',
 } as const;
 export type EstadoNomina = (typeof EstadoNomina)[keyof typeof EstadoNomina];
+
+// Fase 10 — Verticales: Taller Mecánico y Salón de Belleza
+
+export const EstadoOrdenTrabajo = {
+  RECIBIDO: 'RECIBIDO',
+  EN_DIAGNOSTICO: 'EN_DIAGNOSTICO',
+  ESPERANDO_REPUESTOS: 'ESPERANDO_REPUESTOS',
+  EN_REPARACION: 'EN_REPARACION',
+  LISTO: 'LISTO',
+  ENTREGADO: 'ENTREGADO',
+  CANCELADO: 'CANCELADO',
+} as const;
+export type EstadoOrdenTrabajo = (typeof EstadoOrdenTrabajo)[keyof typeof EstadoOrdenTrabajo];
+
+export const EstadoCita = {
+  PENDIENTE: 'PENDIENTE',
+  CONFIRMADA: 'CONFIRMADA',
+  EN_PROCESO: 'EN_PROCESO',
+  COMPLETADA: 'COMPLETADA',
+  CANCELADA: 'CANCELADA',
+  NO_SHOW: 'NO_SHOW',
+} as const;
+export type EstadoCita = (typeof EstadoCita)[keyof typeof EstadoCita];

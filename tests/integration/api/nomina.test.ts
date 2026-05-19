@@ -59,7 +59,9 @@ function setupSession() {
 // ─── GET /api/nomina/empleados ────────────────────────────────────
 
 describe('GET /api/nomina/empleados', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('devuelve lista de empleados', async () => {
     setupSession();
@@ -118,7 +120,9 @@ describe('GET /api/nomina/empleados', () => {
 // ─── POST /api/nomina/empleados ───────────────────────────────────
 
 describe('POST /api/nomina/empleados', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   const bodyValido = {
     nombre: 'Ana',
@@ -197,7 +201,9 @@ describe('POST /api/nomina/empleados', () => {
 // ─── POST /api/nomina/nominas ─────────────────────────────────────
 
 describe('POST /api/nomina/nominas', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   const bodyValido = {
     periodo: 'Mayo 2026',
@@ -283,7 +289,9 @@ describe('POST /api/nomina/nominas', () => {
 // ─── POST /api/nomina/nominas/[id]/procesar ───────────────────────
 
 describe('POST /api/nomina/nominas/[id]/procesar', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('cambia estado BORRADOR → PROCESADA', async () => {
     setupSession();
@@ -356,7 +364,9 @@ describe('POST /api/nomina/nominas/[id]/procesar', () => {
 // ─── POST /api/nomina/nominas/[id]/pagar ─────────────────────────
 
 describe('POST /api/nomina/nominas/[id]/pagar', () => {
-  beforeEach(() => { vi.clearAllMocks(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('cambia estado PROCESADA → PAGADA', async () => {
     setupSession();

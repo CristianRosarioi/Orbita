@@ -3,11 +3,7 @@ import { getCurrentEmpresa } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import EditarEmpleadoForm from './_form';
 
-export default async function EditarEmpleadoPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditarEmpleadoPage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
 

@@ -3,9 +3,7 @@ import { z } from 'zod';
 export const CreateEmpleadoSchema = z.object({
   nombre: z.string().min(1, 'El nombre es requerido').max(100),
   apellido: z.string().min(1, 'El apellido es requerido').max(100),
-  cedula: z
-    .string()
-    .regex(/^\d{11}$/, 'La cédula debe tener exactamente 11 dígitos'),
+  cedula: z.string().regex(/^\d{11}$/, 'La cédula debe tener exactamente 11 dígitos'),
   cargo: z.string().min(1, 'El cargo es requerido').max(100),
   departamento: z.string().max(100).optional(),
   salarioBase: z.number().positive('El salario debe ser mayor que cero'),

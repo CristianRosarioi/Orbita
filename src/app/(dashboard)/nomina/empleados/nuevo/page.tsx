@@ -74,7 +74,10 @@ export default function NuevoEmpleadoPage() {
         <p className="text-slate-500 text-sm mt-1">Completa los datos del empleado.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 bg-white rounded-lg border border-slate-200 p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 bg-white rounded-lg border border-slate-200 p-6"
+      >
         {/* Datos personales */}
         <div className="space-y-4">
           <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
@@ -105,7 +108,9 @@ export default function NuevoEmpleadoPage() {
             <Input
               id="cedula"
               value={form.cedula}
-              onChange={(e) => handleChange('cedula', e.target.value.replace(/\D/g, '').slice(0, 11))}
+              onChange={(e) =>
+                handleChange('cedula', e.target.value.replace(/\D/g, '').slice(0, 11))
+              }
               placeholder="00000000000"
               required
             />

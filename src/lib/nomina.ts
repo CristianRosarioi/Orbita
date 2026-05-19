@@ -7,28 +7,27 @@ const TOPE_TSS_MENSUAL = 118_656;
 
 // Porcentajes de cotización según Ley 87-01
 const TSS_TRABAJADOR = {
-  SFS: 0.0304,    // Seguro Familiar de Salud — trabajador
-  AFP: 0.0287,    // Pensión — trabajador
+  SFS: 0.0304, // Seguro Familiar de Salud — trabajador
+  AFP: 0.0287, // Pensión — trabajador
 };
 const TSS_EMPLEADOR = {
-  SFS: 0.0709,    // Seguro Familiar de Salud — empleador
-  AFP: 0.0710,    // Pensión — empleador
-  SRL: 0.011,     // Seguro de Riesgos Laborales
+  SFS: 0.0709, // Seguro Familiar de Salud — empleador
+  AFP: 0.071, // Pensión — empleador
+  SRL: 0.011, // Seguro de Riesgos Laborales
 };
 
 export const TASA_TSS_TRABAJADOR = TSS_TRABAJADOR.SFS + TSS_TRABAJADOR.AFP; // 5.91%
-export const TASA_TSS_EMPLEADOR =
-  TSS_EMPLEADOR.SFS + TSS_EMPLEADOR.AFP + TSS_EMPLEADOR.SRL;                // 15.29% (≈)
+export const TASA_TSS_EMPLEADOR = TSS_EMPLEADOR.SFS + TSS_EMPLEADOR.AFP + TSS_EMPLEADOR.SRL; // 15.29% (≈)
 
 // ── ISR 2026 — Tabla progresiva anual (Art. 296 Código Tributario) ──────────
 // Exento hasta: RD$ 416,220.00 anuales
 // Los montos de salario anual gravable (después de exento y TSS)
 
 const TRAMOS_ISR = [
-  { desde: 0,          hasta: 416_220.00,  tasa: 0,    cuota: 0 },
-  { desde: 416_220.01, hasta: 624_329.00,  tasa: 0.15, cuota: 0 },
-  { desde: 624_329.01, hasta: 867_123.00,  tasa: 0.20, cuota: 31_216.00 },
-  { desde: 867_123.01, hasta: Infinity,    tasa: 0.25, cuota: 79_776.00 },
+  { desde: 0, hasta: 416_220.0, tasa: 0, cuota: 0 },
+  { desde: 416_220.01, hasta: 624_329.0, tasa: 0.15, cuota: 0 },
+  { desde: 624_329.01, hasta: 867_123.0, tasa: 0.2, cuota: 31_216.0 },
+  { desde: 867_123.01, hasta: Infinity, tasa: 0.25, cuota: 79_776.0 },
 ];
 
 function calcularISRAnual(salarioAnualGravable: number): number {
@@ -45,40 +44,35 @@ function calcularISRAnual(salarioAnualGravable: number): number {
 
 export interface InputItemNomina {
   salarioBase: number;
-  diasTrabajados?: number;     // default 23.83 (mes completo)
-  otrosIngresos?: number;      // bonificaciones, horas extra, etc.
-  otrosDescuentos?: number;    // descuentos varios
+  diasTrabajados?: number; // default 23.83 (mes completo)
+  otrosIngresos?: number; // bonificaciones, horas extra, etc.
+  otrosDescuentos?: number; // descuentos varios
 }
 
 export interface ResultadoItemNomina {
   salarioBase: number;
   diasTrabajados: number;
-  salarioBruto: number;        // proporcional a días trabajados + otros ingresos
-  tssTrabajador: number;       // descuento al trabajador
-  tssEmpleador: number;        // costo adicional del empleador
-  isr: number;                 // retención ISR mensual
+  salarioBruto: number; // proporcional a días trabajados + otros ingresos
+  tssTrabajador: number; // descuento al trabajador
+  tssEmpleador: number; // costo adicional del empleador
+  isr: number; // retención ISR mensual
   otrosDescuentos: number;
   otrosIngresos: number;
-  salarioNeto: number;         // lo que recibe el trabajador
+  salarioNeto: number; // lo que recibe el trabajador
 }
 
 export interface ResumenNomina {
   totalBruto: number;
-  totalTSS: number;        // suma de TSS trabajadores
+  totalTSS: number; // suma de TSS trabajadores
   totalISR: number;
-  totalOtros: number;      // suma de otros descuentos
+  totalOtros: number; // suma de otros descuentos
   totalNeto: number;
 }
 
 // ── Cálculo individual ────────────────────────────────────────────────────
 
 export function calcularItemNomina(input: InputItemNomina): ResultadoItemNomina {
-  const {
-    salarioBase,
-    diasTrabajados = 23.83,
-    otrosIngresos = 0,
-    otrosDescuentos = 0,
-  } = input;
+  const { salarioBase, diasTrabajados = 23.83, otrosIngresos = 0, otrosDescuentos = 0 } = input;
 
   // Salario proporcional a días trabajados (base: 23.83 días/mes)
   const salarioProporcional = (salarioBase / 23.83) * diasTrabajados;

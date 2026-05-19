@@ -31,6 +31,10 @@ import {
   Receipt,
   UserCheck,
   Wallet,
+  Wrench,
+  Car,
+  CalendarDays,
+  Clock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -51,6 +55,8 @@ interface SidebarProps {
 
 const INDUSTRIAS_RESTAURANTE = ['RESTAURANTE'];
 const INDUSTRIAS_COLMADO = ['COLMADO', 'TIENDA_ONLINE', 'FARMACIA', 'TIENDA_ROPA'];
+const INDUSTRIAS_TALLER = ['TALLER_MECANICO', 'CARWASH', 'REPUESTOS'];
+const INDUSTRIAS_SALON = ['SALON_BARBERIA'];
 
 const RESTAURANTE_ITEMS = [
   { href: '/restaurante/mesas', label: 'Mesas', icon: LayoutGrid },
@@ -79,6 +85,16 @@ const COMPRAS_ITEMS = [
 const NOMINA_ITEMS = [
   { href: '/nomina/empleados', label: 'Empleados', icon: UserCheck },
   { href: '/nomina/nominas', label: 'Nóminas', icon: Wallet },
+];
+
+const TALLER_ITEMS = [
+  { href: '/taller/ordenes', label: 'Órdenes de trabajo', icon: Wrench },
+  { href: '/taller/historial', label: 'Historial por placa', icon: Car },
+];
+
+const SALON_ITEMS = [
+  { href: '/salon/agenda', label: 'Agenda', icon: CalendarDays },
+  { href: '/salon/citas', label: 'Citas', icon: Clock },
 ];
 
 const CONTABILIDAD_ITEMS = [
@@ -275,6 +291,26 @@ function SidebarContent({
           <>
             <SectionDivider label="Mi Tienda" />
             {COLMADO_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Taller Mecánico */}
+        {INDUSTRIAS_TALLER.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Taller" />
+            {TALLER_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Salón de Belleza */}
+        {INDUSTRIAS_SALON.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Salón" />
+            {SALON_ITEMS.map(({ href, label, icon }) => (
               <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
             ))}
           </>

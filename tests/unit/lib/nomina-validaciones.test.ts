@@ -49,7 +49,10 @@ describe('CreateEmpleadoSchema', () => {
   });
 
   it('rechaza fecha inválida', () => {
-    const result = CreateEmpleadoSchema.safeParse({ ...empleadoValido, fechaIngreso: 'no-es-fecha' });
+    const result = CreateEmpleadoSchema.safeParse({
+      ...empleadoValido,
+      fechaIngreso: 'no-es-fecha',
+    });
     expect(result.success).toBe(false);
   });
 

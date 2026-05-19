@@ -101,12 +101,11 @@ export default async function EmpleadosPage() {
                   <td className="px-4 py-3 text-slate-700">{emp.cargo}</td>
                   <td className="px-4 py-3 text-slate-500">{CONTRATO_LABELS[emp.tipoContrato]}</td>
                   <td className="px-4 py-3 text-right font-medium text-slate-900">
-                    RD$ {Number(emp.salarioBase).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                    RD${' '}
+                    {Number(emp.salarioBase).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <Badge className={ESTADO_COLORS[emp.estado]}>
-                      {ESTADO_LABELS[emp.estado]}
-                    </Badge>
+                    <Badge className={ESTADO_COLORS[emp.estado]}>{ESTADO_LABELS[emp.estado]}</Badge>
                   </td>
                   <td className="px-4 py-3">
                     <Link
