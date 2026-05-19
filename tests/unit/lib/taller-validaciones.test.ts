@@ -76,7 +76,15 @@ describe('UpdateOrdenTrabajoSchema', () => {
   });
 
   it('acepta todos los estados del enum', () => {
-    const estados = ['RECIBIDO', 'EN_DIAGNOSTICO', 'ESPERANDO_REPUESTOS', 'EN_REPARACION', 'LISTO', 'ENTREGADO', 'CANCELADO'];
+    const estados = [
+      'RECIBIDO',
+      'EN_DIAGNOSTICO',
+      'ESPERANDO_REPUESTOS',
+      'EN_REPARACION',
+      'LISTO',
+      'ENTREGADO',
+      'CANCELADO',
+    ];
     for (const estado of estados) {
       const result = UpdateOrdenTrabajoSchema.safeParse({ estado });
       expect(result.success).toBe(true);

@@ -59,8 +59,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       data: {
         ...parsed.data,
         fechaPromesa: parsed.data.fechaPromesa ? new Date(parsed.data.fechaPromesa) : undefined,
-        fechaEntrega:
-          parsed.data.estado === 'ENTREGADO' ? new Date() : undefined,
+        fechaEntrega: parsed.data.estado === 'ENTREGADO' ? new Date() : undefined,
       },
       include: { items: true },
     });

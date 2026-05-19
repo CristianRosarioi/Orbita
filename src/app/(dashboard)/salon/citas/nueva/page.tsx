@@ -76,17 +76,29 @@ export default function NuevaCitaPage() {
         <p className="text-slate-500 text-sm mt-1">Agenda un nuevo servicio para un cliente.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5 bg-white rounded-lg border border-slate-200 p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-5 bg-white rounded-lg border border-slate-200 p-6"
+      >
         <div className="space-y-4">
           <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Cliente</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="clienteNombre">Nombre *</Label>
-              <Input id="clienteNombre" value={form.clienteNombre} onChange={(e) => set('clienteNombre', e.target.value)} required />
+              <Input
+                id="clienteNombre"
+                value={form.clienteNombre}
+                onChange={(e) => set('clienteNombre', e.target.value)}
+                required
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="clienteTelefono">Teléfono</Label>
-              <Input id="clienteTelefono" value={form.clienteTelefono} onChange={(e) => set('clienteTelefono', e.target.value)} />
+              <Input
+                id="clienteTelefono"
+                value={form.clienteTelefono}
+                onChange={(e) => set('clienteTelefono', e.target.value)}
+              />
             </div>
           </div>
         </div>
@@ -95,12 +107,24 @@ export default function NuevaCitaPage() {
           <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Servicio</h2>
           <div className="space-y-1.5">
             <Label htmlFor="servicio">Servicio *</Label>
-            <Input id="servicio" value={form.servicio} onChange={(e) => set('servicio', e.target.value)} placeholder="Ej: Corte de cabello, Tinte, Manicure..." required />
+            <Input
+              id="servicio"
+              value={form.servicio}
+              onChange={(e) => set('servicio', e.target.value)}
+              placeholder="Ej: Corte de cabello, Tinte, Manicure..."
+              required
+            />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="fecha">Fecha y hora *</Label>
-              <Input id="fecha" type="datetime-local" value={form.fecha} onChange={(e) => set('fecha', e.target.value)} required />
+              <Input
+                id="fecha"
+                type="datetime-local"
+                value={form.fecha}
+                onChange={(e) => set('fecha', e.target.value)}
+                required
+              />
             </div>
             <div className="space-y-1.5">
               <Label>Duración</Label>
@@ -120,7 +144,15 @@ export default function NuevaCitaPage() {
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="precio">Precio (RD$) *</Label>
-            <Input id="precio" type="number" min="0.01" step="0.01" value={form.precio} onChange={(e) => set('precio', e.target.value)} required />
+            <Input
+              id="precio"
+              type="number"
+              min="0.01"
+              step="0.01"
+              value={form.precio}
+              onChange={(e) => set('precio', e.target.value)}
+              required
+            />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="notas">Notas</Label>

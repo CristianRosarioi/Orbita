@@ -66,18 +66,31 @@ export default function NuevaOrdenTrabajoPage() {
         <p className="text-slate-500 text-sm mt-1">Registra la entrada de un vehículo.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 bg-white rounded-lg border border-slate-200 p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 bg-white rounded-lg border border-slate-200 p-6"
+      >
         {/* Vehículo */}
         <div className="space-y-4">
           <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Vehículo</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="vehiculoMarca">Marca *</Label>
-              <Input id="vehiculoMarca" value={form.vehiculoMarca} onChange={(e) => set('vehiculoMarca', e.target.value)} required />
+              <Input
+                id="vehiculoMarca"
+                value={form.vehiculoMarca}
+                onChange={(e) => set('vehiculoMarca', e.target.value)}
+                required
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="vehiculoModelo">Modelo *</Label>
-              <Input id="vehiculoModelo" value={form.vehiculoModelo} onChange={(e) => set('vehiculoModelo', e.target.value)} required />
+              <Input
+                id="vehiculoModelo"
+                value={form.vehiculoModelo}
+                onChange={(e) => set('vehiculoModelo', e.target.value)}
+                required
+              />
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4">
@@ -92,16 +105,33 @@ export default function NuevaOrdenTrabajoPage() {
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="vehiculoAnio">Año</Label>
-              <Input id="vehiculoAnio" type="number" min="1900" max="2100" value={form.vehiculoAnio} onChange={(e) => set('vehiculoAnio', e.target.value)} />
+              <Input
+                id="vehiculoAnio"
+                type="number"
+                min="1900"
+                max="2100"
+                value={form.vehiculoAnio}
+                onChange={(e) => set('vehiculoAnio', e.target.value)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="vehiculoColor">Color</Label>
-              <Input id="vehiculoColor" value={form.vehiculoColor} onChange={(e) => set('vehiculoColor', e.target.value)} />
+              <Input
+                id="vehiculoColor"
+                value={form.vehiculoColor}
+                onChange={(e) => set('vehiculoColor', e.target.value)}
+              />
             </div>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="kilometraje">Kilometraje</Label>
-            <Input id="kilometraje" type="number" min="0" value={form.kilometraje} onChange={(e) => set('kilometraje', e.target.value)} />
+            <Input
+              id="kilometraje"
+              type="number"
+              min="0"
+              value={form.kilometraje}
+              onChange={(e) => set('kilometraje', e.target.value)}
+            />
           </div>
         </div>
 
@@ -111,11 +141,20 @@ export default function NuevaOrdenTrabajoPage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="clienteNombre">Nombre *</Label>
-              <Input id="clienteNombre" value={form.clienteNombre} onChange={(e) => set('clienteNombre', e.target.value)} required />
+              <Input
+                id="clienteNombre"
+                value={form.clienteNombre}
+                onChange={(e) => set('clienteNombre', e.target.value)}
+                required
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="clienteTelefono">Teléfono</Label>
-              <Input id="clienteTelefono" value={form.clienteTelefono} onChange={(e) => set('clienteTelefono', e.target.value)} />
+              <Input
+                id="clienteTelefono"
+                value={form.clienteTelefono}
+                onChange={(e) => set('clienteTelefono', e.target.value)}
+              />
             </div>
           </div>
         </div>
@@ -138,11 +177,20 @@ export default function NuevaOrdenTrabajoPage() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label htmlFor="tecnico">Técnico asignado</Label>
-              <Input id="tecnico" value={form.tecnico} onChange={(e) => set('tecnico', e.target.value)} />
+              <Input
+                id="tecnico"
+                value={form.tecnico}
+                onChange={(e) => set('tecnico', e.target.value)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="fechaPromesa">Fecha promesa de entrega</Label>
-              <Input id="fechaPromesa" type="date" value={form.fechaPromesa} onChange={(e) => set('fechaPromesa', e.target.value)} />
+              <Input
+                id="fechaPromesa"
+                type="date"
+                value={form.fechaPromesa}
+                onChange={(e) => set('fechaPromesa', e.target.value)}
+              />
             </div>
           </div>
           <div className="space-y-1.5">

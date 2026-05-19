@@ -177,6 +177,8 @@ model Empresa {
   nominas         Nomina[]
   ordenesTrabajo  OrdenTrabajo[]
   citas           Cita[]
+  lotes           Lote[]
+  pedidosProveedor PedidoProveedor[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -354,9 +356,10 @@ model Proveedor {
   updatedAt          DateTime           @updatedAt @map("updated_at")
   deletedAt          DateTime?          @map("deleted_at")
 
-  empresa        Empresa       @relation(fields: [empresaId], references: [id], onDelete: Cascade)
-  ordenesCompra  OrdenCompra[]
-  gastos         Gasto[]
+  empresa          Empresa           @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  ordenesCompra    OrdenCompra[]
+  gastos           Gasto[]
+  pedidosProveedor PedidoProveedor[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, identificacion])
@@ -395,8 +398,10 @@ model Producto {
   itemsFactura      ItemFactura[]
   movimientos       MovimientoInventario[]
   itemsComanda      ItemComanda[]
-  itemsOrdenCompra  ItemOrdenCompra[]
-  itemsOrdenTrabajo ItemOrdenTrabajo[]
+  itemsOrdenCompra     ItemOrdenCompra[]
+  itemsOrdenTrabajo    ItemOrdenTrabajo[]
+  lotes                Lote[]
+  itemsPedidoProveedor ItemPedidoProveedor[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, sku])
@@ -1296,4 +1301,90 @@ model Cita {
   @@index([empresaId, fecha])
   @@index([empresaId, estado])
   @@map("citas")
+}
+
+// ============================================================
+// ENUM: EstadoPedido
+// ============================================================
+enum EstadoPedido {
+  BORRADOR
+  ENVIADO
+  CONFIRMADO
+  RECIBIDO
+  CANCELADO
+}
+
+// ============================================================
+// MODELO: Lote (Farmacia)
+// ============================================================
+model Lote {
+  id               String   @id @default(cuid())
+  empresaId        String   @map("empresa_id")
+  productoId       String   @map("producto_id")
+  numeroLote       String   @map("numero_lote")
+  fechaVencimiento DateTime @map("fecha_vencimiento")
+  cantidadInicial  Decimal  @map("cantidad_inicial")
+  cantidadActual   Decimal  @map("cantidad_actual")
+  precioCompra     Decimal? @map("precio_compra")
+  proveedor        String?
+  notas            String?
+  activo           Boolean  @default(true)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  producto Producto @relation(fields: [productoId], references: [id])
+
+  @@unique([empresaId, productoId, numeroLote])
+  @@index([empresaId, fechaVencimiento])
+  @@map("lotes")
+}
+
+// ============================================================
+// MODELO: PedidoProveedor (Ferretería)
+// ============================================================
+model PedidoProveedor {
+  id           String       @id @default(cuid())
+  empresaId    String       @map("empresa_id")
+  proveedorId  String       @map("proveedor_id")
+  numero       Int
+  estado       EstadoPedido @default(BORRADOR)
+  notas        String?
+  total        Decimal      @default(0)
+  fechaPedido  DateTime     @default(now()) @map("fecha_pedido")
+  fechaEntrega DateTime?    @map("fecha_entrega")
+  creadoPor    String       @map("creado_por")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  deletedAt    DateTime?    @map("deleted_at")
+
+  empresa   Empresa               @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  proveedor Proveedor             @relation(fields: [proveedorId], references: [id])
+  items     ItemPedidoProveedor[]
+
+  @@unique([empresaId, numero])
+  @@index([empresaId, estado])
+  @@map("pedidos_proveedor")
+}
+
+// ============================================================
+// MODELO: ItemPedidoProveedor
+// ============================================================
+model ItemPedidoProveedor {
+  id             String  @id @default(cuid())
+  pedidoId       String  @map("pedido_id")
+  productoId     String? @map("producto_id")
+  descripcion    String
+  unidadMedida   String  @default("und") @map("unidad_medida")
+  cantidad       Decimal
+  precioUnitario Decimal @map("precio_unitario")
+  subtotal       Decimal
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  pedido   PedidoProveedor @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  producto Producto?       @relation(fields: [productoId], references: [id])
+
+  @@index([pedidoId])
+  @@map("items_pedido_proveedor")
 }

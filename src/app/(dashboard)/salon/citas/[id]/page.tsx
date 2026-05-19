@@ -26,11 +26,7 @@ const ESTADO_COLORS: Record<string, string> = {
   NO_SHOW: 'bg-slate-100 text-slate-500',
 };
 
-export default async function CitaDetallePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function CitaDetallePage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
   if (!INDUSTRIAS_SALON.includes(sesion.empresaActiva.industria)) redirect('/dashboard');
@@ -46,7 +42,8 @@ export default async function CitaDetallePage({
   if (!cita) notFound();
 
   const fecha = new Date(cita.fecha);
-  const cerrado = cita.estado === 'COMPLETADA' || cita.estado === 'CANCELADA' || cita.estado === 'NO_SHOW';
+  const cerrado =
+    cita.estado === 'COMPLETADA' || cita.estado === 'CANCELADA' || cita.estado === 'NO_SHOW';
 
   return (
     <div className="p-4 space-y-6 md:p-6 max-w-3xl">
@@ -69,14 +66,21 @@ export default async function CitaDetallePage({
         <div className="md:col-span-2 space-y-4">
           {/* Fecha y hora */}
           <div className="bg-white rounded-lg border border-slate-200 p-5 space-y-3">
-            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Detalles del servicio</h2>
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+              Detalles del servicio
+            </h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-start gap-2">
                 <Calendar className="h-4 w-4 text-slate-400 mt-0.5" />
                 <div>
                   <p className="text-xs text-slate-500">Fecha</p>
                   <p className="text-sm font-medium text-slate-900">
-                    {fecha.toLocaleDateString('es-DO', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}
+                    {fecha.toLocaleDateString('es-DO', {
+                      weekday: 'long',
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric',
+                    })}
                   </p>
                 </div>
               </div>
@@ -124,14 +128,18 @@ export default async function CitaDetallePage({
           {/* Acciones */}
           {!cerrado && (
             <div className="bg-white rounded-lg border border-slate-200 p-5 space-y-3">
-              <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Acciones</h2>
+              <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+                Acciones
+              </h2>
               <CitaAcciones citaId={cita.id} estado={cita.estado} />
             </div>
           )}
 
           {cerrado && cita.estado === 'COMPLETADA' && (
             <div className="bg-white rounded-lg border border-slate-200 p-5 space-y-3">
-              <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Facturación</h2>
+              <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+                Facturación
+              </h2>
               <CitaAcciones citaId={cita.id} estado={cita.estado} />
             </div>
           )}
@@ -140,7 +148,9 @@ export default async function CitaDetallePage({
         {/* Panel lateral: cliente */}
         <div className="space-y-4">
           <div className="bg-white rounded-lg border border-slate-200 p-5 space-y-3">
-            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Cliente</h2>
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+              Cliente
+            </h2>
             <div className="space-y-2">
               <div className="flex items-start gap-2">
                 <User className="h-4 w-4 text-slate-400 mt-0.5" />
@@ -166,7 +176,9 @@ export default async function CitaDetallePage({
           </div>
 
           <div className="bg-white rounded-lg border border-slate-200 p-5 space-y-2">
-            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Historial</h2>
+            <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wide">
+              Historial
+            </h2>
             <p className="text-xs text-slate-500">
               Creada: {new Date(cita.createdAt).toLocaleDateString('es-DO')}
             </p>

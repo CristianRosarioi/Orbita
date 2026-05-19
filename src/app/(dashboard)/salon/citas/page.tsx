@@ -31,11 +31,7 @@ interface SearchParams {
   estado?: string;
 }
 
-export default async function CitasPage({
-  searchParams,
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
+export default async function CitasPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
   if (!INDUSTRIAS_SALON.includes(sesion.empresaActiva.industria)) redirect('/dashboard');
@@ -93,15 +89,23 @@ export default async function CitasPage({
           >
             <option value="">Todos</option>
             {Object.keys(ESTADO_LABELS).map((e) => (
-              <option key={e} value={e}>{ESTADO_LABELS[e]}</option>
+              <option key={e} value={e}>
+                {ESTADO_LABELS[e]}
+              </option>
             ))}
           </select>
         </div>
-        <button type="submit" className="px-4 py-1.5 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700">
+        <button
+          type="submit"
+          className="px-4 py-1.5 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700"
+        >
           Filtrar
         </button>
         {(fecha || estado) && (
-          <Link href="/salon/citas" className="px-4 py-1.5 text-sm border border-slate-200 rounded-md hover:bg-slate-50">
+          <Link
+            href="/salon/citas"
+            className="px-4 py-1.5 text-sm border border-slate-200 rounded-md hover:bg-slate-50"
+          >
             Limpiar
           </Link>
         )}
@@ -138,8 +142,11 @@ export default async function CitasPage({
                   <td className="px-4 py-3 text-slate-700">{c.servicio}</td>
                   <td className="px-4 py-3 text-slate-500 whitespace-nowrap text-xs">
                     {new Date(c.fecha).toLocaleString('es-DO', {
-                      day: '2-digit', month: '2-digit', year: 'numeric',
-                      hour: '2-digit', minute: '2-digit',
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
                     })}
                   </td>
                   <td className="px-4 py-3 text-center text-slate-500">{c.duracionMin}min</td>
@@ -150,7 +157,10 @@ export default async function CitasPage({
                     <Badge className={ESTADO_COLORS[c.estado]}>{ESTADO_LABELS[c.estado]}</Badge>
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/salon/citas/${c.id}`} className="text-xs text-indigo-600 hover:underline">
+                    <Link
+                      href={`/salon/citas/${c.id}`}
+                      className="text-xs text-indigo-600 hover:underline"
+                    >
                       Ver
                     </Link>
                   </td>

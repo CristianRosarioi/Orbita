@@ -81,7 +81,8 @@ export default async function AgendaPage({
             {fechaDisplay}
           </h1>
           <p className="text-slate-500 text-sm mt-1">
-            {citas.length} cita{citas.length !== 1 ? 's' : ''} programada{citas.length !== 1 ? 's' : ''}
+            {citas.length} cita{citas.length !== 1 ? 's' : ''} programada
+            {citas.length !== 1 ? 's' : ''}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -129,7 +130,10 @@ export default async function AgendaPage({
               <div className="flex border-b border-slate-200 bg-slate-50">
                 <div className="w-16 shrink-0" />
                 {HORAS.map((h) => (
-                  <div key={h} className="flex-1 text-center text-xs text-slate-400 py-2 border-l border-slate-100">
+                  <div
+                    key={h}
+                    className="flex-1 text-center text-xs text-slate-400 py-2 border-l border-slate-100"
+                  >
                     {h === 12 ? '12pm' : h < 12 ? `${h}am` : `${h - 12}pm`}
                   </div>
                 ))}
@@ -142,7 +146,7 @@ export default async function AgendaPage({
                   const hora = fecha.getHours() + fecha.getMinutes() / 60;
                   const offsetFromStart = hora - 8;
                   const totalHours = HORAS.length;
-                  const left = `calc(4rem + ${(offsetFromStart / totalHours) * (100 - 4 * 16 / 700 * 100)}%)`;
+                  const left = `calc(4rem + ${(offsetFromStart / totalHours) * (100 - ((4 * 16) / 700) * 100)}%)`;
                   const width = `${(cita.duracionMin / 60 / totalHours) * 85}%`;
 
                   return (
@@ -156,7 +160,8 @@ export default async function AgendaPage({
                       <p className="truncate opacity-80">{cita.servicio}</p>
                       <p className="opacity-70">
                         {fecha.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' })}
-                        {' · '}{cita.duracionMin}min
+                        {' · '}
+                        {cita.duracionMin}min
                       </p>
                     </Link>
                   );
@@ -176,7 +181,10 @@ export default async function AgendaPage({
               >
                 <div className="w-14 shrink-0 text-center">
                   <p className="text-sm font-bold text-slate-800">
-                    {new Date(cita.fecha).toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' })}
+                    {new Date(cita.fecha).toLocaleTimeString('es-DO', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
                   </p>
                   <p className="text-xs text-slate-400">{cita.duracionMin}min</p>
                 </div>
@@ -188,7 +196,9 @@ export default async function AgendaPage({
                   <p className="font-medium text-slate-900">
                     RD$ {Number(cita.precio).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
                   </p>
-                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${ESTADO_COLORS[cita.estado]}`}>
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full font-medium ${ESTADO_COLORS[cita.estado]}`}
+                  >
                     {ESTADO_LABELS[cita.estado]}
                   </span>
                 </div>

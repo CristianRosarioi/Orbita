@@ -79,9 +79,7 @@ export default async function TallerOrdenesPage({
     <div className="p-4 space-y-4 md:p-6 md:space-y-6 max-w-7xl">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            Órdenes de trabajo
-          </h1>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Órdenes de trabajo</h1>
           <p className="text-slate-500 text-sm mt-1">
             {ordenes.length} orden{ordenes.length !== 1 ? 'es' : ''}
             {estado ? ` · ${ESTADO_LABELS[estado] ?? estado}` : ''}
@@ -98,9 +96,7 @@ export default async function TallerOrdenesPage({
         <Link
           href="/taller/ordenes"
           className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-            !estado
-              ? 'bg-slate-900 text-white'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            !estado ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
           }`}
         >
           Todos
@@ -150,16 +146,16 @@ export default async function TallerOrdenesPage({
               {ordenes.map((o) => (
                 <tr key={o.id} className="border-b border-slate-100 hover:bg-slate-50">
                   <td className="px-4 py-3 font-mono text-slate-500 text-xs">#{o.numero}</td>
-                  <td className="px-4 py-3 font-mono font-bold text-slate-900">{o.vehiculoPlaca}</td>
+                  <td className="px-4 py-3 font-mono font-bold text-slate-900">
+                    {o.vehiculoPlaca}
+                  </td>
                   <td className="px-4 py-3 text-slate-700">
                     {o.vehiculoMarca} {o.vehiculoModelo}
                   </td>
                   <td className="px-4 py-3 text-slate-700">{o.clienteNombre}</td>
                   <td className="px-4 py-3 text-slate-500">{o.tecnico ?? '—'}</td>
                   <td className="px-4 py-3 text-slate-500 whitespace-nowrap text-xs">
-                    {o.fechaPromesa
-                      ? new Date(o.fechaPromesa).toLocaleDateString('es-DO')
-                      : '—'}
+                    {o.fechaPromesa ? new Date(o.fechaPromesa).toLocaleDateString('es-DO') : '—'}
                   </td>
                   <td className="px-4 py-3 text-right font-medium text-slate-900">
                     RD$ {Number(o.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}

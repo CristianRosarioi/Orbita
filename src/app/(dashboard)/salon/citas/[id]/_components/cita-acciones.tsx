@@ -4,7 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
-const SIGUIENTE_ESTADO: Record<string, { estado: string; label: string; variant: 'default' | 'outline' }> = {
+const SIGUIENTE_ESTADO: Record<
+  string,
+  { estado: string; label: string; variant: 'default' | 'outline' }
+> = {
   PENDIENTE: { estado: 'CONFIRMADA', label: 'Confirmar cita', variant: 'default' },
   CONFIRMADA: { estado: 'EN_PROCESO', label: 'Iniciar servicio', variant: 'default' },
   EN_PROCESO: { estado: 'COMPLETADA', label: 'Completar', variant: 'default' },

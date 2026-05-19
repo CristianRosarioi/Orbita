@@ -28,8 +28,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (!cita) return err('NOT_FOUND', 'Cita no encontrada.', 404);
     if (cita.estado !== 'COMPLETADA')
       return err('VALIDATION_ERROR', 'Solo se pueden facturar citas completadas.', 422);
-    if (cita.facturaId)
-      return err('VALIDATION_ERROR', 'Esta cita ya fue facturada.', 422);
+    if (cita.facturaId) return err('VALIDATION_ERROR', 'Esta cita ya fue facturada.', 422);
 
     const body = await req.json();
     const parsed = FacturarCitaSchema.safeParse(body);

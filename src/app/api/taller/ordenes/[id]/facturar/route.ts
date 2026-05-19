@@ -25,8 +25,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (!orden) return err('NOT_FOUND', 'Orden de trabajo no encontrada.', 404);
     if (orden.estado !== 'LISTO')
       return err('VALIDATION_ERROR', 'Solo se pueden facturar órdenes con estado LISTO.', 422);
-    if (orden.facturaId)
-      return err('VALIDATION_ERROR', 'Esta orden ya fue facturada.', 422);
+    if (orden.facturaId) return err('VALIDATION_ERROR', 'Esta orden ya fue facturada.', 422);
     if (orden.items.length === 0)
       return err('VALIDATION_ERROR', 'La orden no tiene ítems para facturar.', 422);
 

@@ -35,6 +35,8 @@ import {
   Car,
   CalendarDays,
   Clock,
+  AlertTriangle,
+  Ruler,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -54,9 +56,11 @@ interface SidebarProps {
 }
 
 const INDUSTRIAS_RESTAURANTE = ['RESTAURANTE'];
-const INDUSTRIAS_COLMADO = ['COLMADO', 'TIENDA_ONLINE', 'FARMACIA', 'TIENDA_ROPA'];
+const INDUSTRIAS_COLMADO = ['COLMADO', 'TIENDA_ONLINE', 'TIENDA_ROPA'];
 const INDUSTRIAS_TALLER = ['TALLER_MECANICO', 'CARWASH', 'REPUESTOS'];
 const INDUSTRIAS_SALON = ['SALON_BARBERIA'];
+const INDUSTRIAS_FARMACIA = ['FARMACIA', 'BOTICA', 'DROGUERIA'];
+const INDUSTRIAS_FERRETERIA = ['FERRETERIA', 'MATERIALES', 'PINTURAS'];
 
 const RESTAURANTE_ITEMS = [
   { href: '/restaurante/mesas', label: 'Mesas', icon: LayoutGrid },
@@ -95,6 +99,16 @@ const TALLER_ITEMS = [
 const SALON_ITEMS = [
   { href: '/salon/agenda', label: 'Agenda', icon: CalendarDays },
   { href: '/salon/citas', label: 'Citas', icon: Clock },
+];
+
+const FARMACIA_ITEMS = [
+  { href: '/farmacia/lotes', label: 'Control de lotes', icon: Package },
+  { href: '/farmacia/vencimientos', label: 'Vencimientos', icon: AlertTriangle },
+];
+
+const FERRETERIA_ITEMS = [
+  { href: '/ferreteria/pedidos', label: 'Pedidos', icon: ShoppingCart },
+  { href: '/ferreteria/unidades', label: 'Unidades', icon: Ruler },
 ];
 
 const CONTABILIDAD_ITEMS = [
@@ -311,6 +325,26 @@ function SidebarContent({
           <>
             <SectionDivider label="Salón" />
             {SALON_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Farmacia */}
+        {INDUSTRIAS_FARMACIA.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Farmacia" />
+            {FARMACIA_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Ferretería */}
+        {INDUSTRIAS_FERRETERIA.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Ferretería" />
+            {FERRETERIA_ITEMS.map(({ href, label, icon }) => (
               <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
             ))}
           </>

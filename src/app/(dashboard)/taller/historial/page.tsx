@@ -104,7 +104,10 @@ export default async function HistorialPlacaPage({
             <p className="text-xs text-slate-500">Vehículo</p>
             <p className="font-bold text-slate-900 text-lg">{placa?.toUpperCase()}</p>
             <p className="text-sm text-slate-600">{vehiculo}</p>
-            <p className="text-sm text-slate-500 mt-0.5">{ordenes.length} visita{ordenes.length !== 1 ? 's' : ''} registrada{ordenes.length !== 1 ? 's' : ''}</p>
+            <p className="text-sm text-slate-500 mt-0.5">
+              {ordenes.length} visita{ordenes.length !== 1 ? 's' : ''} registrada
+              {ordenes.length !== 1 ? 's' : ''}
+            </p>
           </div>
 
           {ordenes.map((o) => (
@@ -117,12 +120,16 @@ export default async function HistorialPlacaPage({
                   </div>
                   <p className="text-xs text-slate-500 mt-0.5">
                     Recibido: {new Date(o.fechaRecepcion).toLocaleDateString('es-DO')}
-                    {o.fechaEntrega && ` · Entregado: ${new Date(o.fechaEntrega).toLocaleDateString('es-DO')}`}
+                    {o.fechaEntrega &&
+                      ` · Entregado: ${new Date(o.fechaEntrega).toLocaleDateString('es-DO')}`}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="font-bold text-slate-900">{fmt(o.total)}</p>
-                  <Link href={`/taller/ordenes/${o.id}`} className="text-xs text-indigo-600 hover:underline">
+                  <Link
+                    href={`/taller/ordenes/${o.id}`}
+                    className="text-xs text-indigo-600 hover:underline"
+                  >
                     Ver detalle
                   </Link>
                 </div>
@@ -137,7 +144,9 @@ export default async function HistorialPlacaPage({
                   <ul className="text-sm text-slate-600 space-y-0.5">
                     {o.items.map((item, i) => (
                       <li key={i} className="flex items-center gap-1.5">
-                        <span className={`text-xs px-1 rounded ${item.tipo === 'SERVICIO' ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-600'}`}>
+                        <span
+                          className={`text-xs px-1 rounded ${item.tipo === 'SERVICIO' ? 'bg-blue-50 text-blue-600' : 'bg-amber-50 text-amber-600'}`}
+                        >
                           {item.tipo === 'SERVICIO' ? 'S' : 'R'}
                         </span>
                         {item.descripcion}

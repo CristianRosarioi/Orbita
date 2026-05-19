@@ -262,3 +262,12 @@ export const EstadoCita = {
   NO_SHOW: 'NO_SHOW',
 } as const;
 export type EstadoCita = (typeof EstadoCita)[keyof typeof EstadoCita];
+
+export const EstadoPedido = {
+  BORRADOR: 'BORRADOR',
+  ENVIADO: 'ENVIADO',
+  CONFIRMADO: 'CONFIRMADO',
+  RECIBIDO: 'RECIBIDO',
+  CANCELADO: 'CANCELADO',
+} as const;
+export type EstadoPedido = (typeof EstadoPedido)[keyof typeof EstadoPedido];

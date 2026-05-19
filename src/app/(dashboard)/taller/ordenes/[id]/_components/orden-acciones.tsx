@@ -44,10 +44,16 @@ export default function OrdenAcciones({ orden }: { orden: OrdenInfo }) {
         body: JSON.stringify({ estado: siguiente }),
       });
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error.');
+        return;
+      }
       router.refresh();
-    } catch { setError('Error de conexión.'); }
-    finally { setLoading(null); }
+    } catch {
+      setError('Error de conexión.');
+    } finally {
+      setLoading(null);
+    }
   }
 
   async function facturar() {
@@ -60,11 +66,17 @@ export default function OrdenAcciones({ orden }: { orden: OrdenInfo }) {
         body: JSON.stringify({ metodoPago }),
       });
       const data = await res.json();
-      if (!data.success) { setError(data.error?.message ?? 'Error.'); return; }
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error.');
+        return;
+      }
       setShowFacturar(false);
       router.refresh();
-    } catch { setError('Error de conexión.'); }
-    finally { setLoading(null); }
+    } catch {
+      setError('Error de conexión.');
+    } finally {
+      setLoading(null);
+    }
   }
 
   const cerrado = orden.estado === 'ENTREGADO' || orden.estado === 'CANCELADO';
@@ -132,10 +144,20 @@ export default function OrdenAcciones({ orden }: { orden: OrdenInfo }) {
               </select>
             </div>
             <div className="flex gap-2">
-              <Button size="sm" onClick={facturar} disabled={loading === 'facturar'} className="flex-1">
+              <Button
+                size="sm"
+                onClick={facturar}
+                disabled={loading === 'facturar'}
+                className="flex-1"
+              >
                 {loading === 'facturar' ? 'Procesando...' : 'Confirmar'}
               </Button>
-              <Button size="sm" variant="outline" onClick={() => setShowFacturar(false)} className="flex-1">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setShowFacturar(false)}
+                className="flex-1"
+              >
                 Cancelar
               </Button>
             </div>

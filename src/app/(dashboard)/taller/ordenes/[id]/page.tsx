@@ -41,11 +41,7 @@ const TIMELINE = [
 const fmt = (n: unknown) =>
   `RD$ ${Number(n).toLocaleString('es-DO', { minimumFractionDigits: 2 })}`;
 
-export default async function OrdenDetallesPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function OrdenDetallesPage({ params }: { params: Promise<{ id: string }> }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
   if (!INDUSTRIAS_TALLER.includes(sesion.empresaActiva.industria)) redirect('/dashboard');
@@ -104,12 +100,16 @@ export default async function OrdenDetallesPage({
                         : 'bg-white border-slate-300'
                     }`}
                   />
-                  <span className={`text-[10px] whitespace-nowrap ${idx <= estadoIdx ? 'text-indigo-600 font-medium' : 'text-slate-400'}`}>
+                  <span
+                    className={`text-[10px] whitespace-nowrap ${idx <= estadoIdx ? 'text-indigo-600 font-medium' : 'text-slate-400'}`}
+                  >
                     {ESTADO_LABELS[e].split(' ')[0]}
                   </span>
                 </div>
                 {idx < TIMELINE.length - 1 && (
-                  <div className={`flex-1 h-0.5 mx-1 ${idx < estadoIdx ? 'bg-indigo-600' : 'bg-slate-200'}`} />
+                  <div
+                    className={`flex-1 h-0.5 mx-1 ${idx < estadoIdx ? 'bg-indigo-600' : 'bg-slate-200'}`}
+                  />
                 )}
               </div>
             ))}
@@ -123,12 +123,34 @@ export default async function OrdenDetallesPage({
           <div className="bg-white rounded-lg border border-slate-200 p-5 space-y-3">
             <h2 className="font-semibold text-slate-900">Información del vehículo</h2>
             <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
-              <div><span className="text-slate-500">Placa:</span> <span className="font-mono font-bold ml-2">{orden.vehiculoPlaca}</span></div>
-              <div><span className="text-slate-500">Color:</span> <span className="ml-2">{orden.vehiculoColor ?? '—'}</span></div>
-              <div><span className="text-slate-500">Marca/Modelo:</span> <span className="ml-2">{orden.vehiculoMarca} {orden.vehiculoModelo}</span></div>
-              <div><span className="text-slate-500">Año:</span> <span className="ml-2">{orden.vehiculoAnio ?? '—'}</span></div>
-              <div><span className="text-slate-500">Kilometraje:</span> <span className="ml-2">{orden.kilometraje ? `${orden.kilometraje.toLocaleString()} km` : '—'}</span></div>
-              <div><span className="text-slate-500">Técnico:</span> <span className="ml-2">{orden.tecnico ?? '—'}</span></div>
+              <div>
+                <span className="text-slate-500">Placa:</span>{' '}
+                <span className="font-mono font-bold ml-2">{orden.vehiculoPlaca}</span>
+              </div>
+              <div>
+                <span className="text-slate-500">Color:</span>{' '}
+                <span className="ml-2">{orden.vehiculoColor ?? '—'}</span>
+              </div>
+              <div>
+                <span className="text-slate-500">Marca/Modelo:</span>{' '}
+                <span className="ml-2">
+                  {orden.vehiculoMarca} {orden.vehiculoModelo}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-500">Año:</span>{' '}
+                <span className="ml-2">{orden.vehiculoAnio ?? '—'}</span>
+              </div>
+              <div>
+                <span className="text-slate-500">Kilometraje:</span>{' '}
+                <span className="ml-2">
+                  {orden.kilometraje ? `${orden.kilometraje.toLocaleString()} km` : '—'}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-500">Técnico:</span>{' '}
+                <span className="ml-2">{orden.tecnico ?? '—'}</span>
+              </div>
             </div>
             <div className="pt-2 border-t border-slate-100">
               <p className="text-xs text-slate-500 mb-1">Descripción de la falla</p>
@@ -165,7 +187,9 @@ export default async function OrdenDetallesPage({
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-200">
                     <th className="text-left px-4 py-2.5 font-medium text-slate-600">Tipo</th>
-                    <th className="text-left px-4 py-2.5 font-medium text-slate-600">Descripción</th>
+                    <th className="text-left px-4 py-2.5 font-medium text-slate-600">
+                      Descripción
+                    </th>
                     <th className="text-right px-4 py-2.5 font-medium text-slate-600">Cant.</th>
                     <th className="text-right px-4 py-2.5 font-medium text-slate-600">Precio</th>
                     <th className="text-right px-4 py-2.5 font-medium text-slate-600">ITBIS</th>
@@ -176,22 +200,36 @@ export default async function OrdenDetallesPage({
                   {orden.items.map((item) => (
                     <tr key={item.id} className="border-b border-slate-100">
                       <td className="px-4 py-2.5">
-                        <span className={`inline-block px-1.5 py-0.5 rounded text-xs font-medium ${item.tipo === 'SERVICIO' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'}`}>
+                        <span
+                          className={`inline-block px-1.5 py-0.5 rounded text-xs font-medium ${item.tipo === 'SERVICIO' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700'}`}
+                        >
                           {item.tipo === 'SERVICIO' ? 'Servicio' : 'Repuesto'}
                         </span>
                       </td>
                       <td className="px-4 py-2.5 text-slate-700">{item.descripcion}</td>
-                      <td className="px-4 py-2.5 text-right text-slate-600">{Number(item.cantidad)}</td>
-                      <td className="px-4 py-2.5 text-right text-slate-600">{fmt(item.precioUnitario)}</td>
-                      <td className="px-4 py-2.5 text-right text-slate-500">{fmt(item.itbisMonto)}</td>
-                      <td className="px-4 py-2.5 text-right font-medium text-slate-900">{fmt(item.total)}</td>
+                      <td className="px-4 py-2.5 text-right text-slate-600">
+                        {Number(item.cantidad)}
+                      </td>
+                      <td className="px-4 py-2.5 text-right text-slate-600">
+                        {fmt(item.precioUnitario)}
+                      </td>
+                      <td className="px-4 py-2.5 text-right text-slate-500">
+                        {fmt(item.itbisMonto)}
+                      </td>
+                      <td className="px-4 py-2.5 text-right font-medium text-slate-900">
+                        {fmt(item.total)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
                   <tr className="border-t border-slate-200 bg-slate-50">
-                    <td colSpan={5} className="px-4 py-2.5 text-right font-semibold text-slate-700">Total</td>
-                    <td className="px-4 py-2.5 text-right font-bold text-slate-900">{fmt(orden.total)}</td>
+                    <td colSpan={5} className="px-4 py-2.5 text-right font-semibold text-slate-700">
+                      Total
+                    </td>
+                    <td className="px-4 py-2.5 text-right font-bold text-slate-900">
+                      {fmt(orden.total)}
+                    </td>
                   </tr>
                 </tfoot>
               </table>
@@ -224,7 +262,9 @@ export default async function OrdenDetallesPage({
               {orden.fechaEntrega && (
                 <div className="flex justify-between">
                   <span className="text-slate-500">Entrega</span>
-                  <span className="text-emerald-700 font-medium">{new Date(orden.fechaEntrega).toLocaleDateString('es-DO')}</span>
+                  <span className="text-emerald-700 font-medium">
+                    {new Date(orden.fechaEntrega).toLocaleDateString('es-DO')}
+                  </span>
                 </div>
               )}
             </div>
@@ -232,9 +272,18 @@ export default async function OrdenDetallesPage({
           <div className="bg-white rounded-lg border border-slate-200 p-5 space-y-2">
             <h2 className="font-semibold text-slate-900">Totales</h2>
             <div className="text-sm space-y-1.5">
-              <div className="flex justify-between"><span className="text-slate-500">Subtotal</span><span>{fmt(orden.subtotal)}</span></div>
-              <div className="flex justify-between"><span className="text-slate-500">ITBIS (18%)</span><span>{fmt(orden.itbis)}</span></div>
-              <div className="flex justify-between font-bold border-t border-slate-100 pt-1.5 mt-1.5"><span>Total</span><span>{fmt(orden.total)}</span></div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Subtotal</span>
+                <span>{fmt(orden.subtotal)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">ITBIS (18%)</span>
+                <span>{fmt(orden.itbis)}</span>
+              </div>
+              <div className="flex justify-between font-bold border-t border-slate-100 pt-1.5 mt-1.5">
+                <span>Total</span>
+                <span>{fmt(orden.total)}</span>
+              </div>
             </div>
           </div>
         </div>
