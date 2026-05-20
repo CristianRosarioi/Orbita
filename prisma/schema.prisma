@@ -23,6 +23,8 @@ enum Industria {
   FERRETERIA
   SALON_BARBERIA
   CLINICA
+  DENTAL
+  VETERINARIA
   INMOBILIARIA
   FARMACIA
   TIENDA_ROPA
@@ -181,6 +183,8 @@ model Empresa {
   pedidosProveedor PedidoProveedor[]
   stockSucursal    StockSucursal[]
   transferencias   TransferenciaInventario[]
+  pacientes        Paciente[]
+  consultas        Consulta[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -335,6 +339,7 @@ model Cliente {
   cuentaFiado    CuentaFiado?
   ordenesTrabajo OrdenTrabajo[]
   citas          Cita[]
+  paciente       Paciente?
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, identificacion])
@@ -532,6 +537,7 @@ model Factura {
   items       ItemFactura[]
   pagos       PagoFactura[]
   movimientos MovimientoInventario[]
+  consulta    Consulta?
 
   @@unique([empresaId, numero])
   @@index([empresaId, estado])
@@ -1404,6 +1410,112 @@ model ItemPedidoProveedor {
 
   @@index([pedidoId])
   @@map("items_pedido_proveedor")
+}
+
+// ============================================================
+// FASE 14 — CLÍNICA / CONSULTORIO
+// ============================================================
+
+enum EstadoExpediente {
+  ACTIVO
+  INACTIVO
+  ARCHIVADO
+
+  @@map("estado_expediente")
+}
+
+enum EstadoConsulta {
+  PROGRAMADA
+  EN_CURSO
+  COMPLETADA
+  CANCELADA
+  NO_ASISTIO
+
+  @@map("estado_consulta")
+}
+
+enum TipoSangre {
+  A_POSITIVO
+  A_NEGATIVO
+  B_POSITIVO
+  B_NEGATIVO
+  AB_POSITIVO
+  AB_NEGATIVO
+  O_POSITIVO
+  O_NEGATIVO
+  DESCONOCIDO
+
+  @@map("tipo_sangre")
+}
+
+// ============================================================
+// MODELO: Paciente
+// ============================================================
+model Paciente {
+  id                String           @id @default(cuid())
+  empresaId         String           @map("empresa_id")
+  clienteId         String?          @unique @map("cliente_id")
+  numeroExpediente  String           @map("numero_expediente")
+  nombre            String
+  apellido          String
+  fechaNacimiento   DateTime?        @map("fecha_nacimiento")
+  sexo              String?
+  cedula            String?
+  telefono          String?
+  email             String?
+  direccion         String?
+  tipoSangre        TipoSangre?      @map("tipo_sangre")
+  alergias          String?
+  antecedentes      String?
+  estado            EstadoExpediente @default(ACTIVO)
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+  deletedAt         DateTime?        @map("deleted_at")
+
+  empresa   Empresa   @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente   Cliente?  @relation(fields: [clienteId], references: [id])
+  consultas Consulta[]
+
+  @@unique([empresaId, numeroExpediente])
+  @@unique([empresaId, cedula])
+  @@index([empresaId, estado])
+  @@index([empresaId, nombre])
+  @@map("pacientes")
+}
+
+// ============================================================
+// MODELO: Consulta
+// ============================================================
+model Consulta {
+  id                String         @id @default(cuid())
+  empresaId         String         @map("empresa_id")
+  pacienteId        String         @map("paciente_id")
+  medicoNombre      String         @map("medico_nombre")
+  fechaHora         DateTime       @map("fecha_hora")
+  motivo            String?
+  diagnostico       String?
+  tratamiento       String?
+  receta            String?
+  peso              Decimal?
+  talla             Decimal?
+  temperatura       Decimal?
+  frecuenciaCard    Decimal?       @map("frecuencia_card")
+  presionArterial   String?        @map("presion_arterial")
+  notas             String?
+  estado            EstadoConsulta @default(PROGRAMADA)
+  precio            Decimal?
+  facturaId         String?        @unique @map("factura_id")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  paciente Paciente @relation(fields: [pacienteId], references: [id])
+  factura  Factura? @relation(fields: [facturaId], references: [id])
+
+  @@index([empresaId, fechaHora])
+  @@index([pacienteId])
+  @@index([empresaId, estado])
+  @@map("consultas")
 }
 
 // ============================================================

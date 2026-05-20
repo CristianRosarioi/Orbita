@@ -7,6 +7,7 @@ const VERTICALES_LINKS = [
   { href: '/vertical/salon', label: 'Salón de Belleza' },
   { href: '/vertical/farmacia', label: 'Farmacia' },
   { href: '/vertical/ferreteria', label: 'Ferretería' },
+  { href: '/vertical/clinica', label: 'Clínica / Consultorio' },
 ];
 
 const PRODUCTO_LINKS = [
@@ -57,10 +58,7 @@ export function Footer() {
             <ul className="space-y-2.5">
               {PRODUCTO_LINKS.map(({ href, label }) => (
                 <li key={href}>
-                  <a
-                    href={href}
-                    className="text-sm transition-colors hover:text-white"
-                  >
+                  <a href={href} className="text-sm transition-colors hover:text-white">
                     {label}
                   </a>
                 </li>

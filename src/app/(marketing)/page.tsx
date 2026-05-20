@@ -164,7 +164,12 @@ function HeroSection() {
               >
                 Empieza gratis 14 días
                 <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
                 </svg>
               </Link>
               <Link
@@ -183,7 +188,10 @@ function HeroSection() {
                 { value: 'TSS+ISR', label: 'calculado solo' },
                 { value: '6', label: 'verticales' },
               ].map(({ value, label }) => (
-                <div key={label} className="rounded-xl border border-slate-100 bg-slate-50 px-3 py-3 text-center">
+                <div
+                  key={label}
+                  className="rounded-xl border border-slate-100 bg-slate-50 px-3 py-3 text-center"
+                >
                   <div className="text-lg font-bold text-slate-900">{value}</div>
                   <div className="text-xs text-slate-500">{label}</div>
                 </div>
@@ -250,8 +258,18 @@ function ProblemasSection() {
               <div className="px-6 py-5">
                 <div className="mb-2 flex items-center gap-2">
                   <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-100">
-                    <svg className="h-3 w-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="h-3 w-3 text-green-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={3}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                   </div>
                   <p className="text-sm font-semibold text-slate-900">{solucion}</p>
@@ -299,7 +317,12 @@ function VerticalesSection() {
                       stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     {f}
                   </li>
@@ -312,7 +335,12 @@ function VerticalesSection() {
               >
                 Ver más
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </Link>
             </div>
@@ -375,9 +403,7 @@ function ModulosSection() {
           <h2 className="mb-4 text-3xl font-bold text-slate-900 sm:text-4xl">
             Todo lo que necesita cualquier negocio
           </h2>
-          <p className="text-lg text-slate-600">
-            Módulos que funcionan juntos desde el primer día
-          </p>
+          <p className="text-lg text-slate-600">Módulos que funcionan juntos desde el primer día</p>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -470,56 +496,88 @@ function PreciosSection() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {planes.map(({ nombre, precio, descripcion, popular, incluye, excluye, cta, ctaHref, ctaStyle }) => (
-            <div
-              key={nombre}
-              className={`relative flex flex-col rounded-2xl border p-8 transition-all${popular ? ' border-indigo-600 shadow-xl shadow-indigo-600/10 ring-2 ring-indigo-600' : ' border-slate-200 hover:border-slate-300 hover:shadow-md'}`}
-            >
-              {popular && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                  <span className="rounded-full bg-indigo-600 px-4 py-1 text-xs font-semibold text-white">
-                    ⭐ Más popular
-                  </span>
-                </div>
-              )}
-
-              <div className="mb-6">
-                <h3 className="mb-1 text-lg font-bold text-slate-900">{nombre}</h3>
-                <p className="mb-4 text-sm text-slate-600">{descripcion}</p>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-sm font-medium text-slate-500">RD$</span>
-                  <span className="text-4xl font-extrabold text-slate-900">{precio}</span>
-                  <span className="text-sm text-slate-500">/mes</span>
-                </div>
-              </div>
-
-              <ul className="mb-8 flex-1 space-y-2.5">
-                {incluye.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700">
-                    <svg className="mt-0.5 h-4 w-4 shrink-0 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                    </svg>
-                    {item}
-                  </li>
-                ))}
-                {excluye.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm text-slate-400">
-                    <svg className="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-
-              <Link
-                href={ctaHref}
-                className={`block rounded-xl px-6 py-3 text-center text-sm font-semibold transition-all ${ctaStyle}`}
+          {planes.map(
+            ({
+              nombre,
+              precio,
+              descripcion,
+              popular,
+              incluye,
+              excluye,
+              cta,
+              ctaHref,
+              ctaStyle,
+            }) => (
+              <div
+                key={nombre}
+                className={`relative flex flex-col rounded-2xl border p-8 transition-all${popular ? ' border-indigo-600 shadow-xl shadow-indigo-600/10 ring-2 ring-indigo-600' : ' border-slate-200 hover:border-slate-300 hover:shadow-md'}`}
               >
-                {cta}
-              </Link>
-            </div>
-          ))}
+                {popular && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                    <span className="rounded-full bg-indigo-600 px-4 py-1 text-xs font-semibold text-white">
+                      ⭐ Más popular
+                    </span>
+                  </div>
+                )}
+
+                <div className="mb-6">
+                  <h3 className="mb-1 text-lg font-bold text-slate-900">{nombre}</h3>
+                  <p className="mb-4 text-sm text-slate-600">{descripcion}</p>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-sm font-medium text-slate-500">RD$</span>
+                    <span className="text-4xl font-extrabold text-slate-900">{precio}</span>
+                    <span className="text-sm text-slate-500">/mes</span>
+                  </div>
+                </div>
+
+                <ul className="mb-8 flex-1 space-y-2.5">
+                  {incluye.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700">
+                      <svg
+                        className="mt-0.5 h-4 w-4 shrink-0 text-green-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                  {excluye.map((item) => (
+                    <li key={item} className="flex items-start gap-2.5 text-sm text-slate-400">
+                      <svg
+                        className="mt-0.5 h-4 w-4 shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href={ctaHref}
+                  className={`block rounded-xl px-6 py-3 text-center text-sm font-semibold transition-all ${ctaStyle}`}
+                >
+                  {cta}
+                </Link>
+              </div>
+            ),
+          )}
         </div>
 
         <p className="mt-8 text-center text-sm text-slate-500">
@@ -547,7 +605,12 @@ function CTAFinalSection() {
         >
           Crear cuenta gratis
           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 7l5 5m0 0l-5 5m5-5H6"
+            />
           </svg>
         </Link>
         <p className="mt-4 text-sm text-indigo-300">

@@ -4,7 +4,8 @@ export type VerticalSlug =
   | 'taller'
   | 'salon'
   | 'farmacia'
-  | 'ferreteria';
+  | 'ferreteria'
+  | 'clinica';
 
 export interface VerticalData {
   slug: VerticalSlug;
@@ -121,7 +122,8 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
     nombre: 'Taller Mecánico',
     emoji: '🔧',
     tagline: 'Órdenes de trabajo digitales, sin papeles',
-    descripcionCorta: 'Controla las órdenes de trabajo, el historial de vehículos y factura al instante.',
+    descripcionCorta:
+      'Controla las órdenes de trabajo, el historial de vehículos y factura al instante.',
     descripcionLarga:
       'Órbita para talleres mecánicos digitaliza todo el proceso: desde que el cliente trae el vehículo hasta que sale con la factura. Historial completo por placa, control de repuestos y servicios, y facturación en un click.',
     color: {
@@ -154,7 +156,12 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
         desc: 'Al cerrar la orden, genera la factura en segundos. El vehículo entregado, el cliente pagando. Así de simple.',
       },
     ],
-    paraQuien: ['Talleres mecánicos', 'Carwash con servicios', 'Tiendas de repuestos', 'Servitecas'],
+    paraQuien: [
+      'Talleres mecánicos',
+      'Carwash con servicios',
+      'Tiendas de repuestos',
+      'Servitecas',
+    ],
     ejemplos: [
       'El mecánico ve la lista de órdenes pendientes y cuáles están listas para entregar',
       'El cliente pregunta por su carro y el recepcionista busca la placa en segundos',
@@ -295,13 +302,65 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
         desc: 'Borrador → Enviado → Confirmado → Recibido. Control total del proceso de compra con tu proveedor.',
       },
     ],
-    paraQuien: ['Ferreterías', 'Distribuidoras de materiales', 'Tiendas de pinturas', 'Constructores'],
+    paraQuien: [
+      'Ferreterías',
+      'Distribuidoras de materiales',
+      'Tiendas de pinturas',
+      'Constructores',
+    ],
     ejemplos: [
       'El encargado crea un pedido de 200 sacos de cemento al proveedor desde el sistema',
       'Al llegar el pedido, lo marca como recibido y el inventario se actualiza',
       'El vendedor sabe exactamente cuántos galones de pintura quedan en almacén',
     ],
     ctaLabel: '¿Tienes una ferretería?',
+  },
+
+  clinica: {
+    slug: 'clinica',
+    nombre: 'Clínica / Consultorio',
+    emoji: '🏥',
+    tagline: 'Expedientes digitales, sin papeles perdidos',
+    descripcionCorta: 'Gestiona expedientes de pacientes, consultas y agenda médica en un solo lugar.',
+    descripcionLarga:
+      'Órbita para clínicas y consultorios digitaliza todo el flujo médico: desde que el paciente llega hasta que sale con su receta. Expedientes completos, historial de consultas, signos vitales y facturación integrada para que te concentres en lo que importa: la salud de tus pacientes.',
+    color: {
+      bg: 'bg-cyan-50',
+      text: 'text-cyan-600',
+      ring: 'ring-cyan-200',
+      badge: 'bg-cyan-100 text-cyan-700',
+    },
+    funciones: [
+      'Expedientes médicos digitales',
+      'Historial completo de consultas',
+      'Agenda con vista de timeline',
+      'Facturación al completar la consulta',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Expedientes digitales',
+        desc: 'Cada paciente tiene su expediente con datos personales, tipo de sangre, alergias y antecedentes médicos. Busca por nombre, cédula o número de expediente en segundos.',
+      },
+      {
+        titulo: 'Historial de consultas',
+        desc: 'Registro completo de cada consulta: diagnóstico, tratamiento, receta, signos vitales y notas del médico. El historial siempre disponible, nunca un papel perdido.',
+      },
+      {
+        titulo: 'Agenda médica visual',
+        desc: 'Vista de todas las consultas del día ordenadas por hora, de 7am a 8pm. Navega entre días y programa nuevas consultas directamente desde la agenda.',
+      },
+      {
+        titulo: 'Facturación integrada',
+        desc: 'Al completar la consulta, genera la factura en un click. El precio de la consulta ya está registrado. Acepta efectivo, tarjeta o crédito.',
+      },
+    ],
+    paraQuien: ['Médicos generales', 'Especialistas', 'Odontólogos', 'Veterinarios', 'Clínicas pequeñas'],
+    ejemplos: [
+      'El recepcionista busca al paciente por cédula y ve todo su historial en segundos',
+      'El médico registra el diagnóstico, la receta y los signos vitales en la misma consulta',
+      'Al completar la consulta, la factura se genera automáticamente con el precio correcto',
+    ],
+    ctaLabel: '¿Tienes una clínica o consultorio?',
   },
 };
 

@@ -10,6 +10,8 @@ export const Industria = {
   FERRETERIA: 'FERRETERIA',
   SALON_BARBERIA: 'SALON_BARBERIA',
   CLINICA: 'CLINICA',
+  DENTAL: 'DENTAL',
+  VETERINARIA: 'VETERINARIA',
   INMOBILIARIA: 'INMOBILIARIA',
   FARMACIA: 'FARMACIA',
   TIENDA_ROPA: 'TIENDA_ROPA',
@@ -271,3 +273,34 @@ export const EstadoPedido = {
   CANCELADO: 'CANCELADO',
 } as const;
 export type EstadoPedido = (typeof EstadoPedido)[keyof typeof EstadoPedido];
+
+// Fase 14 — Clínica / Consultorio
+
+export const EstadoExpediente = {
+  ACTIVO: 'ACTIVO',
+  INACTIVO: 'INACTIVO',
+  ARCHIVADO: 'ARCHIVADO',
+} as const;
+export type EstadoExpediente = (typeof EstadoExpediente)[keyof typeof EstadoExpediente];
+
+export const EstadoConsulta = {
+  PROGRAMADA: 'PROGRAMADA',
+  EN_CURSO: 'EN_CURSO',
+  COMPLETADA: 'COMPLETADA',
+  CANCELADA: 'CANCELADA',
+  NO_ASISTIO: 'NO_ASISTIO',
+} as const;
+export type EstadoConsulta = (typeof EstadoConsulta)[keyof typeof EstadoConsulta];
+
+export const TipoSangre = {
+  A_POSITIVO: 'A_POSITIVO',
+  A_NEGATIVO: 'A_NEGATIVO',
+  B_POSITIVO: 'B_POSITIVO',
+  B_NEGATIVO: 'B_NEGATIVO',
+  AB_POSITIVO: 'AB_POSITIVO',
+  AB_NEGATIVO: 'AB_NEGATIVO',
+  O_POSITIVO: 'O_POSITIVO',
+  O_NEGATIVO: 'O_NEGATIVO',
+  DESCONOCIDO: 'DESCONOCIDO',
+} as const;
+export type TipoSangre = (typeof TipoSangre)[keyof typeof TipoSangre];

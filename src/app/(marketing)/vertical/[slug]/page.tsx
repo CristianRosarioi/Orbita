@@ -39,8 +39,7 @@ export default async function VerticalPage({ params }: Params) {
             <div className="mb-6 text-6xl">{v.emoji}</div>
 
             <h1 className={`mb-4 text-4xl font-extrabold text-slate-900 sm:text-5xl`}>
-              Órbita para{' '}
-              <span className={v.color.text}>{v.nombre}</span>
+              Órbita para <span className={v.color.text}>{v.nombre}</span>
             </h1>
 
             <p className="mb-4 text-lg font-medium text-slate-700">{v.tagline}</p>
@@ -53,7 +52,12 @@ export default async function VerticalPage({ params }: Params) {
               >
                 Empezar gratis — 14 días
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
                 </svg>
               </Link>
               <Link
@@ -74,7 +78,9 @@ export default async function VerticalPage({ params }: Params) {
             <h2 className="mb-3 text-3xl font-bold text-slate-900">
               Todo lo que incluye el módulo
             </h2>
-            <p className="text-slate-600">Funciones diseñadas para la operación diaria de tu negocio</p>
+            <p className="text-slate-600">
+              Funciones diseñadas para la operación diaria de tu negocio
+            </p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
@@ -141,8 +147,18 @@ export default async function VerticalPage({ params }: Params) {
                   className="flex items-start gap-3 rounded-xl bg-white p-4 ring-1 ring-slate-200"
                 >
                   <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-100">
-                    <svg className="h-3 w-3 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                    <svg
+                      className="h-3 w-3 text-indigo-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2.5}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                   </div>
                   <p className="text-sm text-slate-700">{ejemplo}</p>
@@ -157,9 +173,7 @@ export default async function VerticalPage({ params }: Params) {
       <section className="bg-indigo-700 py-16">
         <div className="mx-auto max-w-3xl px-6 text-center">
           <div className="mb-4 text-4xl">{v.emoji}</div>
-          <h2 className="mb-4 text-2xl font-extrabold text-white sm:text-3xl">
-            {v.ctaLabel}
-          </h2>
+          <h2 className="mb-4 text-2xl font-extrabold text-white sm:text-3xl">{v.ctaLabel}</h2>
           <p className="mb-8 text-indigo-200">
             Configura tu {v.nombre.toLowerCase()} en Órbita en menos de 5 minutos. 14 días gratis.
           </p>
@@ -170,13 +184,15 @@ export default async function VerticalPage({ params }: Params) {
             >
               Crear cuenta gratis
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
               </svg>
             </Link>
-            <Link
-              href="/"
-              className="text-sm font-medium text-indigo-200 hover:text-white"
-            >
+            <Link href="/" className="text-sm font-medium text-indigo-200 hover:text-white">
               ← Ver todos los módulos
             </Link>
           </div>
