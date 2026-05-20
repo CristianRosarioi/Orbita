@@ -4,6 +4,7 @@
 export const Industria = {
   RESTAURANTE: 'RESTAURANTE',
   COLMADO: 'COLMADO',
+  COLMADO_GRANDE: 'COLMADO_GRANDE',
   CARWASH: 'CARWASH',
   REPUESTOS: 'REPUESTOS',
   TALLER_MECANICO: 'TALLER_MECANICO',
@@ -17,6 +18,8 @@ export const Industria = {
   TIENDA_ROPA: 'TIENDA_ROPA',
   TIENDA_ONLINE: 'TIENDA_ONLINE',
   JOYERIA: 'JOYERIA',
+  SUPERMERCADO: 'SUPERMERCADO',
+  MINIMARKET: 'MINIMARKET',
   OTRO: 'OTRO',
 } as const;
 export type Industria = (typeof Industria)[keyof typeof Industria];

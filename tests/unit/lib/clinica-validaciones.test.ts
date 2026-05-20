@@ -23,17 +23,29 @@ describe('CreatePacienteSchema', () => {
   });
 
   it('valida cédula de 11 dígitos', () => {
-    const valida = CreatePacienteSchema.safeParse({ nombre: 'J', apellido: 'P', cedula: '00100123456' });
+    const valida = CreatePacienteSchema.safeParse({
+      nombre: 'J',
+      apellido: 'P',
+      cedula: '00100123456',
+    });
     expect(valida.success).toBe(true);
   });
 
   it('rechaza cédula con menos de 11 dígitos', () => {
-    const resultado = CreatePacienteSchema.safeParse({ nombre: 'J', apellido: 'P', cedula: '12345' });
+    const resultado = CreatePacienteSchema.safeParse({
+      nombre: 'J',
+      apellido: 'P',
+      cedula: '12345',
+    });
     expect(resultado.success).toBe(false);
   });
 
   it('rechaza cédula con letras', () => {
-    const resultado = CreatePacienteSchema.safeParse({ nombre: 'J', apellido: 'P', cedula: '0010012345A' });
+    const resultado = CreatePacienteSchema.safeParse({
+      nombre: 'J',
+      apellido: 'P',
+      cedula: '0010012345A',
+    });
     expect(resultado.success).toBe(false);
   });
 
@@ -52,12 +64,20 @@ describe('CreatePacienteSchema', () => {
   });
 
   it('rechaza tipo de sangre inválido', () => {
-    const resultado = CreatePacienteSchema.safeParse({ nombre: 'J', apellido: 'P', tipoSangre: 'X_NEGATIVO' });
+    const resultado = CreatePacienteSchema.safeParse({
+      nombre: 'J',
+      apellido: 'P',
+      tipoSangre: 'X_NEGATIVO',
+    });
     expect(resultado.success).toBe(false);
   });
 
   it('rechaza email inválido', () => {
-    const resultado = CreatePacienteSchema.safeParse({ nombre: 'J', apellido: 'P', email: 'no-es-email' });
+    const resultado = CreatePacienteSchema.safeParse({
+      nombre: 'J',
+      apellido: 'P',
+      email: 'no-es-email',
+    });
     expect(resultado.success).toBe(false);
   });
 

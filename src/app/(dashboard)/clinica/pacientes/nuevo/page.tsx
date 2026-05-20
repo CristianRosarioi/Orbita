@@ -115,7 +115,9 @@ export default function NuevoPacientePage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Fecha de nacimiento</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">
+                Fecha de nacimiento
+              </label>
               <input
                 type="date"
                 value={form.fechaNacimiento}
@@ -137,7 +139,9 @@ export default function NuevoPacientePage() {
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Tipo de sangre</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">
+                Tipo de sangre
+              </label>
               <select
                 value={form.tipoSangre}
                 onChange={(e) => set('tipoSangre', e.target.value)}
@@ -145,7 +149,9 @@ export default function NuevoPacientePage() {
               >
                 <option value="">Seleccionar...</option>
                 {TIPOS_SANGRE.map((ts) => (
-                  <option key={ts.value} value={ts.value}>{ts.label}</option>
+                  <option key={ts.value} value={ts.value}>
+                    {ts.label}
+                  </option>
                 ))}
               </select>
             </div>
@@ -189,7 +195,9 @@ export default function NuevoPacientePage() {
           <h2 className="mb-4 font-semibold text-slate-900">Historial médico</h2>
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Alergias conocidas</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">
+                Alergias conocidas
+              </label>
               <textarea
                 value={form.alergias}
                 onChange={(e) => set('alergias', e.target.value)}
@@ -199,7 +207,9 @@ export default function NuevoPacientePage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Antecedentes médicos</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">
+                Antecedentes médicos
+              </label>
               <textarea
                 value={form.antecedentes}
                 onChange={(e) => set('antecedentes', e.target.value)}

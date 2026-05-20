@@ -8,6 +8,7 @@ const VERTICALES_LINKS = [
   { href: '/vertical/farmacia', label: 'Farmacia' },
   { href: '/vertical/ferreteria', label: 'Ferretería' },
   { href: '/vertical/clinica', label: 'Clínica / Consultorio' },
+  { href: '/vertical/super', label: 'Supermercado / Minimarket' },
 ];
 
 const PRODUCTO_LINKS = [

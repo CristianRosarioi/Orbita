@@ -43,10 +43,14 @@ const ESTADO_CONSULTA_COLOR: Record<string, string> = {
 };
 
 const TIPO_SANGRE_LABEL: Record<string, string> = {
-  A_POSITIVO: 'A+', A_NEGATIVO: 'A-',
-  B_POSITIVO: 'B+', B_NEGATIVO: 'B-',
-  AB_POSITIVO: 'AB+', AB_NEGATIVO: 'AB-',
-  O_POSITIVO: 'O+', O_NEGATIVO: 'O-',
+  A_POSITIVO: 'A+',
+  A_NEGATIVO: 'A-',
+  B_POSITIVO: 'B+',
+  B_NEGATIVO: 'B-',
+  AB_POSITIVO: 'AB+',
+  AB_NEGATIVO: 'AB-',
+  O_POSITIVO: 'O+',
+  O_NEGATIVO: 'O-',
   DESCONOCIDO: 'Desconocido',
 };
 
@@ -54,7 +58,11 @@ function calcularEdad(fecha: string) {
   const hoy = new Date();
   const nac = new Date(fecha);
   let edad = hoy.getFullYear() - nac.getFullYear();
-  if (hoy.getMonth() < nac.getMonth() || (hoy.getMonth() === nac.getMonth() && hoy.getDate() < nac.getDate())) edad--;
+  if (
+    hoy.getMonth() < nac.getMonth() ||
+    (hoy.getMonth() === nac.getMonth() && hoy.getDate() < nac.getDate())
+  )
+    edad--;
   return edad;
 }
 
@@ -70,12 +78,15 @@ export default function PacienteExpedientePage() {
   useEffect(() => {
     fetch(`/api/clinica/pacientes/${id}`)
       .then((r) => r.json())
-      .then((j) => { if (j.success) setPaciente(j.data); })
+      .then((j) => {
+        if (j.success) setPaciente(j.data);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) return <div className="p-6 text-center text-slate-500">Cargando expediente...</div>;
-  if (!paciente) return <div className="p-6 text-center text-red-600">Expediente no encontrado.</div>;
+  if (!paciente)
+    return <div className="p-6 text-center text-red-600">Expediente no encontrado.</div>;
 
   const consultasConSignos = paciente.consultas.filter((c) => c.diagnostico);
 
@@ -89,7 +100,9 @@ export default function PacienteExpedientePage() {
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-slate-900">{paciente.nombre} {paciente.apellido}</h1>
+              <h1 className="text-2xl font-bold text-slate-900">
+                {paciente.nombre} {paciente.apellido}
+              </h1>
               <span className="rounded-full bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-500">
                 #{paciente.numeroExpediente}
               </span>
@@ -111,7 +124,13 @@ export default function PacienteExpedientePage() {
 
       {/* Tabs */}
       <div className="mb-6 flex gap-1 border-b border-slate-200">
-        {([['resumen', 'Resumen'], ['historial', 'Historial'], ['signos', 'Signos vitales']] as [Tab, string][]).map(([key, label]) => (
+        {(
+          [
+            ['resumen', 'Resumen'],
+            ['historial', 'Historial'],
+            ['signos', 'Signos vitales'],
+          ] as [Tab, string][]
+        ).map(([key, label]) => (
           <button
             key={key}
             onClick={() => setTab(key)}
@@ -207,24 +226,47 @@ export default function PacienteExpedientePage() {
                   <div className="flex-1">
                     <div className="mb-1 flex items-center gap-2">
                       <span className="text-sm font-medium text-slate-900">
-                        {new Date(c.fechaHora).toLocaleDateString('es-DO', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        {new Date(c.fechaHora).toLocaleDateString('es-DO', {
+                          day: '2-digit',
+                          month: 'short',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
                       </span>
-                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${ESTADO_CONSULTA_COLOR[c.estado] ?? 'bg-slate-100 text-slate-600'}`}>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${ESTADO_CONSULTA_COLOR[c.estado] ?? 'bg-slate-100 text-slate-600'}`}
+                      >
                         {c.estado.replace(/_/g, ' ')}
                       </span>
                     </div>
                     <p className="text-sm text-slate-500">Dr./Dra. {c.medicoNombre}</p>
-                    {c.motivo && <p className="mt-1 text-sm text-slate-700"><strong>Motivo:</strong> {c.motivo}</p>}
-                    {c.diagnostico && <p className="mt-1 text-sm text-slate-700"><strong>Diagnóstico:</strong> {c.diagnostico}</p>}
+                    {c.motivo && (
+                      <p className="mt-1 text-sm text-slate-700">
+                        <strong>Motivo:</strong> {c.motivo}
+                      </p>
+                    )}
+                    {c.diagnostico && (
+                      <p className="mt-1 text-sm text-slate-700">
+                        <strong>Diagnóstico:</strong> {c.diagnostico}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    {c.precio && <span className="text-sm font-semibold text-slate-900">RD${Number(c.precio).toLocaleString('es-DO')}</span>}
+                    {c.precio && (
+                      <span className="text-sm font-semibold text-slate-900">
+                        RD${Number(c.precio).toLocaleString('es-DO')}
+                      </span>
+                    )}
                     {c.facturaId && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700">
                         <FileText className="h-3 w-3" /> Facturada
                       </span>
                     )}
-                    <Link href={`/clinica/consultas/${c.id}`} className="text-xs text-indigo-600 hover:underline">
+                    <Link
+                      href={`/clinica/consultas/${c.id}`}
+                      className="text-xs text-indigo-600 hover:underline"
+                    >
                       Ver detalle
                     </Link>
                   </div>
@@ -263,7 +305,10 @@ export default function PacienteExpedientePage() {
                       <td className="px-4 py-3 text-slate-600">{c.medicoNombre}</td>
                       <td className="px-4 py-3 text-slate-700">{c.diagnostico}</td>
                       <td className="px-4 py-3 text-right">
-                        <Link href={`/clinica/consultas/${c.id}`} className="text-xs text-indigo-600 hover:underline">
+                        <Link
+                          href={`/clinica/consultas/${c.id}`}
+                          className="text-xs text-indigo-600 hover:underline"
+                        >
                           Ver
                         </Link>
                       </td>

@@ -50,13 +50,18 @@ function NuevaConsultaForm() {
     if (pacienteIdParam) {
       fetch(`/api/clinica/pacientes/${pacienteIdParam}`)
         .then((r) => r.json())
-        .then((j) => { if (j.success) setPacienteSeleccionado(j.data); });
+        .then((j) => {
+          if (j.success) setPacienteSeleccionado(j.data);
+        });
     }
   }, [pacienteIdParam]);
 
   const buscarPaciente = async (q: string) => {
     setBusquedaPaciente(q);
-    if (q.length < 2) { setResultados([]); return; }
+    if (q.length < 2) {
+      setResultados([]);
+      return;
+    }
     setBuscando(true);
     const res = await fetch(`/api/clinica/pacientes?q=${encodeURIComponent(q)}&limit=6`);
     const json = await res.json();
@@ -73,7 +78,10 @@ function NuevaConsultaForm() {
 
   const guardar = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!pacienteId) { setError('Debes seleccionar un paciente.'); return; }
+    if (!pacienteId) {
+      setError('Debes seleccionar un paciente.');
+      return;
+    }
     setSaving(true);
     setError('');
 
@@ -135,7 +143,10 @@ function NuevaConsultaForm() {
               </div>
               <button
                 type="button"
-                onClick={() => { setPacienteId(''); setPacienteSeleccionado(null); }}
+                onClick={() => {
+                  setPacienteId('');
+                  setPacienteSeleccionado(null);
+                }}
                 className="text-xs text-slate-500 hover:text-slate-700"
               >
                 Cambiar
@@ -166,8 +177,13 @@ function NuevaConsultaForm() {
                         className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm hover:bg-slate-50"
                       >
                         <div>
-                          <p className="font-medium text-slate-900">{p.nombre} {p.apellido}</p>
-                          <p className="text-xs text-slate-500">#{p.numeroExpediente}{p.cedula ? ` · ${p.cedula}` : ''}</p>
+                          <p className="font-medium text-slate-900">
+                            {p.nombre} {p.apellido}
+                          </p>
+                          <p className="text-xs text-slate-500">
+                            #{p.numeroExpediente}
+                            {p.cedula ? ` · ${p.cedula}` : ''}
+                          </p>
                         </div>
                       </button>
                     ))
@@ -198,7 +214,9 @@ function NuevaConsultaForm() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Fecha y hora *</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">
+                Fecha y hora *
+              </label>
               <input
                 required
                 type="datetime-local"
@@ -208,7 +226,9 @@ function NuevaConsultaForm() {
               />
             </div>
             <div className="sm:col-span-2">
-              <label className="mb-1 block text-sm font-medium text-slate-700">Motivo de consulta</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">
+                Motivo de consulta
+              </label>
               <input
                 value={form.motivo}
                 onChange={(e) => set('motivo', e.target.value)}
@@ -222,13 +242,15 @@ function NuevaConsultaForm() {
         <div className="rounded-xl border border-slate-200 bg-white p-6">
           <h2 className="mb-4 font-semibold text-slate-900">Signos vitales</h2>
           <div className="grid gap-4 sm:grid-cols-3">
-            {([
-              ['peso', 'Peso (kg)'],
-              ['talla', 'Talla (cm)'],
-              ['temperatura', 'Temperatura (°C)'],
-              ['frecuenciaCard', 'Freq. cardíaca (bpm)'],
-              ['presionArterial', 'Presión arterial'],
-            ] as [string, string][]).map(([key, label]) => (
+            {(
+              [
+                ['peso', 'Peso (kg)'],
+                ['talla', 'Talla (cm)'],
+                ['temperatura', 'Temperatura (°C)'],
+                ['frecuenciaCard', 'Freq. cardíaca (bpm)'],
+                ['presionArterial', 'Presión arterial'],
+              ] as [string, string][]
+            ).map(([key, label]) => (
               <div key={key}>
                 <label className="mb-1 block text-sm font-medium text-slate-700">{label}</label>
                 <input
@@ -247,12 +269,14 @@ function NuevaConsultaForm() {
         <div className="rounded-xl border border-slate-200 bg-white p-6">
           <h2 className="mb-4 font-semibold text-slate-900">Notas clínicas</h2>
           <div className="space-y-4">
-            {([
-              ['diagnostico', 'Diagnóstico', 3],
-              ['tratamiento', 'Tratamiento', 3],
-              ['receta', 'Receta médica', 4],
-              ['notas', 'Notas adicionales', 2],
-            ] as [string, string, number][]).map(([key, label, rows]) => (
+            {(
+              [
+                ['diagnostico', 'Diagnóstico', 3],
+                ['tratamiento', 'Tratamiento', 3],
+                ['receta', 'Receta médica', 4],
+                ['notas', 'Notas adicionales', 2],
+              ] as [string, string, number][]
+            ).map(([key, label, rows]) => (
               <div key={key}>
                 <label className="mb-1 block text-sm font-medium text-slate-700">{label}</label>
                 <textarea
@@ -264,7 +288,9 @@ function NuevaConsultaForm() {
               </div>
             ))}
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Precio de la consulta (RD$)</label>
+              <label className="mb-1 block text-sm font-medium text-slate-700">
+                Precio de la consulta (RD$)
+              </label>
               <input
                 type="number"
                 min="0"

@@ -117,7 +117,11 @@ export default function ConsultasPage() {
         />
         {(fecha || estado || medico) && (
           <button
-            onClick={() => { setFecha(''); setEstado(''); setMedico(''); }}
+            onClick={() => {
+              setFecha('');
+              setEstado('');
+              setMedico('');
+            }}
             className="rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"
           >
             Limpiar
@@ -131,27 +135,43 @@ export default function ConsultasPage() {
         <div className="rounded-xl border border-dashed border-slate-200 py-16 text-center">
           <Stethoscope className="mx-auto mb-3 h-10 w-10 text-slate-300" />
           <p className="font-medium text-slate-500">No hay consultas que mostrar.</p>
-          <Link href="/clinica/consultas/nueva" className="mt-3 inline-block text-sm text-indigo-600 hover:underline">
+          <Link
+            href="/clinica/consultas/nueva"
+            className="mt-3 inline-block text-sm text-indigo-600 hover:underline"
+          >
             Registrar consulta
           </Link>
         </div>
       ) : (
         <div className="space-y-3">
           {consultas.map((c) => (
-            <div key={c.id} className="rounded-xl border border-slate-200 bg-white p-4 hover:border-indigo-200">
+            <div
+              key={c.id}
+              className="rounded-xl border border-slate-200 bg-white p-4 hover:border-indigo-200"
+            >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="mb-1 flex flex-wrap items-center gap-2">
                     <span className="font-medium text-slate-900">
                       {c.paciente.nombre} {c.paciente.apellido}
                     </span>
-                    <span className="font-mono text-xs text-slate-400">#{c.paciente.numeroExpediente}</span>
-                    <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${ESTADO_COLOR[c.estado] ?? 'bg-slate-100 text-slate-600'}`}>
+                    <span className="font-mono text-xs text-slate-400">
+                      #{c.paciente.numeroExpediente}
+                    </span>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-xs font-medium ${ESTADO_COLOR[c.estado] ?? 'bg-slate-100 text-slate-600'}`}
+                    >
                       {ESTADO_LABEL[c.estado] ?? c.estado}
                     </span>
                   </div>
                   <p className="text-sm text-slate-500">
-                    {new Date(c.fechaHora).toLocaleDateString('es-DO', { weekday: 'long', day: '2-digit', month: 'long', hour: '2-digit', minute: '2-digit' })}
+                    {new Date(c.fechaHora).toLocaleDateString('es-DO', {
+                      weekday: 'long',
+                      day: '2-digit',
+                      month: 'long',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
                     {' · '}Dr./Dra. {c.medicoNombre}
                   </p>
                   {c.motivo && <p className="mt-1 text-sm text-slate-600">{c.motivo}</p>}
@@ -162,7 +182,10 @@ export default function ConsultasPage() {
                       RD${Number(c.precio).toLocaleString('es-DO')}
                     </span>
                   )}
-                  <Link href={`/clinica/consultas/${c.id}`} className="text-xs font-medium text-indigo-600 hover:underline">
+                  <Link
+                    href={`/clinica/consultas/${c.id}`}
+                    className="text-xs font-medium text-indigo-600 hover:underline"
+                  >
                     Ver detalle
                   </Link>
                 </div>

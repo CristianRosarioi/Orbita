@@ -5,7 +5,8 @@ export type VerticalSlug =
   | 'salon'
   | 'farmacia'
   | 'ferreteria'
-  | 'clinica';
+  | 'clinica'
+  | 'super';
 
 export interface VerticalData {
   slug: VerticalSlug;
@@ -321,7 +322,8 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
     nombre: 'Clínica / Consultorio',
     emoji: '🏥',
     tagline: 'Expedientes digitales, sin papeles perdidos',
-    descripcionCorta: 'Gestiona expedientes de pacientes, consultas y agenda médica en un solo lugar.',
+    descripcionCorta:
+      'Gestiona expedientes de pacientes, consultas y agenda médica en un solo lugar.',
     descripcionLarga:
       'Órbita para clínicas y consultorios digitaliza todo el flujo médico: desde que el paciente llega hasta que sale con su receta. Expedientes completos, historial de consultas, signos vitales y facturación integrada para que te concentres en lo que importa: la salud de tus pacientes.',
     color: {
@@ -354,13 +356,71 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
         desc: 'Al completar la consulta, genera la factura en un click. El precio de la consulta ya está registrado. Acepta efectivo, tarjeta o crédito.',
       },
     ],
-    paraQuien: ['Médicos generales', 'Especialistas', 'Odontólogos', 'Veterinarios', 'Clínicas pequeñas'],
+    paraQuien: [
+      'Médicos generales',
+      'Especialistas',
+      'Odontólogos',
+      'Veterinarios',
+      'Clínicas pequeñas',
+    ],
     ejemplos: [
       'El recepcionista busca al paciente por cédula y ve todo su historial en segundos',
       'El médico registra el diagnóstico, la receta y los signos vitales en la misma consulta',
       'Al completar la consulta, la factura se genera automáticamente con el precio correcto',
     ],
     ctaLabel: '¿Tienes una clínica o consultorio?',
+  },
+
+  super: {
+    slug: 'super',
+    nombre: 'Supermercado',
+    emoji: '🛒',
+    tagline: 'Inventario, ofertas y precios por volumen en un solo sistema',
+    descripcionCorta: 'Gestiona departamentos, lanza ofertas con vigencia automática y define precios mayoristas.',
+    descripcionLarga:
+      'Órbita potencia la operación de tu supermercado o minimarket con herramientas diseñadas para el volumen y la velocidad. Organiza tu catálogo por departamentos, lanza ofertas que se activan y vencen solas, y configura precios especiales por cantidad para clientes mayoristas.',
+    color: {
+      bg: 'bg-emerald-50',
+      text: 'text-emerald-600',
+      ring: 'ring-emerald-200',
+      badge: 'bg-emerald-100 text-emerald-700',
+    },
+    funciones: [
+      'Departamentos y categorías organizados',
+      'Ofertas con vigencia automática',
+      'Precios por volumen (mayorista)',
+      'Control de inventario multi-producto',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Departamentos y categorías',
+        desc: 'Organiza tu catálogo por secciones (Lácteos, Carnes, Bebidas…) con categorías anidadas. Facilita la navegación del inventario y los reportes por departamento.',
+      },
+      {
+        titulo: 'Ofertas automáticas',
+        desc: 'Programa ofertas con fecha de inicio y fin. El sistema las activa y vence solo — sin tener que recordar hacerlo manualmente. Las activas se muestran en el POS automáticamente.',
+      },
+      {
+        titulo: 'Precios por volumen',
+        desc: 'Define precios escalonados: si el cliente lleva 6 unidades paga X, si lleva 12 paga Y. Ideal para mayoristas y clientes frecuentes sin crear facturas especiales.',
+      },
+      {
+        titulo: 'Inventario de alto volumen',
+        desc: 'Maneja cientos de productos con SKU, código de barras y múltiples unidades de medida. El inventario se descuenta automáticamente con cada venta.',
+      },
+    ],
+    paraQuien: [
+      'Supermercados medianos y grandes',
+      'Minimarkets',
+      'Colmados grandes',
+      'Distribuidoras',
+    ],
+    ejemplos: [
+      'El cajero escanea el código de barras y el sistema aplica el precio de oferta vigente automáticamente',
+      'Un cliente mayorista compra 24 unidades y el sistema aplica el precio por volumen sin necesidad de ajuste manual',
+      'El gerente programa las ofertas del fin de semana el lunes — el sistema las activa y desactiva solo',
+    ],
+    ctaLabel: '¿Tienes un supermercado o minimarket?',
   },
 };
 

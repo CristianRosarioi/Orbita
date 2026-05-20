@@ -107,7 +107,10 @@ export async function POST(req: NextRequest) {
       });
 
       const siguiente = ultimo
-        ? String(parseInt(ultimo.numeroExpediente.replace(/\D/g, '') || '0', 10) + 1).padStart(6, '0')
+        ? String(parseInt(ultimo.numeroExpediente.replace(/\D/g, '') || '0', 10) + 1).padStart(
+            6,
+            '0',
+          )
         : '000001';
 
       return tx.paciente.create({

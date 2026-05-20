@@ -144,15 +144,17 @@ describe('GET /api/clinica/pacientes', () => {
 describe('POST /api/clinica/pacientes', () => {
   it('crea un paciente correctamente', async () => {
     mockPrisma.paciente.findFirst.mockResolvedValue(null); // no duplicate cedula
-    mockPrisma.$transaction.mockImplementation(async (fn: (tx: typeof mockPrisma) => Promise<unknown>) => {
-      const txMock = {
-        paciente: {
-          findFirst: vi.fn().mockResolvedValue(null),
-          create: vi.fn().mockResolvedValue(mockPaciente),
-        },
-      };
-      return fn(txMock);
-    });
+    mockPrisma.$transaction.mockImplementation(
+      async (fn: (tx: typeof mockPrisma) => Promise<unknown>) => {
+        const txMock = {
+          paciente: {
+            findFirst: vi.fn().mockResolvedValue(null),
+            create: vi.fn().mockResolvedValue(mockPaciente),
+          },
+        };
+        return fn(txMock);
+      },
+    );
 
     const { POST } = await import('@/app/api/clinica/pacientes/route');
     const req = new NextRequest('http://localhost/api/clinica/pacientes', {

@@ -4,7 +4,12 @@ export const CreatePacienteSchema = z.object({
   clienteId: z.string().optional(),
   nombre: z.string().min(1, 'El nombre es requerido').max(100),
   apellido: z.string().min(1, 'El apellido es requerido').max(100),
-  fechaNacimiento: z.string().datetime({ offset: true }).optional().or(z.literal('')).transform((v) => v || undefined),
+  fechaNacimiento: z
+    .string()
+    .datetime({ offset: true })
+    .optional()
+    .or(z.literal(''))
+    .transform((v) => v || undefined),
   sexo: z.enum(['MASCULINO', 'FEMENINO', 'OTRO']).optional(),
   cedula: z
     .string()
@@ -13,7 +18,12 @@ export const CreatePacienteSchema = z.object({
     .or(z.literal(''))
     .transform((v) => v || undefined),
   telefono: z.string().max(20).optional(),
-  email: z.string().email('Email inválido').optional().or(z.literal('')).transform((v) => v || undefined),
+  email: z
+    .string()
+    .email('Email inválido')
+    .optional()
+    .or(z.literal(''))
+    .transform((v) => v || undefined),
   direccion: z.string().max(255).optional(),
   tipoSangre: z
     .enum([

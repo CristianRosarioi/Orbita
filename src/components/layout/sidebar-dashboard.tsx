@@ -40,6 +40,7 @@ import {
   ArrowRightLeft,
   UserRound,
   Stethoscope,
+  Layers,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -65,6 +66,7 @@ const INDUSTRIAS_SALON = ['SALON_BARBERIA'];
 const INDUSTRIAS_FARMACIA = ['FARMACIA', 'BOTICA', 'DROGUERIA'];
 const INDUSTRIAS_FERRETERIA = ['FERRETERIA', 'MATERIALES', 'PINTURAS'];
 const INDUSTRIAS_CLINICA = ['CLINICA', 'DENTAL', 'VETERINARIA'];
+const INDUSTRIAS_SUPER = ['SUPERMERCADO', 'MINIMARKET', 'COLMADO_GRANDE'];
 
 const RESTAURANTE_ITEMS = [
   { href: '/restaurante/mesas', label: 'Mesas', icon: LayoutGrid },
@@ -119,6 +121,12 @@ const CLINICA_ITEMS = [
   { href: '/clinica/pacientes', label: 'Pacientes', icon: UserRound },
   { href: '/clinica/consultas', label: 'Consultas', icon: Stethoscope },
   { href: '/clinica/agenda', label: 'Agenda médica', icon: CalendarDays },
+];
+
+const SUPER_ITEMS = [
+  { href: '/super/departamentos', label: 'Departamentos', icon: LayoutGrid },
+  { href: '/super/ofertas', label: 'Ofertas', icon: Tag },
+  { href: '/super/precios', label: 'Precios por volumen', icon: Layers },
 ];
 
 const INVENTARIO_ITEMS = [
@@ -370,6 +378,16 @@ function SidebarContent({
           <>
             <SectionDivider label="Clínica" />
             {CLINICA_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Supermercado */}
+        {INDUSTRIAS_SUPER.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Supermercado" />
+            {SUPER_ITEMS.map(({ href, label, icon }) => (
               <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
             ))}
           </>

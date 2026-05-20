@@ -33,7 +33,13 @@ export async function GET(req: NextRequest) {
       orderBy: { fechaHora: 'asc' },
       include: {
         paciente: {
-          select: { id: true, nombre: true, apellido: true, numeroExpediente: true, tipoSangre: true },
+          select: {
+            id: true,
+            nombre: true,
+            apellido: true,
+            numeroExpediente: true,
+            tipoSangre: true,
+          },
         },
       },
     });

@@ -17,6 +17,7 @@ datasource db {
 enum Industria {
   RESTAURANTE
   COLMADO
+  COLMADO_GRANDE
   CARWASH
   REPUESTOS
   TALLER_MECANICO
@@ -30,6 +31,8 @@ enum Industria {
   TIENDA_ROPA
   TIENDA_ONLINE
   JOYERIA
+  SUPERMERCADO
+  MINIMARKET
   OTRO
 
   @@map("industria")
@@ -185,6 +188,10 @@ model Empresa {
   transferencias   TransferenciaInventario[]
   pacientes        Paciente[]
   consultas        Consulta[]
+  departamentos    Departamento[]
+  categoriasSuper  CategoriaSuper[]
+  ofertas          Oferta[]
+  preciosVolumen   PrecioVolumen[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -419,6 +426,8 @@ model Producto {
   itemsPedidoProveedor ItemPedidoProveedor[]
   stockSucursal        StockSucursal[]
   transferencias       TransferenciaInventario[]
+  ofertas              Oferta[]
+  preciosVolumen       PrecioVolumen[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, sku])
@@ -1578,4 +1587,97 @@ model TransferenciaInventario {
   @@index([sucursalDestinoId])
   @@index([productoId])
   @@map("transferencias_inventario")
+}
+
+// ============================================================
+// FASE 15 — SUPERMERCADO
+// ============================================================
+
+// ============================================================
+// MODELO: Departamento
+// ============================================================
+model Departamento {
+  id          String    @id @default(cuid())
+  empresaId   String    @map("empresa_id")
+  nombre      String
+  descripcion String?
+  activo      Boolean   @default(true)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  empresa    Empresa          @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  categorias CategoriaSuper[]
+
+  @@unique([empresaId, nombre])
+  @@index([empresaId])
+  @@map("departamentos")
+}
+
+// ============================================================
+// MODELO: CategoriaSuper
+// ============================================================
+model CategoriaSuper {
+  id             String   @id @default(cuid())
+  empresaId      String   @map("empresa_id")
+  departamentoId String   @map("departamento_id")
+  nombre         String
+  activo         Boolean  @default(true)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  empresa      Empresa      @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  departamento Departamento @relation(fields: [departamentoId], references: [id], onDelete: Cascade)
+  ofertas      Oferta[]
+
+  @@unique([empresaId, departamentoId, nombre])
+  @@index([empresaId, departamentoId])
+  @@map("categorias_super")
+}
+
+// ============================================================
+// MODELO: Oferta
+// ============================================================
+model Oferta {
+  id             String   @id @default(cuid())
+  empresaId      String   @map("empresa_id")
+  productoId     String   @map("producto_id")
+  categoriaId    String?  @map("categoria_id")
+  nombre         String
+  descripcion    String?
+  precioOriginal Decimal  @map("precio_original")
+  precioOferta   Decimal  @map("precio_oferta")
+  descuento      Decimal
+  fechaInicio    DateTime @map("fecha_inicio")
+  fechaFin       DateTime @map("fecha_fin")
+  activa         Boolean  @default(true)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  empresa   Empresa         @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  producto  Producto        @relation(fields: [productoId], references: [id])
+  categoria CategoriaSuper? @relation(fields: [categoriaId], references: [id])
+
+  @@index([empresaId, activa])
+  @@index([empresaId, fechaFin])
+  @@map("ofertas")
+}
+
+// ============================================================
+// MODELO: PrecioVolumen
+// ============================================================
+model PrecioVolumen {
+  id          String   @id @default(cuid())
+  empresaId   String   @map("empresa_id")
+  productoId  String   @map("producto_id")
+  cantidadMin Decimal  @map("cantidad_min")
+  precio      Decimal
+  etiqueta    String?
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  producto Producto @relation(fields: [productoId], references: [id])
+
+  @@index([empresaId, productoId])
+  @@map("precios_volumen")
 }

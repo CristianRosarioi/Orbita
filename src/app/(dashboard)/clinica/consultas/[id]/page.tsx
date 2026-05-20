@@ -46,8 +46,14 @@ interface Consulta {
 }
 
 const TIPO_SANGRE_LABEL: Record<string, string> = {
-  A_POSITIVO: 'A+', A_NEGATIVO: 'A-', B_POSITIVO: 'B+', B_NEGATIVO: 'B-',
-  AB_POSITIVO: 'AB+', AB_NEGATIVO: 'AB-', O_POSITIVO: 'O+', O_NEGATIVO: 'O-',
+  A_POSITIVO: 'A+',
+  A_NEGATIVO: 'A-',
+  B_POSITIVO: 'B+',
+  B_NEGATIVO: 'B-',
+  AB_POSITIVO: 'AB+',
+  AB_NEGATIVO: 'AB-',
+  O_POSITIVO: 'O+',
+  O_NEGATIVO: 'O-',
   DESCONOCIDO: '?',
 };
 
@@ -60,8 +66,11 @@ const ESTADO_COLOR: Record<string, string> = {
 };
 
 const ESTADO_LABEL: Record<string, string> = {
-  PROGRAMADA: 'Programada', EN_CURSO: 'En curso', COMPLETADA: 'Completada',
-  CANCELADA: 'Cancelada', NO_ASISTIO: 'No asistió',
+  PROGRAMADA: 'Programada',
+  EN_CURSO: 'En curso',
+  COMPLETADA: 'Completada',
+  CANCELADA: 'Cancelada',
+  NO_ASISTIO: 'No asistió',
 };
 
 export default function ConsultaDetallePage() {
@@ -76,7 +85,9 @@ export default function ConsultaDetallePage() {
   const cargar = useCallback(() => {
     fetch(`/api/clinica/consultas/${id}`)
       .then((r) => r.json())
-      .then((j) => { if (j.success) setConsulta(j.data); })
+      .then((j) => {
+        if (j.success) setConsulta(j.data);
+      })
       .finally(() => setLoading(false));
   }, [id]);
 
@@ -93,7 +104,7 @@ export default function ConsultaDetallePage() {
     });
     const json = await res.json();
     if (json.success) {
-      setConsulta((c) => c ? { ...c, estado: nuevoEstado } : c);
+      setConsulta((c) => (c ? { ...c, estado: nuevoEstado } : c));
       setMensaje('Estado actualizado.');
     }
     setActualizando(false);
@@ -126,7 +137,10 @@ export default function ConsultaDetallePage() {
     { label: 'Peso', value: consulta.peso ? `${consulta.peso} kg` : null },
     { label: 'Talla', value: consulta.talla ? `${consulta.talla} cm` : null },
     { label: 'Temperatura', value: consulta.temperatura ? `${consulta.temperatura}°C` : null },
-    { label: 'Freq. cardíaca', value: consulta.frecuenciaCard ? `${consulta.frecuenciaCard} bpm` : null },
+    {
+      label: 'Freq. cardíaca',
+      value: consulta.frecuenciaCard ? `${consulta.frecuenciaCard} bpm` : null,
+    },
     { label: 'Presión arterial', value: consulta.presionArterial },
   ].filter((s) => s.value);
 
@@ -141,12 +155,21 @@ export default function ConsultaDetallePage() {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-bold text-slate-900">Consulta médica</h1>
-              <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${ESTADO_COLOR[consulta.estado] ?? 'bg-slate-100'}`}>
+              <span
+                className={`rounded-full px-2 py-0.5 text-xs font-medium ${ESTADO_COLOR[consulta.estado] ?? 'bg-slate-100'}`}
+              >
                 {ESTADO_LABEL[consulta.estado] ?? consulta.estado}
               </span>
             </div>
             <p className="text-sm text-slate-500">
-              {new Date(consulta.fechaHora).toLocaleDateString('es-DO', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+              {new Date(consulta.fechaHora).toLocaleDateString('es-DO', {
+                weekday: 'long',
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
               {' · '}Dr./Dra. {consulta.medicoNombre}
             </p>
           </div>
@@ -216,14 +239,32 @@ export default function ConsultaDetallePage() {
         <div className="space-y-4">
           <div className="rounded-xl border border-slate-200 bg-white p-5">
             <h3 className="mb-3 font-semibold text-slate-900">Paciente</h3>
-            <Link href={`/clinica/pacientes/${p.id}`} className="font-medium text-indigo-600 hover:underline">
+            <Link
+              href={`/clinica/pacientes/${p.id}`}
+              className="font-medium text-indigo-600 hover:underline"
+            >
               {p.nombre} {p.apellido}
             </Link>
             <p className="text-xs text-slate-500 mt-0.5">#{p.numeroExpediente}</p>
             <dl className="mt-3 space-y-1.5 text-sm">
-              {p.cedula && <div className="flex justify-between"><dt className="text-slate-500">Cédula</dt><dd className="text-slate-700">{p.cedula}</dd></div>}
-              {p.sexo && <div className="flex justify-between"><dt className="text-slate-500">Sexo</dt><dd className="text-slate-700">{p.sexo}</dd></div>}
-              {p.tipoSangre && <div className="flex justify-between"><dt className="text-slate-500">Sangre</dt><dd className="font-semibold text-red-600">{TIPO_SANGRE_LABEL[p.tipoSangre]}</dd></div>}
+              {p.cedula && (
+                <div className="flex justify-between">
+                  <dt className="text-slate-500">Cédula</dt>
+                  <dd className="text-slate-700">{p.cedula}</dd>
+                </div>
+              )}
+              {p.sexo && (
+                <div className="flex justify-between">
+                  <dt className="text-slate-500">Sexo</dt>
+                  <dd className="text-slate-700">{p.sexo}</dd>
+                </div>
+              )}
+              {p.tipoSangre && (
+                <div className="flex justify-between">
+                  <dt className="text-slate-500">Sangre</dt>
+                  <dd className="font-semibold text-red-600">{TIPO_SANGRE_LABEL[p.tipoSangre]}</dd>
+                </div>
+              )}
             </dl>
             {p.alergias && (
               <div className="mt-3 rounded-lg bg-amber-50 p-2">
@@ -280,7 +321,9 @@ export default function ConsultaDetallePage() {
           {consulta.receta && (
             <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5">
               <h3 className="mb-2 font-semibold text-indigo-900">Receta médica</h3>
-              <pre className="whitespace-pre-wrap text-sm text-indigo-800 font-sans">{consulta.receta}</pre>
+              <pre className="whitespace-pre-wrap text-sm text-indigo-800 font-sans">
+                {consulta.receta}
+              </pre>
             </div>
           )}
           {consulta.notas && (
@@ -289,11 +332,15 @@ export default function ConsultaDetallePage() {
               <p className="text-sm leading-relaxed text-slate-700">{consulta.notas}</p>
             </div>
           )}
-          {!consulta.motivo && !consulta.diagnostico && !consulta.tratamiento && !consulta.receta && !consulta.notas && (
-            <div className="rounded-xl border border-dashed border-slate-200 py-12 text-center text-slate-500">
-              No hay notas clínicas registradas para esta consulta.
-            </div>
-          )}
+          {!consulta.motivo &&
+            !consulta.diagnostico &&
+            !consulta.tratamiento &&
+            !consulta.receta &&
+            !consulta.notas && (
+              <div className="rounded-xl border border-dashed border-slate-200 py-12 text-center text-slate-500">
+                No hay notas clínicas registradas para esta consulta.
+              </div>
+            )}
         </div>
       </div>
     </div>

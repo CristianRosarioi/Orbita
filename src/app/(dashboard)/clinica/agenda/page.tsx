@@ -162,10 +162,15 @@ function AgendaContent() {
                                 {c.paciente.nombre} {c.paciente.apellido}
                               </p>
                               <p className="text-xs text-slate-500">
-                                {new Date(c.fechaHora).toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit' })}
+                                {new Date(c.fechaHora).toLocaleTimeString('es-DO', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
                                 {' · '}Dr./Dra. {c.medicoNombre}
                               </p>
-                              {c.motivo && <p className="mt-0.5 text-xs text-slate-600">{c.motivo}</p>}
+                              {c.motivo && (
+                                <p className="mt-0.5 text-xs text-slate-600">{c.motivo}</p>
+                              )}
                             </div>
                             {c.precio && (
                               <span className="shrink-0 text-xs font-semibold text-slate-700">
