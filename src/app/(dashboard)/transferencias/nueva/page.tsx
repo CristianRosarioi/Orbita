@@ -9,8 +9,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-interface Sucursal { id: string; nombre: string; codigo: string }
-interface Producto { id: string; nombre: string; sku: string | null }
+interface Sucursal {
+  id: string;
+  nombre: string;
+  codigo: string;
+}
+interface Producto {
+  id: string;
+  nombre: string;
+  sku: string | null;
+}
 
 function NuevaTransferenciaForm() {
   const router = useRouter();
@@ -88,7 +96,9 @@ function NuevaTransferenciaForm() {
               >
                 <option value="">Selecciona la sucursal origen</option>
                 {sucursales.map((s) => (
-                  <option key={s.id} value={s.id}>{s.nombre} ({s.codigo})</option>
+                  <option key={s.id} value={s.id}>
+                    {s.nombre} ({s.codigo})
+                  </option>
                 ))}
               </select>
             </div>
@@ -103,7 +113,9 @@ function NuevaTransferenciaForm() {
               >
                 <option value="">Selecciona la sucursal destino</option>
                 {sucursales.map((s) => (
-                  <option key={s.id} value={s.id}>{s.nombre} ({s.codigo})</option>
+                  <option key={s.id} value={s.id}>
+                    {s.nombre} ({s.codigo})
+                  </option>
                 ))}
               </select>
             </div>
@@ -118,7 +130,10 @@ function NuevaTransferenciaForm() {
               >
                 <option value="">Selecciona un producto</option>
                 {productos.map((p) => (
-                  <option key={p.id} value={p.id}>{p.nombre}{p.sku ? ` (${p.sku})` : ''}</option>
+                  <option key={p.id} value={p.id}>
+                    {p.nombre}
+                    {p.sku ? ` (${p.sku})` : ''}
+                  </option>
                 ))}
               </select>
             </div>

@@ -41,7 +41,8 @@ export async function POST(req: NextRequest) {
     const existe = await prisma.sucursal.findFirst({
       where: { empresaId: sesion.empresaActivaId, codigo, deletedAt: null },
     });
-    if (existe) return err('VALIDATION_ERROR', `Ya existe una sucursal con el código "${codigo}".`, 409);
+    if (existe)
+      return err('VALIDATION_ERROR', `Ya existe una sucursal con el código "${codigo}".`, 409);
 
     const sucursal = await prisma.sucursal.create({
       data: {

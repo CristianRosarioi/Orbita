@@ -25,7 +25,9 @@ export default function SucursalesPage() {
   useEffect(() => {
     fetch('/api/sucursales')
       .then((r) => r.json())
-      .then((d) => { if (d.success) setSucursales(d.data); })
+      .then((d) => {
+        if (d.success) setSucursales(d.data);
+      })
       .finally(() => setCargando(false));
   }, []);
 

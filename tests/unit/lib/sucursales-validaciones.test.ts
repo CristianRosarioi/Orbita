@@ -55,7 +55,10 @@ describe('UpdateSucursalSchema', () => {
   });
 
   it('acepta actualización parcial', () => {
-    const result = UpdateSucursalSchema.safeParse({ ciudad: 'La Romana', telefono: '809-550-0000' });
+    const result = UpdateSucursalSchema.safeParse({
+      ciudad: 'La Romana',
+      telefono: '809-550-0000',
+    });
     expect(result.success).toBe(true);
   });
 
@@ -106,7 +109,10 @@ describe('CreateTransferenciaSchema', () => {
   });
 
   it('acepta notas opcionales', () => {
-    const result = CreateTransferenciaSchema.safeParse({ ...base, notas: 'Reabastecimiento mensual' });
+    const result = CreateTransferenciaSchema.safeParse({
+      ...base,
+      notas: 'Reabastecimiento mensual',
+    });
     expect(result.success).toBe(true);
   });
 

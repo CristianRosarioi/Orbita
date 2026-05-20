@@ -86,10 +86,7 @@ export default function DetalleSucursalPage() {
           </div>
         </div>
         {!sucursal.esPrincipal && sucursal.activa && (
-          <button
-            onClick={handleDesactivar}
-            className={buttonVariants({ variant: 'outline' })}
-          >
+          <button onClick={handleDesactivar} className={buttonVariants({ variant: 'outline' })}>
             Desactivar
           </button>
         )}
@@ -101,7 +98,8 @@ export default function DetalleSucursalPage() {
             <CardContent className="pt-6">
               <p className="text-muted-foreground text-sm">Ventas totales</p>
               <p className="text-2xl font-bold">
-                RD$ {Number(reporte.totalVentas).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                RD${' '}
+                {Number(reporte.totalVentas).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
               </p>
               <p className="text-muted-foreground text-xs">{reporte.cantidadFacturas} facturas</p>
             </CardContent>
@@ -109,9 +107,12 @@ export default function DetalleSucursalPage() {
           <Card>
             <CardContent className="pt-6">
               <p className="text-muted-foreground text-sm">Transferencias</p>
-              <p className="text-2xl font-bold">{reporte.transferenciasEnviadas + reporte.transferenciasRecibidas}</p>
+              <p className="text-2xl font-bold">
+                {reporte.transferenciasEnviadas + reporte.transferenciasRecibidas}
+              </p>
               <p className="text-muted-foreground text-xs">
-                {reporte.transferenciasEnviadas} enviadas · {reporte.transferenciasRecibidas} recibidas
+                {reporte.transferenciasEnviadas} enviadas · {reporte.transferenciasRecibidas}{' '}
+                recibidas
               </p>
             </CardContent>
           </Card>
@@ -119,7 +120,9 @@ export default function DetalleSucursalPage() {
             <CardContent className="pt-6">
               <p className="text-muted-foreground text-sm">Stock en sucursal</p>
               <p className="text-2xl font-bold">{reporte.productosEnStock} productos</p>
-              <p className="text-muted-foreground text-xs">{Number(reporte.unidadesEnStock).toLocaleString()} unidades</p>
+              <p className="text-muted-foreground text-xs">
+                {Number(reporte.unidadesEnStock).toLocaleString()} unidades
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -137,7 +140,8 @@ export default function DetalleSucursalPage() {
             <ul className="space-y-1">
               {itemsBajoMinimo.map((s) => (
                 <li key={s.id} className="text-sm text-amber-700 dark:text-amber-300">
-                  {s.producto.nombre} — {Number(s.cantidad)} unidades (mín. {Number(s.producto.stockMinimo)})
+                  {s.producto.nombre} — {Number(s.cantidad)} unidades (mín.{' '}
+                  {Number(s.producto.stockMinimo)})
                 </li>
               ))}
             </ul>
@@ -146,11 +150,17 @@ export default function DetalleSucursalPage() {
       )}
 
       <div className="flex gap-3">
-        <Link href={`/transferencias/nueva?origen=${id}`} className={buttonVariants({ variant: 'outline' })}>
+        <Link
+          href={`/transferencias/nueva?origen=${id}`}
+          className={buttonVariants({ variant: 'outline' })}
+        >
           <ArrowRightLeft className="mr-2 h-4 w-4" />
           Nueva transferencia
         </Link>
-        <Link href={`/transferencias?sucursalId=${id}`} className={buttonVariants({ variant: 'ghost' })}>
+        <Link
+          href={`/transferencias?sucursalId=${id}`}
+          className={buttonVariants({ variant: 'ghost' })}
+        >
           Ver transferencias
         </Link>
       </div>
@@ -185,9 +195,13 @@ export default function DetalleSucursalPage() {
                           <AlertTriangle className="ml-1 inline h-3 w-3 text-amber-500" />
                         )}
                       </td>
-                      <td className="text-muted-foreground py-2 font-mono text-xs">{s.producto.sku ?? '—'}</td>
+                      <td className="text-muted-foreground py-2 font-mono text-xs">
+                        {s.producto.sku ?? '—'}
+                      </td>
                       <td className="py-2 text-right font-medium">{Number(s.cantidad)}</td>
-                      <td className="text-muted-foreground py-2 text-right">{Number(s.producto.stockMinimo)}</td>
+                      <td className="text-muted-foreground py-2 text-right">
+                        {Number(s.producto.stockMinimo)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -205,10 +219,26 @@ export default function DetalleSucursalPage() {
           </CardTitle>
         </CardHeader>
         <CardContent className="grid gap-2 text-sm sm:grid-cols-2">
-          {sucursal.ciudad && <div><span className="text-muted-foreground">Ciudad:</span> {sucursal.ciudad}</div>}
-          {sucursal.telefono && <div><span className="text-muted-foreground">Teléfono:</span> {sucursal.telefono}</div>}
-          {sucursal.encargado && <div><span className="text-muted-foreground">Encargado:</span> {sucursal.encargado}</div>}
-          {sucursal.direccion && <div className="sm:col-span-2"><span className="text-muted-foreground">Dirección:</span> {sucursal.direccion}</div>}
+          {sucursal.ciudad && (
+            <div>
+              <span className="text-muted-foreground">Ciudad:</span> {sucursal.ciudad}
+            </div>
+          )}
+          {sucursal.telefono && (
+            <div>
+              <span className="text-muted-foreground">Teléfono:</span> {sucursal.telefono}
+            </div>
+          )}
+          {sucursal.encargado && (
+            <div>
+              <span className="text-muted-foreground">Encargado:</span> {sucursal.encargado}
+            </div>
+          )}
+          {sucursal.direccion && (
+            <div className="sm:col-span-2">
+              <span className="text-muted-foreground">Dirección:</span> {sucursal.direccion}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

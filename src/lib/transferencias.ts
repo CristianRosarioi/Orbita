@@ -20,7 +20,9 @@ export async function ejecutarTransferencia(
     if (!destino) throw new Error('DESTINO_NOT_FOUND');
 
     const stockOrigen = await tx.stockSucursal.findUnique({
-      where: { sucursalId_productoId: { sucursalId: data.sucursalOrigenId, productoId: data.productoId } },
+      where: {
+        sucursalId_productoId: { sucursalId: data.sucursalOrigenId, productoId: data.productoId },
+      },
     });
 
     const cantidadDisponible = stockOrigen?.cantidad ?? 0;
@@ -29,12 +31,16 @@ export async function ejecutarTransferencia(
     }
 
     await tx.stockSucursal.update({
-      where: { sucursalId_productoId: { sucursalId: data.sucursalOrigenId, productoId: data.productoId } },
+      where: {
+        sucursalId_productoId: { sucursalId: data.sucursalOrigenId, productoId: data.productoId },
+      },
       data: { cantidad: { decrement: data.cantidad } },
     });
 
     await tx.stockSucursal.upsert({
-      where: { sucursalId_productoId: { sucursalId: data.sucursalDestinoId, productoId: data.productoId } },
+      where: {
+        sucursalId_productoId: { sucursalId: data.sucursalDestinoId, productoId: data.productoId },
+      },
       create: {
         empresaId,
         sucursalId: data.sucursalDestinoId,

@@ -56,7 +56,12 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
     if (parsed.data.codigo && parsed.data.codigo !== sucursal.codigo) {
       const existe = await prisma.sucursal.findFirst({
-        where: { empresaId: sesion.empresaActivaId, codigo: parsed.data.codigo, deletedAt: null, id: { not: id } },
+        where: {
+          empresaId: sesion.empresaActivaId,
+          codigo: parsed.data.codigo,
+          deletedAt: null,
+          id: { not: id },
+        },
       });
       if (existe) return err('VALIDATION_ERROR', `Ya existe una sucursal con ese código.`, 409);
     }
@@ -86,7 +91,8 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
       where: { id, empresaId: sesion.empresaActivaId, deletedAt: null },
     });
     if (!sucursal) return err('NOT_FOUND', 'Sucursal no encontrada.', 404);
-    if (sucursal.esPrincipal) return err('FORBIDDEN', 'No se puede eliminar la sucursal principal.', 403);
+    if (sucursal.esPrincipal)
+      return err('FORBIDDEN', 'No se puede eliminar la sucursal principal.', 403);
 
     await prisma.sucursal.update({
       where: { id },

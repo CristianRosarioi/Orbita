@@ -63,9 +63,12 @@ export async function POST(req: NextRequest) {
       transferencia = await ejecutarTransferencia(sesion.empresaActivaId, parsed.data, userId);
     } catch (e) {
       if (e instanceof Error) {
-        if (e.message === 'ORIGEN_NOT_FOUND') return err('NOT_FOUND', 'Sucursal de origen no encontrada.', 404);
-        if (e.message === 'DESTINO_NOT_FOUND') return err('NOT_FOUND', 'Sucursal de destino no encontrada.', 404);
-        if (e.message === 'STOCK_INSUFICIENTE') return err('FORBIDDEN', 'Stock insuficiente en la sucursal de origen.', 422);
+        if (e.message === 'ORIGEN_NOT_FOUND')
+          return err('NOT_FOUND', 'Sucursal de origen no encontrada.', 404);
+        if (e.message === 'DESTINO_NOT_FOUND')
+          return err('NOT_FOUND', 'Sucursal de destino no encontrada.', 404);
+        if (e.message === 'STOCK_INSUFICIENTE')
+          return err('FORBIDDEN', 'Stock insuficiente en la sucursal de origen.', 422);
       }
       throw e;
     }

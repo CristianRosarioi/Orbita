@@ -30,7 +30,9 @@ function TransferenciasLista() {
     const qs = sucursalId ? `?sucursalId=${sucursalId}` : '';
     fetch(`/api/transferencias${qs}`)
       .then((r) => r.json())
-      .then((d) => { if (d.success) setTransferencias(d.data); })
+      .then((d) => {
+        if (d.success) setTransferencias(d.data);
+      })
       .finally(() => setCargando(false));
   }, [sucursalId]);
 
@@ -64,7 +66,9 @@ function TransferenciasLista() {
               {t.notas && <p className="text-muted-foreground text-xs">{t.notas}</p>}
             </div>
             <div className="flex flex-col items-end gap-1">
-              <Badge variant={t.estado === 'COMPLETADA' ? 'secondary' : 'outline'}>{t.estado}</Badge>
+              <Badge variant={t.estado === 'COMPLETADA' ? 'secondary' : 'outline'}>
+                {t.estado}
+              </Badge>
               <span className="text-muted-foreground text-xs">
                 {new Date(t.createdAt).toLocaleDateString('es-DO')}
               </span>
