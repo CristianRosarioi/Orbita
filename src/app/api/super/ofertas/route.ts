@@ -23,7 +23,9 @@ export async function GET(req: NextRequest) {
 
     const where = {
       empresaId,
-      ...(filtro === 'activas' ? { activa: true, fechaInicio: { lte: now }, fechaFin: { gte: now } } : {}),
+      ...(filtro === 'activas'
+        ? { activa: true, fechaInicio: { lte: now }, fechaFin: { gte: now } }
+        : {}),
       ...(filtro === 'vencidas' ? { fechaFin: { lt: now } } : {}),
     };
 
@@ -54,7 +56,8 @@ export async function POST(req: NextRequest) {
     const empresaId = sesion.empresaActiva.id;
     const body = await req.json();
     const parsed = CreateOfertaSchema.safeParse(body);
-    if (!parsed.success) return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 400);
+    if (!parsed.success)
+      return err('VALIDATION_ERROR', parsed.error.issues[0]?.message ?? 'Datos inválidos.', 400);
 
     const data = parsed.data;
 
@@ -63,7 +66,9 @@ export async function POST(req: NextRequest) {
     });
     if (!producto) return err('NOT_FOUND', 'Producto no encontrado.', 404);
 
-    const descuento = Math.round(((data.precioOriginal - data.precioOferta) / data.precioOriginal) * 100 * 100) / 100;
+    const descuento =
+      Math.round(((data.precioOriginal - data.precioOferta) / data.precioOriginal) * 100 * 100) /
+      100;
 
     const oferta = await prisma.oferta.create({
       data: {

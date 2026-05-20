@@ -41,6 +41,7 @@ import {
   UserRound,
   Stethoscope,
   Layers,
+  Bell,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -149,11 +150,12 @@ const REPORTES_ITEMS = [
 const ROLES_CAJA = ['OWNER', 'ADMIN', 'CAJERO'];
 
 const CONFIG_ITEMS = [
-  { href: '/configuracion/empresa', label: 'Mi empresa' },
-  { href: '/configuracion/usuarios', label: 'Usuarios' },
-  { href: '/configuracion/categorias', label: 'Categorías' },
-  { href: '/configuracion/unidades-medida', label: 'Unidades de medida' },
-  { href: '/sucursales', label: 'Sucursales' },
+  { href: '/configuracion/empresa', label: 'Mi empresa', icon: Settings },
+  { href: '/configuracion/usuarios', label: 'Usuarios', icon: Settings },
+  { href: '/configuracion/categorias', label: 'Categorías', icon: Settings },
+  { href: '/configuracion/unidades-medida', label: 'Unidades de medida', icon: Settings },
+  { href: '/sucursales', label: 'Sucursales', icon: Settings },
+  { href: '/configuracion/notificaciones', label: 'Notificaciones', icon: Bell },
 ];
 
 const ROL_LABELS: Record<string, string> = {
@@ -439,8 +441,8 @@ function SidebarContent({
 
         {/* Configuración */}
         <SectionDivider label="Configuración" />
-        {CONFIG_ITEMS.map(({ href, label }) => (
-          <NavLink key={href} href={href} label={label} icon={Settings} onClick={onLinkClick} />
+        {CONFIG_ITEMS.map(({ href, label, icon }) => (
+          <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
         ))}
       </nav>
 

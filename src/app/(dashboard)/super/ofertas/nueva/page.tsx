@@ -118,7 +118,9 @@ export default function NuevaOfertaPage() {
         </Link>
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Nueva oferta</h1>
-          <p className="text-sm text-slate-500">Define un precio especial con vigencia automática</p>
+          <p className="text-sm text-slate-500">
+            Define un precio especial con vigencia automática
+          </p>
         </div>
       </div>
 
@@ -136,7 +138,9 @@ export default function NuevaOfertaPage() {
             {productoSeleccionado ? (
               <div className="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2">
                 <div>
-                  <p className="text-sm font-medium text-emerald-900">{productoSeleccionado.nombre}</p>
+                  <p className="text-sm font-medium text-emerald-900">
+                    {productoSeleccionado.nombre}
+                  </p>
                   {productoSeleccionado.sku && (
                     <p className="text-xs text-emerald-600">SKU: {productoSeleccionado.sku}</p>
                   )}
@@ -266,9 +270,7 @@ export default function NuevaOfertaPage() {
           {descuento !== null && (
             <div className="mb-4 flex items-center gap-2 rounded-lg bg-orange-50 px-3 py-2">
               <Tag className="h-4 w-4 text-orange-600" />
-              <span className="text-sm font-semibold text-orange-700">
-                Descuento: {descuento}%
-              </span>
+              <span className="text-sm font-semibold text-orange-700">Descuento: {descuento}%</span>
               <span className="text-sm text-orange-600">
                 — ahorro de RD$
                 {(Number(precioOriginal) - Number(precioOferta)).toLocaleString('es-DO', {

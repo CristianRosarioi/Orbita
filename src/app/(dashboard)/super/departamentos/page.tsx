@@ -213,9 +213,7 @@ export default function DepartamentosPage() {
                 </p>
               )}
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  Nombre *
-                </label>
+                <label className="mb-1 block text-sm font-medium text-slate-700">Nombre *</label>
                 <input
                   required
                   value={nombre}
@@ -225,9 +223,7 @@ export default function DepartamentosPage() {
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
-                  Descripción
-                </label>
+                <label className="mb-1 block text-sm font-medium text-slate-700">Descripción</label>
                 <input
                   value={descripcion}
                   onChange={(e) => setDescripcion(e.target.value)}

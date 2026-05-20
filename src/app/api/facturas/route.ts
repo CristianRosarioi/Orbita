@@ -5,6 +5,7 @@ import { ok, err, handleApiError } from '@/lib/api-response';
 import { requireEmpresa } from '@/lib/auth';
 import { CreateFacturaSchema, FacturaFiltrosSchema } from '@/lib/validations/facturas';
 import { calcularTotalesFactura, generarNumeroFactura } from '@/lib/facturacion';
+import { enviarNotificacion } from '@/lib/notificaciones';
 import type { Prisma } from '@/generated/prisma/client';
 
 export async function GET(req: NextRequest) {
@@ -145,6 +146,33 @@ export async function POST(req: NextRequest) {
         include: { items: true },
       });
     });
+
+    // Fire-and-forget: no bloquea la respuesta
+    if (factura.clienteId) {
+      const empresa = await prisma.empresa.findFirst({
+        where: { id: empresaId },
+        select: { nombre: true, telefono: true },
+      });
+      const cliente = await prisma.cliente.findFirst({
+        where: { id: factura.clienteId },
+        select: { nombre: true, email: true, telefono: true },
+      });
+      const destinatario = cliente?.email ?? cliente?.telefono;
+      if (destinatario) {
+        enviarNotificacion({
+          empresaId,
+          tipo: 'FACTURA_EMITIDA',
+          datos: {
+            nombre: cliente?.nombre ?? 'cliente',
+            numero: factura.numero,
+            total: Number(factura.total).toLocaleString('es-DO', { minimumFractionDigits: 2 }),
+            empresa: empresa?.nombre ?? '',
+          },
+          destinatario,
+          referencia: factura.id,
+        }).catch(console.error);
+      }
+    }
 
     return ok(factura, 201);
   } catch (error) {

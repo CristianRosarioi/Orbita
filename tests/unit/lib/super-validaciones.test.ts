@@ -99,7 +99,9 @@ describe('CreateOfertaSchema', () => {
 
   it('rechaza fechaFin igual a fechaInicio', () => {
     const misma = ISO('2030-06-01T00:00:00Z');
-    expect(CreateOfertaSchema.safeParse({ ...base, fechaInicio: misma, fechaFin: misma }).success).toBe(false);
+    expect(
+      CreateOfertaSchema.safeParse({ ...base, fechaInicio: misma, fechaFin: misma }).success,
+    ).toBe(false);
   });
 
   it('rechaza precioOriginal negativo', () => {
@@ -156,7 +158,9 @@ describe('CreatePrecioVolumenSchema', () => {
   });
 
   it('acepta con etiqueta', () => {
-    expect(CreatePrecioVolumenSchema.safeParse({ ...base, etiqueta: 'Precio mayorista' }).success).toBe(true);
+    expect(
+      CreatePrecioVolumenSchema.safeParse({ ...base, etiqueta: 'Precio mayorista' }).success,
+    ).toBe(true);
   });
 
   it('rechaza cantidadMin cero', () => {
@@ -182,9 +186,9 @@ describe('CreatePrecioVolumenSchema', () => {
   });
 
   it('rechaza etiqueta mayor a 50 caracteres', () => {
-    expect(
-      CreatePrecioVolumenSchema.safeParse({ ...base, etiqueta: 'a'.repeat(51) }).success,
-    ).toBe(false);
+    expect(CreatePrecioVolumenSchema.safeParse({ ...base, etiqueta: 'a'.repeat(51) }).success).toBe(
+      false,
+    );
   });
 
   it('coerce cantidadMin de string a número', () => {

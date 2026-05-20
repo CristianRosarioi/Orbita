@@ -5,6 +5,7 @@ import { ok, err, handleApiError } from '@/lib/api-response';
 import { requireEmpresa } from '@/lib/auth';
 import { RegistrarPagoSchema } from '@/lib/validations/facturas';
 import { crearAsientoPago } from '@/lib/asientos';
+import { enviarNotificacion } from '@/lib/notificaciones';
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -68,6 +69,39 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
       return pago;
     });
+
+    // Fire-and-forget
+    if (resultado) {
+      const factura = await prisma.factura.findFirst({
+        where: { id, empresaId },
+        select: { numero: true, clienteId: true },
+      });
+      const empresa = await prisma.empresa.findFirst({
+        where: { id: empresaId },
+        select: { nombre: true },
+      });
+      if (factura?.clienteId) {
+        const cliente = await prisma.cliente.findFirst({
+          where: { id: factura.clienteId },
+          select: { nombre: true, email: true, telefono: true },
+        });
+        const destinatario = cliente?.email ?? cliente?.telefono;
+        if (destinatario) {
+          enviarNotificacion({
+            empresaId,
+            tipo: 'PAGO_RECIBIDO',
+            datos: {
+              nombre: cliente?.nombre ?? 'cliente',
+              monto: data.monto.toLocaleString('es-DO', { minimumFractionDigits: 2 }),
+              numero: factura.numero,
+              empresa: empresa?.nombre ?? '',
+            },
+            destinatario,
+            referencia: id,
+          }).catch(console.error);
+        }
+      }
+    }
 
     return ok(resultado, 201);
   } catch (error) {

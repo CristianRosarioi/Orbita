@@ -35,7 +35,11 @@ function diasRestantes(fecha: string) {
 }
 
 function formatFecha(f: string) {
-  return new Date(f).toLocaleDateString('es-DO', { day: '2-digit', month: 'short', year: 'numeric' });
+  return new Date(f).toLocaleDateString('es-DO', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
 }
 
 export default function OfertasPage() {
@@ -122,11 +126,13 @@ export default function OfertasPage() {
 
       {/* Tabs */}
       <div className="mb-4 flex gap-1 border-b border-slate-200">
-        {([
-          ['activas', 'Activas', activas.length],
-          ['programadas', 'Programadas', programadas.length],
-          ['vencidas', 'Vencidas', vencidas.length],
-        ] as [Tab, string, number][]).map(([key, label, count]) => (
+        {(
+          [
+            ['activas', 'Activas', activas.length],
+            ['programadas', 'Programadas', programadas.length],
+            ['vencidas', 'Vencidas', vencidas.length],
+          ] as [Tab, string, number][]
+        ).map(([key, label, count]) => (
           <button
             key={key}
             onClick={() => setTab(key)}
@@ -137,9 +143,7 @@ export default function OfertasPage() {
             }`}
           >
             {label}{' '}
-            <span className="ml-1 rounded-full bg-slate-100 px-1.5 py-0.5 text-xs">
-              {count}
-            </span>
+            <span className="ml-1 rounded-full bg-slate-100 px-1.5 py-0.5 text-xs">{count}</span>
           </button>
         ))}
       </div>

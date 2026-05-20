@@ -188,10 +188,12 @@ model Empresa {
   transferencias   TransferenciaInventario[]
   pacientes        Paciente[]
   consultas        Consulta[]
-  departamentos    Departamento[]
-  categoriasSuper  CategoriaSuper[]
-  ofertas          Oferta[]
-  preciosVolumen   PrecioVolumen[]
+  departamentos      Departamento[]
+  categoriasSuper    CategoriaSuper[]
+  ofertas            Oferta[]
+  preciosVolumen     PrecioVolumen[]
+  configNotificacion ConfigNotificacion?
+  notificaciones     Notificacion[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -1680,4 +1682,87 @@ model PrecioVolumen {
 
   @@index([empresaId, productoId])
   @@map("precios_volumen")
+}
+
+// ============================================================
+// ENUMS — Fase 16: Notificaciones
+// ============================================================
+
+enum TipoNotificacion {
+  FACTURA_EMITIDA
+  FACTURA_VENCIDA
+  PAGO_RECIBIDO
+  CITA_RECORDATORIO
+  STOCK_BAJO
+  NOMINA_PROCESADA
+  BIENVENIDA
+
+  @@map("tipo_notificacion")
+}
+
+enum CanalNotificacion {
+  WHATSAPP
+  EMAIL
+  AMBOS
+
+  @@map("canal_notificacion")
+}
+
+enum EstadoNotificacion {
+  PENDIENTE
+  ENVIADA
+  FALLIDA
+  CANCELADA
+
+  @@map("estado_notificacion")
+}
+
+// ============================================================
+// MODELO: ConfigNotificacion
+// ============================================================
+model ConfigNotificacion {
+  id                String   @id @default(cuid())
+  empresaId         String   @unique @map("empresa_id")
+  whatsappActivo    Boolean  @default(false) @map("whatsapp_activo")
+  emailActivo       Boolean  @default(false) @map("email_activo")
+  whatsappNumero    String?  @map("whatsapp_numero")
+  whatsappApiKey    String?  @map("whatsapp_api_key")
+  emailRemitente    String?  @map("email_remitente")
+  notifFacturas     Boolean  @default(true) @map("notif_facturas")
+  notifVencimientos Boolean  @default(true) @map("notif_vencimientos")
+  notifCitas        Boolean  @default(true) @map("notif_citas")
+  notifStockBajo    Boolean  @default(true) @map("notif_stock_bajo")
+  notifNomina       Boolean  @default(false) @map("notif_nomina")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@map("config_notificacion")
+}
+
+// ============================================================
+// MODELO: Notificacion
+// ============================================================
+model Notificacion {
+  id           String             @id @default(cuid())
+  empresaId    String             @map("empresa_id")
+  tipo         TipoNotificacion
+  canal        CanalNotificacion
+  estado       EstadoNotificacion @default(PENDIENTE)
+  destinatario String
+  asunto       String?
+  mensaje      String
+  referencia   String?
+  intentos     Int                @default(0)
+  errorMsg     String?            @map("error_msg")
+  enviadaEn    DateTime?          @map("enviada_en")
+  createdAt    DateTime           @default(now()) @map("created_at")
+
+  empresa Empresa @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@index([empresaId, estado])
+  @@index([empresaId, tipo])
+  @@index([empresaId, createdAt])
+  @@map("notificaciones")
 }

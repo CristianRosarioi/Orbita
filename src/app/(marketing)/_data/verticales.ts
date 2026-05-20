@@ -376,7 +376,8 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
     nombre: 'Supermercado',
     emoji: '🛒',
     tagline: 'Inventario, ofertas y precios por volumen en un solo sistema',
-    descripcionCorta: 'Gestiona departamentos, lanza ofertas con vigencia automática y define precios mayoristas.',
+    descripcionCorta:
+      'Gestiona departamentos, lanza ofertas con vigencia automática y define precios mayoristas.',
     descripcionLarga:
       'Órbita potencia la operación de tu supermercado o minimarket con herramientas diseñadas para el volumen y la velocidad. Organiza tu catálogo por departamentos, lanza ofertas que se activan y vencen solas, y configura precios especiales por cantidad para clientes mayoristas.',
     color: {
