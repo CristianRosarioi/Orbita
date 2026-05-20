@@ -87,7 +87,10 @@ const mockNotif = {
 // ─── GET /api/notificaciones/config ─────────────────────────────────────────
 
 describe('GET /api/notificaciones/config', () => {
-  beforeEach(() => { vi.clearAllMocks(); setupSession(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+    setupSession();
+  });
 
   it('devuelve la config existente', async () => {
     mockPrisma.configNotificacion.findUnique.mockResolvedValue(mockConfig);
@@ -112,7 +115,10 @@ describe('GET /api/notificaciones/config', () => {
 // ─── POST /api/notificaciones/config ────────────────────────────────────────
 
 describe('POST /api/notificaciones/config', () => {
-  beforeEach(() => { vi.clearAllMocks(); setupSession(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+    setupSession();
+  });
 
   it('crea config si no existe (upsert)', async () => {
     mockPrisma.configNotificacion.upsert.mockResolvedValue(mockConfig);
@@ -143,7 +149,10 @@ describe('POST /api/notificaciones/config', () => {
 // ─── GET /api/notificaciones ─────────────────────────────────────────────────
 
 describe('GET /api/notificaciones', () => {
-  beforeEach(() => { vi.clearAllMocks(); setupSession(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+    setupSession();
+  });
 
   it('devuelve historial paginado', async () => {
     mockPrisma.notificacion.findMany.mockResolvedValue([mockNotif]);
@@ -181,7 +190,10 @@ describe('GET /api/notificaciones', () => {
 // ─── DELETE /api/notificaciones/[id] ────────────────────────────────────────
 
 describe('DELETE /api/notificaciones/[id]', () => {
-  beforeEach(() => { vi.clearAllMocks(); setupSession(); });
+  beforeEach(() => {
+    vi.clearAllMocks();
+    setupSession();
+  });
 
   it('cancela la notificación', async () => {
     mockPrisma.notificacion.findFirst.mockResolvedValue(mockNotif);

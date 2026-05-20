@@ -6,16 +6,16 @@ import { requireEmpresa } from '@/lib/auth';
 import { z } from 'zod';
 
 const ConfigSchema = z.object({
-  whatsappActivo:    z.boolean().optional(),
-  emailActivo:       z.boolean().optional(),
-  whatsappNumero:    z.string().max(20).optional().nullable(),
-  whatsappApiKey:    z.string().max(200).optional().nullable(),
-  emailRemitente:    z.string().email().optional().nullable(),
-  notifFacturas:     z.boolean().optional(),
+  whatsappActivo: z.boolean().optional(),
+  emailActivo: z.boolean().optional(),
+  whatsappNumero: z.string().max(20).optional().nullable(),
+  whatsappApiKey: z.string().max(200).optional().nullable(),
+  emailRemitente: z.string().email().optional().nullable(),
+  notifFacturas: z.boolean().optional(),
   notifVencimientos: z.boolean().optional(),
-  notifCitas:        z.boolean().optional(),
-  notifStockBajo:    z.boolean().optional(),
-  notifNomina:       z.boolean().optional(),
+  notifCitas: z.boolean().optional(),
+  notifStockBajo: z.boolean().optional(),
+  notifNomina: z.boolean().optional(),
 });
 
 export async function GET() {

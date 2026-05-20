@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { ChevronRight, Home } from 'lucide-react';
 import Link from 'next/link';
+import { ConnectionStatus } from '@/components/shared/connection-status';
 
 const SEGMENTO_LABEL: Record<string, string> = {
   dashboard: 'Inicio',
@@ -59,7 +60,8 @@ export function DashboardHeader() {
       {/* Espacio para hamburguesa móvil */}
       <div className="w-10 md:hidden" />
 
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 flex items-center gap-3">
+        <div className="flex-1 min-w-0">
         <p className="font-semibold text-slate-900 text-lg leading-tight tracking-tight truncate">
           {paginaActual}
         </p>
@@ -84,6 +86,8 @@ export function DashboardHeader() {
             ))}
           </nav>
         )}
+        </div>
+        <ConnectionStatus />
       </div>
     </header>
   );

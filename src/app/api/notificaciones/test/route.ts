@@ -7,7 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
 const TestSchema = z.object({
-  canal:       z.enum(['WHATSAPP', 'EMAIL']),
+  canal: z.enum(['WHATSAPP', 'EMAIL']),
   destinatario: z.string().min(1),
 });
 

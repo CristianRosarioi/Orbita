@@ -21,12 +21,19 @@ export const metadata: Metadata = {
   },
   description:
     'Facturación, inventario y cumplimiento DGII para negocios dominicanos. Todo en un solo lugar.',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Órbita',
+  },
 };
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
+  themeColor: '#4f46e5',
 };
 
 export default function RootLayout({

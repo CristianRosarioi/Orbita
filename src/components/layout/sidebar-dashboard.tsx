@@ -42,6 +42,8 @@ import {
   Stethoscope,
   Layers,
   Bell,
+  WifiOff,
+  RefreshCw,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -305,6 +307,32 @@ function SidebarContent({
               >
                 <ClipboardList className="h-3 w-3 shrink-0" />
                 Historial de caja
+              </Link>
+              <Link
+                href="/pos/offline"
+                onClick={onLinkClick}
+                className={cn(
+                  'flex items-center gap-2 rounded-md py-1.5 text-xs font-medium transition-colors',
+                  pathname === '/pos/offline'
+                    ? 'text-white'
+                    : 'text-slate-500 hover:text-slate-300',
+                )}
+              >
+                <WifiOff className="h-3 w-3 shrink-0" />
+                POS Offline
+              </Link>
+              <Link
+                href="/pos/sync"
+                onClick={onLinkClick}
+                className={cn(
+                  'flex items-center gap-2 rounded-md py-1.5 text-xs font-medium transition-colors',
+                  pathname === '/pos/sync'
+                    ? 'text-white'
+                    : 'text-slate-500 hover:text-slate-300',
+                )}
+              >
+                <RefreshCw className="h-3 w-3 shrink-0" />
+                Sincronización
               </Link>
             </div>
           )}

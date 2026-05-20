@@ -4,11 +4,19 @@ import { enviarNotificacion } from '@/lib/notificaciones';
 import { z } from 'zod';
 
 const TriggerSchema = z.object({
-  empresaId:    z.string().min(1),
-  tipo:         z.enum(['FACTURA_EMITIDA', 'FACTURA_VENCIDA', 'PAGO_RECIBIDO', 'CITA_RECORDATORIO', 'STOCK_BAJO', 'NOMINA_PROCESADA', 'BIENVENIDA']),
+  empresaId: z.string().min(1),
+  tipo: z.enum([
+    'FACTURA_EMITIDA',
+    'FACTURA_VENCIDA',
+    'PAGO_RECIBIDO',
+    'CITA_RECORDATORIO',
+    'STOCK_BAJO',
+    'NOMINA_PROCESADA',
+    'BIENVENIDA',
+  ]),
   destinatario: z.string().min(1),
-  datos:        z.record(z.string(), z.string()).default({}),
-  referencia:   z.string().optional(),
+  datos: z.record(z.string(), z.string()).default({}),
+  referencia: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {

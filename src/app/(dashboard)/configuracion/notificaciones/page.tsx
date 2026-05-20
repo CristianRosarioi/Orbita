@@ -80,16 +80,16 @@ export default function NotificacionesConfigPage() {
       const json = await res.json();
       if (json.success) {
         setConfig({
-          whatsappActivo:    json.data.whatsappActivo ?? false,
-          emailActivo:       json.data.emailActivo ?? false,
-          whatsappNumero:    json.data.whatsappNumero ?? '',
-          whatsappApiKey:    json.data.whatsappApiKey ?? '',
-          emailRemitente:    json.data.emailRemitente ?? '',
-          notifFacturas:     json.data.notifFacturas ?? true,
+          whatsappActivo: json.data.whatsappActivo ?? false,
+          emailActivo: json.data.emailActivo ?? false,
+          whatsappNumero: json.data.whatsappNumero ?? '',
+          whatsappApiKey: json.data.whatsappApiKey ?? '',
+          emailRemitente: json.data.emailRemitente ?? '',
+          notifFacturas: json.data.notifFacturas ?? true,
           notifVencimientos: json.data.notifVencimientos ?? true,
-          notifCitas:        json.data.notifCitas ?? true,
-          notifStockBajo:    json.data.notifStockBajo ?? true,
-          notifNomina:       json.data.notifNomina ?? false,
+          notifCitas: json.data.notifCitas ?? true,
+          notifStockBajo: json.data.notifStockBajo ?? true,
+          notifNomina: json.data.notifNomina ?? false,
         });
       }
     } finally {
@@ -111,9 +111,9 @@ export default function NotificacionesConfigPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         ...config,
-        whatsappNumero:  config.whatsappNumero  || null,
-        whatsappApiKey:  config.whatsappApiKey  || null,
-        emailRemitente:  config.emailRemitente  || null,
+        whatsappNumero: config.whatsappNumero || null,
+        whatsappApiKey: config.whatsappApiKey || null,
+        emailRemitente: config.emailRemitente || null,
       }),
     });
     const json = await res.json();
@@ -231,11 +231,7 @@ export default function NotificacionesConfigPage() {
               <h2 className="font-semibold text-slate-900">Email</h2>
               <p className="text-xs text-slate-500">Vía Resend</p>
             </div>
-            <Toggle
-              value={config.emailActivo}
-              onChange={(v) => set('emailActivo', v)}
-              label=""
-            />
+            <Toggle value={config.emailActivo} onChange={(v) => set('emailActivo', v)} label="" />
           </div>
 
           {config.emailActivo && (
@@ -266,7 +262,8 @@ export default function NotificacionesConfigPage() {
                   </a>
                 </label>
                 <p className="mb-1 text-xs text-slate-400">
-                  La API Key se configura en la variable de entorno <code className="rounded bg-slate-100 px-1">RESEND_API_KEY</code> del servidor.
+                  La API Key se configura en la variable de entorno{' '}
+                  <code className="rounded bg-slate-100 px-1">RESEND_API_KEY</code> del servidor.
                 </p>
               </div>
             </div>

@@ -6,7 +6,7 @@ import type { TipoNotificacion, CanalNotificacion } from '@/generated/prisma/cli
 
 export interface DatosNotificacion {
   nombre?: string;
-  numero?: string;       // número de factura
+  numero?: string; // número de factura
   total?: string;
   monto?: string;
   empresa?: string;
@@ -41,14 +41,22 @@ function renderTemplate(tipo: TipoNotificacion, datos: DatosNotificacion): strin
 
 function asuntoTemplate(tipo: TipoNotificacion): string {
   switch (tipo) {
-    case 'FACTURA_EMITIDA':    return 'Tu factura ha sido emitida';
-    case 'FACTURA_VENCIDA':    return 'Factura vencida — acción requerida';
-    case 'PAGO_RECIBIDO':      return 'Confirmación de pago recibido';
-    case 'CITA_RECORDATORIO':  return 'Recordatorio de cita';
-    case 'STOCK_BAJO':         return 'Alerta de stock bajo';
-    case 'NOMINA_PROCESADA':   return 'Nómina procesada';
-    case 'BIENVENIDA':         return '¡Bienvenido/a!';
-    default:                   return 'Notificación';
+    case 'FACTURA_EMITIDA':
+      return 'Tu factura ha sido emitida';
+    case 'FACTURA_VENCIDA':
+      return 'Factura vencida — acción requerida';
+    case 'PAGO_RECIBIDO':
+      return 'Confirmación de pago recibido';
+    case 'CITA_RECORDATORIO':
+      return 'Recordatorio de cita';
+    case 'STOCK_BAJO':
+      return 'Alerta de stock bajo';
+    case 'NOMINA_PROCESADA':
+      return 'Nómina procesada';
+    case 'BIENVENIDA':
+      return '¡Bienvenido/a!';
+    default:
+      return 'Notificación';
   }
 }
 
@@ -92,9 +100,9 @@ export interface OpcionesNotificacion {
   empresaId: string;
   tipo: TipoNotificacion;
   datos: DatosNotificacion;
-  destinatario: string;         // teléfono o email según canal
+  destinatario: string; // teléfono o email según canal
   referencia?: string;
-  canal?: CanalNotificacion;    // si se omite, usa lo configurado
+  canal?: CanalNotificacion; // si se omite, usa lo configurado
 }
 
 export async function enviarNotificacion(opciones: OpcionesNotificacion): Promise<void> {
@@ -106,21 +114,31 @@ export async function enviarNotificacion(opciones: OpcionesNotificacion): Promis
   // Verificar si este tipo está habilitado
   const habilitado = (() => {
     switch (tipo) {
-      case 'FACTURA_EMITIDA':   return config.notifFacturas;
-      case 'FACTURA_VENCIDA':   return config.notifVencimientos;
-      case 'PAGO_RECIBIDO':     return config.notifFacturas;
-      case 'CITA_RECORDATORIO': return config.notifCitas;
-      case 'STOCK_BAJO':        return config.notifStockBajo;
-      case 'NOMINA_PROCESADA':  return config.notifNomina;
-      default:                  return true;
+      case 'FACTURA_EMITIDA':
+        return config.notifFacturas;
+      case 'FACTURA_VENCIDA':
+        return config.notifVencimientos;
+      case 'PAGO_RECIBIDO':
+        return config.notifFacturas;
+      case 'CITA_RECORDATORIO':
+        return config.notifCitas;
+      case 'STOCK_BAJO':
+        return config.notifStockBajo;
+      case 'NOMINA_PROCESADA':
+        return config.notifNomina;
+      default:
+        return true;
     }
   })();
   if (!habilitado) return;
 
-  const canal: CanalNotificacion = canalForzado ?? (
-    config.whatsappActivo && config.emailActivo ? 'AMBOS' :
-    config.whatsappActivo ? 'WHATSAPP' : 'EMAIL'
-  );
+  const canal: CanalNotificacion =
+    canalForzado ??
+    (config.whatsappActivo && config.emailActivo
+      ? 'AMBOS'
+      : config.whatsappActivo
+        ? 'WHATSAPP'
+        : 'EMAIL');
 
   const mensaje = renderTemplate(tipo, datos);
   const asunto = asuntoTemplate(tipo);
@@ -157,7 +175,12 @@ export async function enviarNotificacion(opciones: OpcionesNotificacion): Promis
     if (canal === 'EMAIL' || canal === 'AMBOS') {
       if (config.emailActivo) {
         intentos++;
-        const ok = await enviarEmail(destinatario, asunto, htmlEmail, config.emailRemitente ?? undefined);
+        const ok = await enviarEmail(
+          destinatario,
+          asunto,
+          htmlEmail,
+          config.emailRemitente ?? undefined,
+        );
         if (ok) exito = true;
         else errorMsg = (errorMsg ? errorMsg + ' | ' : '') + 'Fallo al enviar por email';
       }

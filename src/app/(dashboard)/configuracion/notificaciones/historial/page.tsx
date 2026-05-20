@@ -17,19 +17,19 @@ interface Notificacion {
 }
 
 const TIPO_LABELS: Record<string, string> = {
-  FACTURA_EMITIDA:   'Factura emitida',
-  FACTURA_VENCIDA:   'Factura vencida',
-  PAGO_RECIBIDO:     'Pago recibido',
+  FACTURA_EMITIDA: 'Factura emitida',
+  FACTURA_VENCIDA: 'Factura vencida',
+  PAGO_RECIBIDO: 'Pago recibido',
   CITA_RECORDATORIO: 'Recordatorio cita',
-  STOCK_BAJO:        'Stock bajo',
-  NOMINA_PROCESADA:  'Nómina procesada',
-  BIENVENIDA:        'Bienvenida',
+  STOCK_BAJO: 'Stock bajo',
+  NOMINA_PROCESADA: 'Nómina procesada',
+  BIENVENIDA: 'Bienvenida',
 };
 
 const CANAL_LABELS: Record<string, string> = {
   WHATSAPP: 'WhatsApp',
-  EMAIL:    'Email',
-  AMBOS:    'Ambos',
+  EMAIL: 'Email',
+  AMBOS: 'Ambos',
 };
 
 function EstadoBadge({ estado }: { estado: string }) {
@@ -65,8 +65,11 @@ function EstadoBadge({ estado }: { estado: string }) {
 
 function formatFecha(f: string) {
   return new Date(f).toLocaleString('es-DO', {
-    day: '2-digit', month: 'short', year: 'numeric',
-    hour: '2-digit', minute: '2-digit',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
   });
 }
 
@@ -81,7 +84,7 @@ export default function HistorialNotificacionesPage() {
 
   const cargar = useCallback(async () => {
     const params = new URLSearchParams({ page: String(page), limit: String(limit) });
-    if (tipo)   params.set('tipo', tipo);
+    if (tipo) params.set('tipo', tipo);
     if (estado) params.set('estado', estado);
     try {
       const res = await fetch(`/api/notificaciones?${params}`);
@@ -125,17 +128,25 @@ export default function HistorialNotificacionesPage() {
       <div className="mb-5 flex flex-wrap gap-3">
         <select
           value={tipo}
-          onChange={(e) => { setTipo(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setTipo(e.target.value);
+            setPage(1);
+          }}
           className="rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
         >
           <option value="">Todos los tipos</option>
           {Object.entries(TIPO_LABELS).map(([k, v]) => (
-            <option key={k} value={k}>{v}</option>
+            <option key={k} value={k}>
+              {v}
+            </option>
           ))}
         </select>
         <select
           value={estado}
-          onChange={(e) => { setEstado(e.target.value); setPage(1); }}
+          onChange={(e) => {
+            setEstado(e.target.value);
+            setPage(1);
+          }}
           className="rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none"
         >
           <option value="">Todos los estados</option>
@@ -177,9 +188,7 @@ export default function HistorialNotificacionesPage() {
                         {TIPO_LABELS[n.tipo] ?? n.tipo}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-slate-600">
-                      {CANAL_LABELS[n.canal] ?? n.canal}
-                    </td>
+                    <td className="px-4 py-3 text-slate-600">{CANAL_LABELS[n.canal] ?? n.canal}</td>
                     <td className="max-w-[180px] truncate px-4 py-3 text-slate-600">
                       {n.destinatario}
                     </td>
