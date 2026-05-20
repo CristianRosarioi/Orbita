@@ -44,6 +44,9 @@ import {
   Bell,
   WifiOff,
   RefreshCw,
+  Building,
+  FileCheck,
+  Gem,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -70,6 +73,8 @@ const INDUSTRIAS_FARMACIA = ['FARMACIA', 'BOTICA', 'DROGUERIA'];
 const INDUSTRIAS_FERRETERIA = ['FERRETERIA', 'MATERIALES', 'PINTURAS'];
 const INDUSTRIAS_CLINICA = ['CLINICA', 'DENTAL', 'VETERINARIA'];
 const INDUSTRIAS_SUPER = ['SUPERMERCADO', 'MINIMARKET', 'COLMADO_GRANDE'];
+const INDUSTRIAS_INMOBILIARIA = ['INMOBILIARIA', 'BIENES_RAICES'];
+const INDUSTRIAS_JOYERIA = ['JOYERIA', 'RELOJERIA'];
 
 const RESTAURANTE_ITEMS = [
   { href: '/restaurante/mesas', label: 'Mesas', icon: LayoutGrid },
@@ -130,6 +135,17 @@ const SUPER_ITEMS = [
   { href: '/super/departamentos', label: 'Departamentos', icon: LayoutGrid },
   { href: '/super/ofertas', label: 'Ofertas', icon: Tag },
   { href: '/super/precios', label: 'Precios por volumen', icon: Layers },
+];
+
+const INMOBILIARIA_ITEMS = [
+  { href: '/inmobiliaria/propiedades', label: 'Propiedades', icon: Building },
+  { href: '/inmobiliaria/contratos', label: 'Contratos', icon: FileCheck },
+  { href: '/inmobiliaria/pagos', label: 'Pagos de renta', icon: DollarSign },
+];
+
+const JOYERIA_ITEMS = [
+  { href: '/joyeria/inventario', label: 'Inventario', icon: Gem },
+  { href: '/joyeria/reparaciones', label: 'Reparaciones', icon: Wrench },
 ];
 
 const INVENTARIO_ITEMS = [
@@ -326,9 +342,7 @@ function SidebarContent({
                 onClick={onLinkClick}
                 className={cn(
                   'flex items-center gap-2 rounded-md py-1.5 text-xs font-medium transition-colors',
-                  pathname === '/pos/sync'
-                    ? 'text-white'
-                    : 'text-slate-500 hover:text-slate-300',
+                  pathname === '/pos/sync' ? 'text-white' : 'text-slate-500 hover:text-slate-300',
                 )}
               >
                 <RefreshCw className="h-3 w-3 shrink-0" />
@@ -418,6 +432,26 @@ function SidebarContent({
           <>
             <SectionDivider label="Supermercado" />
             {SUPER_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Inmobiliaria */}
+        {INDUSTRIAS_INMOBILIARIA.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Inmobiliaria" />
+            {INMOBILIARIA_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Joyería */}
+        {INDUSTRIAS_JOYERIA.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Joyería" />
+            {JOYERIA_ITEMS.map(({ href, label, icon }) => (
               <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
             ))}
           </>

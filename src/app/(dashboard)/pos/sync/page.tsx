@@ -19,13 +19,16 @@ import type { SyncResult } from '@/lib/sync';
 
 function formatHora(ts: number) {
   return new Date(ts).toLocaleString('es-DO', {
-    day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit',
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
   });
 }
 
 export default function SyncPage() {
   const [online, setOnline] = useState(() =>
-    typeof window !== 'undefined' ? navigator.onLine : true
+    typeof window !== 'undefined' ? navigator.onLine : true,
   );
   const [sincronizando, setSincronizando] = useState(false);
   const [descargando, setDescargando] = useState(false);
@@ -46,14 +49,12 @@ export default function SyncPage() {
 
   const totalProductos = useLiveQuery(() => db.productos.count(), []) ?? 0;
   const totalClientes = useLiveQuery(() => db.clientes.count(), []) ?? 0;
-  const ventasPendientes = useLiveQuery(
-    () => db.ventasOffline.where('estado').equals('PENDIENTE_SYNC').toArray(),
-    [],
-  ) ?? [];
-  const historialVentas = useLiveQuery(
-    () => db.ventasOffline.orderBy('creadoEn').reverse().limit(20).toArray(),
-    [],
-  ) ?? [];
+  const ventasPendientes =
+    useLiveQuery(() => db.ventasOffline.where('estado').equals('PENDIENTE_SYNC').toArray(), []) ??
+    [];
+  const historialVentas =
+    useLiveQuery(() => db.ventasOffline.orderBy('creadoEn').reverse().limit(20).toArray(), []) ??
+    [];
 
   const sincronizar = useCallback(async () => {
     if (!online) return;
@@ -61,7 +62,12 @@ export default function SyncPage() {
     setError('');
     try {
       const ventas = await sincronizarVentasPendientes();
-      setUltimoResultado({ productos: 0, clientes: 0, ventasOk: ventas.ok, ventasErrores: ventas.errores });
+      setUltimoResultado({
+        productos: 0,
+        clientes: 0,
+        ventasOk: ventas.ok,
+        ventasErrores: ventas.errores,
+      });
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Error de sincronización');
     } finally {
@@ -90,15 +96,15 @@ export default function SyncPage() {
     <div className="p-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-900">Sincronización</h1>
-        <p className="text-sm text-slate-500">Estado del POS offline y sincronización con el servidor</p>
+        <p className="text-sm text-slate-500">
+          Estado del POS offline y sincronización con el servidor
+        </p>
       </div>
 
       {/* Estado de conexión */}
       <div
         className={`mb-6 flex items-center gap-3 rounded-xl border p-4 ${
-          online
-            ? 'border-emerald-200 bg-emerald-50'
-            : 'border-red-200 bg-red-50'
+          online ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'
         }`}
       >
         {online ? (
@@ -126,7 +132,8 @@ export default function SyncPage() {
 
       {ultimoResultado && (
         <div className="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-          Última sincronización: {ultimoResultado.productos > 0 && `${ultimoResultado.productos} productos, `}
+          Última sincronización:{' '}
+          {ultimoResultado.productos > 0 && `${ultimoResultado.productos} productos, `}
           {ultimoResultado.clientes > 0 && `${ultimoResultado.clientes} clientes, `}
           {ultimoResultado.ventasOk} ventas enviadas
           {ultimoResultado.ventasErrores > 0 && `, ${ultimoResultado.ventasErrores} con error`}

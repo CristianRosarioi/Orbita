@@ -60,13 +60,17 @@ export default function PosOfflinePage() {
     setCarrito((prev) => {
       const existente = prev.find((i) => i.productoId === prod.id);
       if (existente) {
-        return prev.map((i) =>
-          i.productoId === prod.id ? { ...i, cantidad: i.cantidad + 1 } : i,
-        );
+        return prev.map((i) => (i.productoId === prod.id ? { ...i, cantidad: i.cantidad + 1 } : i));
       }
       return [
         ...prev,
-        { productoId: prod.id, nombre: prod.nombre, precio: prod.precio, itbis: prod.itbis, cantidad: 1 },
+        {
+          productoId: prod.id,
+          nombre: prod.nombre,
+          precio: prod.precio,
+          itbis: prod.itbis,
+          cantidad: 1,
+        },
       ];
     });
   }, []);
@@ -148,10 +152,14 @@ export default function PosOfflinePage() {
           </div>
 
           {!productos ? (
-            <div className="py-10 text-center text-sm text-slate-500">Cargando catálogo local...</div>
+            <div className="py-10 text-center text-sm text-slate-500">
+              Cargando catálogo local...
+            </div>
           ) : productos.length === 0 ? (
             <div className="py-10 text-center text-sm text-slate-500">
-              {busqueda ? 'Sin resultados.' : 'No hay productos en caché. Sincroniza el catálogo primero.'}
+              {busqueda
+                ? 'Sin resultados.'
+                : 'No hay productos en caché. Sincroniza el catálogo primero.'}
             </div>
           ) : (
             <div className="grid grid-cols-2 gap-2 overflow-y-auto sm:grid-cols-3 lg:grid-cols-4">
@@ -188,7 +196,10 @@ export default function PosOfflinePage() {
               <p className="py-8 text-center text-sm text-slate-400">Agrega productos al carrito</p>
             ) : (
               carrito.map((item) => (
-                <div key={item.productoId} className="rounded-lg border border-slate-100 bg-slate-50 p-2">
+                <div
+                  key={item.productoId}
+                  className="rounded-lg border border-slate-100 bg-slate-50 p-2"
+                >
                   <p className="text-xs font-medium text-slate-900 truncate">{item.nombre}</p>
                   <p className="text-xs text-slate-500">
                     RD${item.precio.toLocaleString('es-DO', { minimumFractionDigits: 2 })} c/u
@@ -208,7 +219,10 @@ export default function PosOfflinePage() {
                       <Plus className="h-3 w-3" />
                     </button>
                     <span className="ml-auto text-xs font-semibold text-slate-700">
-                      RD${(item.precio * item.cantidad).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                      RD$
+                      {(item.precio * item.cantidad).toLocaleString('es-DO', {
+                        minimumFractionDigits: 2,
+                      })}
                     </span>
                     <button onClick={() => cambiarCantidad(item.productoId, -item.cantidad)}>
                       <Trash2 className="h-3.5 w-3.5 text-slate-400 hover:text-red-500" />

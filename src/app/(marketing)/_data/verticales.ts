@@ -6,7 +6,9 @@ export type VerticalSlug =
   | 'farmacia'
   | 'ferreteria'
   | 'clinica'
-  | 'super';
+  | 'super'
+  | 'inmobiliaria'
+  | 'joyeria';
 
 export interface VerticalData {
   slug: VerticalSlug;
@@ -422,6 +424,102 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
       'El gerente programa las ofertas del fin de semana el lunes — el sistema las activa y desactiva solo',
     ],
     ctaLabel: '¿Tienes un supermercado o minimarket?',
+  },
+
+  inmobiliaria: {
+    slug: 'inmobiliaria',
+    nombre: 'Inmobiliaria',
+    emoji: '🏠',
+    tagline: 'Propiedades, contratos y cobros de renta digitalizados',
+    descripcionCorta:
+      'Administra tu cartera de propiedades, contratos de alquiler y cobros mensuales desde un solo lugar.',
+    descripcionLarga:
+      'Órbita Inmobiliaria te da control total sobre tus propiedades. Registra cada inmueble, crea contratos con fechas y montos, y lleva el historial de pagos mes a mes. Recibe alertas cuando un contrato está por vencer y factura cobros de renta directamente desde el sistema.',
+    color: { bg: 'bg-emerald-50', text: 'text-emerald-700', ring: 'ring-emerald-200', badge: 'bg-emerald-100 text-emerald-800' },
+    funciones: [
+      'Gestión de propiedades',
+      'Contratos de alquiler',
+      'Cobros mensuales',
+      'Alertas de vencimiento',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Cartera de propiedades',
+        desc: 'Registra cada propiedad con código, tipo, ubicación, habitaciones, metros cuadrados y precio. Filtra por estado — disponible, alquilada, en venta — con una vista clara de toda tu cartera.',
+      },
+      {
+        titulo: 'Contratos de alquiler digitales',
+        desc: 'Crea contratos con datos del inquilino, fecha de inicio y fin, monto mensual y depósito. El sistema actualiza automáticamente el estado de la propiedad al crear el contrato.',
+      },
+      {
+        titulo: 'Control de pagos mensuales',
+        desc: 'Registra los pagos por mes con un clic. El sistema detecta si un mes ya fue pagado para evitar duplicados. Ve el total cobrado por período en segundos.',
+      },
+      {
+        titulo: 'Alertas de vencimiento',
+        desc: 'El dashboard muestra los contratos que vencen en los próximos 30 días para que puedas contactar al inquilino a tiempo y renovar o liberar la propiedad.',
+      },
+    ],
+    paraQuien: [
+      'Empresas inmobiliarias',
+      'Propietarios con múltiples inmuebles',
+      'Administradores de edificios',
+      'Agentes de bienes raíces',
+    ],
+    ejemplos: [
+      'El administrador crea el contrato del Apto 2B y la propiedad automáticamente pasa a estado "Alquilada"',
+      'A fin de mes, registra los pagos de todos los inquilinos en minutos desde la vista de pagos',
+      'El sistema alerta que 3 contratos vencen este mes — tiempo suficiente para renovar o buscar nuevos inquilinos',
+    ],
+    ctaLabel: '¿Administras propiedades?',
+  },
+
+  joyeria: {
+    slug: 'joyeria',
+    nombre: 'Joyería',
+    emoji: '💍',
+    tagline: 'Inventario de joyas, reparaciones y facturación en un solo sistema',
+    descripcionCorta:
+      'Controla tu inventario de piezas por material, lleva el seguimiento de reparaciones y factura al momento de la entrega.',
+    descripcionLarga:
+      'Órbita Joyería está diseñado para el ritmo de una joyería dominicana. Registra cada pieza con código, material, quilates y precio. Cuando un cliente deja una joya a reparar, créale un expediente con descripción, presupuesto y fecha promesa. Al terminar el trabajo, factura directamente desde la reparación.',
+    color: { bg: 'bg-yellow-50', text: 'text-yellow-700', ring: 'ring-yellow-200', badge: 'bg-yellow-100 text-yellow-800' },
+    funciones: [
+      'Catálogo de joyas por material',
+      'Control de reparaciones',
+      'Facturación al entregar',
+      'Historial por cliente',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Inventario por material',
+        desc: 'Registra piezas en oro 18K, 14K, 10K, plata 925 o platino. Cada pieza tiene código único, peso en gramos, quilates (para diamantes) y precio de venta. Filtra por material o estado: en vitrina, reservada, en reparación.',
+      },
+      {
+        titulo: 'Expediente de reparaciones',
+        desc: 'Crea un expediente por cada joya que entra a reparación con descripción del trabajo, diagnóstico, presupuesto y fecha promesa. El cliente puede consultar el estado de su pieza.',
+      },
+      {
+        titulo: 'Flujo de trabajo claro',
+        desc: 'Cada reparación pasa por estados: Recibida → En proceso → Lista → Entregada. Cuando está lista, el sistema te permite registrar el costo final y facturar con un clic.',
+      },
+      {
+        titulo: 'Facturación al entregar',
+        desc: 'Al marcar una reparación como lista, genera la factura del servicio directamente. El ITBIS se calcula automáticamente y el registro queda en el historial del cliente.',
+      },
+    ],
+    paraQuien: [
+      'Joyerías y orfebres',
+      'Relojeros con servicio de reparación',
+      'Ópticas con joyería',
+      'Vendedores de joyas al detalle',
+    ],
+    ejemplos: [
+      'Una cliente deja su anillo de compromiso a reducir el tamaño — el sistema crea el expediente con fecha promesa y presupuesto de RD$800',
+      'El joyero marca la pieza como "Lista" y con un clic genera la factura por el servicio',
+      'El dueño busca el historial del cliente y ve todas las reparaciones y compras anteriores',
+    ],
+    ctaLabel: '¿Tienes una joyería?',
   },
 };
 

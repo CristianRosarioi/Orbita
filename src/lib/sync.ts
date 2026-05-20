@@ -62,10 +62,7 @@ export interface ResultadoBulkSync {
 }
 
 export async function sincronizarVentasPendientes(): Promise<ResultadoBulkSync> {
-  const pendientes = await db.ventasOffline
-    .where('estado')
-    .equals('PENDIENTE_SYNC')
-    .toArray();
+  const pendientes = await db.ventasOffline.where('estado').equals('PENDIENTE_SYNC').toArray();
 
   if (pendientes.length === 0) return { ok: 0, errores: 0 };
 
@@ -101,9 +98,7 @@ export async function sincronizarVentasPendientes(): Promise<ResultadoBulkSync> 
     }
 
     for (const { id, error } of json.errores) {
-      actualizaciones.push(
-        db.ventasOffline.update(id, { estado: 'ERROR_SYNC', errorMsg: error }),
-      );
+      actualizaciones.push(db.ventasOffline.update(id, { estado: 'ERROR_SYNC', errorMsg: error }));
     }
 
     await Promise.all(actualizaciones);
@@ -111,9 +106,7 @@ export async function sincronizarVentasPendientes(): Promise<ResultadoBulkSync> 
   } catch (e) {
     const errorMsg = e instanceof Error ? e.message : 'Error de red';
     await Promise.all(
-      pendientes.map((v) =>
-        db.ventasOffline.update(v.id, { estado: 'ERROR_SYNC', errorMsg }),
-      ),
+      pendientes.map((v) => db.ventasOffline.update(v.id, { estado: 'ERROR_SYNC', errorMsg })),
     );
     return { ok: 0, errores: pendientes.length };
   }
@@ -139,7 +132,9 @@ export function generarIdLocal(): string {
 }
 
 // Guardar venta offline en IndexedDB
-export async function guardarVentaOffline(venta: Omit<VentaOffline, 'id' | 'creadoEn' | 'estado'>): Promise<string> {
+export async function guardarVentaOffline(
+  venta: Omit<VentaOffline, 'id' | 'creadoEn' | 'estado'>,
+): Promise<string> {
   const id = generarIdLocal();
   await db.ventasOffline.add({
     ...venta,

@@ -194,6 +194,11 @@ model Empresa {
   preciosVolumen     PrecioVolumen[]
   configNotificacion ConfigNotificacion?
   notificaciones     Notificacion[]
+  propiedades        Propiedad[]
+  contratos          ContratoAlquiler[]
+  pagosAlquiler      PagoAlquiler[]
+  piezasJoya         PiezaJoya[]
+  reparacionesJoya   ReparacionJoya[]
 
   @@index([rnc])
   @@index([deletedAt])
@@ -343,12 +348,15 @@ model Cliente {
   updatedAt          DateTime           @updatedAt @map("updated_at")
   deletedAt          DateTime?          @map("deleted_at")
 
-  empresa        Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
-  facturas       Factura[]
-  cuentaFiado    CuentaFiado?
-  ordenesTrabajo OrdenTrabajo[]
-  citas          Cita[]
-  paciente       Paciente?
+  empresa          Empresa            @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  facturas         Factura[]
+  cuentaFiado      CuentaFiado?
+  ordenesTrabajo   OrdenTrabajo[]
+  citas            Cita[]
+  paciente         Paciente?
+  contratos        ContratoAlquiler[]
+  piezasJoya       PiezaJoya[]
+  reparacionesJoya ReparacionJoya[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, identificacion])
@@ -1765,4 +1773,214 @@ model Notificacion {
   @@index([empresaId, tipo])
   @@index([empresaId, createdAt])
   @@map("notificaciones")
+}
+
+// ============================================================
+// ENUMS — Fase 18: Inmobiliaria
+// ============================================================
+
+enum EstadoPropiedad {
+  DISPONIBLE
+  ALQUILADA
+  EN_VENTA
+  VENDIDA
+  MANTENIMIENTO
+
+  @@map("estado_propiedad")
+}
+
+enum TipoPropiedad {
+  APARTAMENTO
+  CASA
+  LOCAL_COMERCIAL
+  OFICINA
+  TERRENO
+  NAVE_INDUSTRIAL
+
+  @@map("tipo_propiedad")
+}
+
+enum EstadoContrato {
+  ACTIVO
+  VENCIDO
+  CANCELADO
+  POR_VENCER
+
+  @@map("estado_contrato")
+}
+
+// ============================================================
+// MODELO: Propiedad
+// ============================================================
+model Propiedad {
+  id              String          @id @default(cuid())
+  empresaId       String          @map("empresa_id")
+  codigo          String
+  nombre          String
+  tipo            TipoPropiedad
+  estado          EstadoPropiedad @default(DISPONIBLE)
+  direccion       String
+  sector          String?
+  ciudad          String          @default("Santo Domingo")
+  habitaciones    Int?
+  banos           Int?
+  metrosCuadrados Decimal?        @map("metros_cuadrados")
+  precioAlquiler  Decimal?        @map("precio_alquiler")
+  precioVenta     Decimal?        @map("precio_venta")
+  descripcion     String?
+  notas           String?
+  activa          Boolean         @default(true)
+  creadoPor       String          @map("creado_por")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @updatedAt @map("updated_at")
+  deletedAt       DateTime?       @map("deleted_at")
+
+  empresa   Empresa            @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  contratos ContratoAlquiler[]
+
+  @@unique([empresaId, codigo])
+  @@index([empresaId, estado])
+  @@index([empresaId, tipo])
+  @@map("propiedades")
+}
+
+// ============================================================
+// MODELO: ContratoAlquiler
+// ============================================================
+model ContratoAlquiler {
+  id                String         @id @default(cuid())
+  empresaId         String         @map("empresa_id")
+  propiedadId       String         @map("propiedad_id")
+  clienteId         String?        @map("cliente_id")
+  inquilinoNombre   String         @map("inquilino_nombre")
+  inquilinoTelefono String?        @map("inquilino_telefono")
+  inquilinoCedula   String?        @map("inquilino_cedula")
+  montoMensual      Decimal        @map("monto_mensual")
+  deposito          Decimal        @default(0)
+  fechaInicio       DateTime       @map("fecha_inicio")
+  fechaFin          DateTime       @map("fecha_fin")
+  estado            EstadoContrato @default(ACTIVO)
+  notas             String?
+  creadoPor         String         @map("creado_por")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  updatedAt         DateTime       @updatedAt @map("updated_at")
+
+  empresa   Empresa        @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  propiedad Propiedad      @relation(fields: [propiedadId], references: [id])
+  cliente   Cliente?       @relation(fields: [clienteId], references: [id])
+  pagos     PagoAlquiler[]
+
+  @@index([empresaId, estado])
+  @@index([propiedadId])
+  @@map("contratos_alquiler")
+}
+
+// ============================================================
+// MODELO: PagoAlquiler
+// ============================================================
+model PagoAlquiler {
+  id         String    @id @default(cuid())
+  contratoId String    @map("contrato_id")
+  empresaId  String    @map("empresa_id")
+  mes        String
+  monto      Decimal
+  pagadoEn   DateTime? @map("pagado_en")
+  estado     String    @default("PENDIENTE")
+  facturaId  String?   @map("factura_id")
+  notas      String?
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  contrato ContratoAlquiler @relation(fields: [contratoId], references: [id])
+  empresa  Empresa          @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+
+  @@unique([contratoId, mes])
+  @@index([empresaId, estado])
+  @@map("pagos_alquiler")
+}
+
+// ============================================================
+// ENUMS — Fase 18: Joyería
+// ============================================================
+
+enum EstadoPieza {
+  EN_VITRINA
+  VENDIDA
+  EN_REPARACION
+  RESERVADA
+  CONSIGNACION
+
+  @@map("estado_pieza")
+}
+
+enum TipoMaterial {
+  ORO_18K
+  ORO_14K
+  ORO_10K
+  PLATA_925
+  PLATINO
+  OTRO
+
+  @@map("tipo_material")
+}
+
+// ============================================================
+// MODELO: PiezaJoya
+// ============================================================
+model PiezaJoya {
+  id           String      @id @default(cuid())
+  empresaId    String      @map("empresa_id")
+  codigo       String
+  nombre       String
+  tipo         String
+  material     TipoMaterial
+  pesoGramos   Decimal?    @map("peso_gramos")
+  quilates     Decimal?
+  estado       EstadoPieza @default(EN_VITRINA)
+  precioCompra Decimal?    @map("precio_compra")
+  precioVenta  Decimal     @map("precio_venta")
+  descripcion  String?
+  notas        String?
+  clienteId    String?     @map("cliente_id")
+  creadoPor    String      @map("creado_por")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+  deletedAt    DateTime?   @map("deleted_at")
+
+  empresa      Empresa          @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente      Cliente?         @relation(fields: [clienteId], references: [id])
+  reparaciones ReparacionJoya[]
+
+  @@unique([empresaId, codigo])
+  @@index([empresaId, estado])
+  @@index([empresaId, material])
+  @@map("piezas_joya")
+}
+
+// ============================================================
+// MODELO: ReparacionJoya
+// ============================================================
+model ReparacionJoya {
+  id            String    @id @default(cuid())
+  empresaId     String    @map("empresa_id")
+  piezaId       String?   @map("pieza_id")
+  clienteId     String?   @map("cliente_id")
+  clienteNombre String    @map("cliente_nombre")
+  descripcion   String
+  diagnostico   String?
+  presupuesto   Decimal?
+  costoFinal    Decimal?  @map("costo_final")
+  estado        String    @default("RECIBIDA")
+  fechaPromesa  DateTime? @map("fecha_promesa")
+  fechaEntrega  DateTime? @map("fecha_entrega")
+  facturaId     String?   @map("factura_id")
+  creadoPor     String    @map("creado_por")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  empresa Empresa    @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  pieza   PiezaJoya? @relation(fields: [piezaId], references: [id])
+  cliente Cliente?   @relation(fields: [clienteId], references: [id])
+
+  @@index([empresaId, estado])
+  @@map("reparaciones_joya")
 }

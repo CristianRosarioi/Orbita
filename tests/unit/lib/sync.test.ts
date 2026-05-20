@@ -51,8 +51,22 @@ describe('sincronizarProductos', () => {
       json: async () => ({
         success: true,
         data: [
-          { id: 'p1', nombre: 'Yogur', precioVenta: 50, stockActual: 20, itbisAplicable: true, activo: true },
-          { id: 'p2', nombre: 'Leche', precioVenta: 35, stockActual: 10, itbisAplicable: false, activo: true },
+          {
+            id: 'p1',
+            nombre: 'Yogur',
+            precioVenta: 50,
+            stockActual: 20,
+            itbisAplicable: true,
+            activo: true,
+          },
+          {
+            id: 'p2',
+            nombre: 'Leche',
+            precioVenta: 35,
+            stockActual: 10,
+            itbisAplicable: false,
+            activo: true,
+          },
         ],
       }),
     });
@@ -76,7 +90,16 @@ describe('sincronizarProductos', () => {
       ok: true,
       json: async () => ({
         success: true,
-        data: [{ id: 'p1', nombre: 'Pan', precioVenta: 10, stockActual: 5, itbisAplicable: false, activo: true }],
+        data: [
+          {
+            id: 'p1',
+            nombre: 'Pan',
+            precioVenta: 10,
+            stockActual: 5,
+            itbisAplicable: false,
+            activo: true,
+          },
+        ],
       }),
     });
     await sincronizarProductos('emp_1');
@@ -130,7 +153,17 @@ describe('sincronizarVentasPendientes', () => {
     {
       id: 'offline-1',
       empresaId: 'emp_1',
-      items: [{ productoId: 'p1', nombre: 'Pan', cantidad: 2, precio: 10, itbis: 0, subtotal: 20, total: 20 }],
+      items: [
+        {
+          productoId: 'p1',
+          nombre: 'Pan',
+          cantidad: 2,
+          precio: 10,
+          itbis: 0,
+          subtotal: 20,
+          total: 20,
+        },
+      ],
       subtotal: 20,
       itbis: 0,
       total: 20,
@@ -154,13 +187,19 @@ describe('sincronizarVentasPendientes', () => {
     const resultado = await sincronizarVentasPendientes();
     expect(resultado.ok).toBe(1);
     expect(resultado.errores).toBe(0);
-    expect(mockDb.ventasOffline.update).toHaveBeenCalledWith('offline-1', expect.objectContaining({ estado: 'SINCRONIZADA' }));
+    expect(mockDb.ventasOffline.update).toHaveBeenCalledWith(
+      'offline-1',
+      expect.objectContaining({ estado: 'SINCRONIZADA' }),
+    );
   });
 
   it('marca como ERROR_SYNC cuando el servidor responde con error', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ ok: [], errores: [{ id: 'offline-1', error: 'Producto no encontrado' }] }),
+      json: async () => ({
+        ok: [],
+        errores: [{ id: 'offline-1', error: 'Producto no encontrado' }],
+      }),
     });
 
     const resultado = await sincronizarVentasPendientes();

@@ -31,6 +31,14 @@ const SEGMENTO_LABEL: Record<string, string> = {
   historial: 'Historial de caja',
   cierre: 'Cierre',
   invitacion: 'Invitación',
+  inmobiliaria: 'Inmobiliaria',
+  propiedades: 'Propiedades',
+  contratos: 'Contratos',
+  pagos: 'Pagos de renta',
+  joyeria: 'Joyería',
+  inventario: 'Inventario',
+  reparaciones: 'Reparaciones',
+  facturar: 'Facturar',
 };
 
 function esId(seg: string) {
@@ -62,30 +70,30 @@ export function DashboardHeader() {
 
       <div className="flex-1 min-w-0 flex items-center gap-3">
         <div className="flex-1 min-w-0">
-        <p className="font-semibold text-slate-900 text-lg leading-tight tracking-tight truncate">
-          {paginaActual}
-        </p>
-        {anteriores.length > 0 && (
-          <nav className="flex items-center gap-1 text-xs mt-0.5 min-w-0">
-            <Link
-              href="/dashboard"
-              className="text-slate-400 hover:text-slate-600 transition-colors shrink-0"
-            >
-              <Home className="h-3 w-3" />
-            </Link>
-            {anteriores.map((c) => (
-              <span key={c.href} className="flex items-center gap-1 text-slate-400 shrink-0">
-                <ChevronRight className="h-3 w-3" />
-                <Link
-                  href={c.href}
-                  className="hover:text-slate-600 transition-colors truncate max-w-28"
-                >
-                  {c.label}
-                </Link>
-              </span>
-            ))}
-          </nav>
-        )}
+          <p className="font-semibold text-slate-900 text-lg leading-tight tracking-tight truncate">
+            {paginaActual}
+          </p>
+          {anteriores.length > 0 && (
+            <nav className="flex items-center gap-1 text-xs mt-0.5 min-w-0">
+              <Link
+                href="/dashboard"
+                className="text-slate-400 hover:text-slate-600 transition-colors shrink-0"
+              >
+                <Home className="h-3 w-3" />
+              </Link>
+              {anteriores.map((c) => (
+                <span key={c.href} className="flex items-center gap-1 text-slate-400 shrink-0">
+                  <ChevronRight className="h-3 w-3" />
+                  <Link
+                    href={c.href}
+                    className="hover:text-slate-600 transition-colors truncate max-w-28"
+                  >
+                    {c.label}
+                  </Link>
+                </span>
+              ))}
+            </nav>
+          )}
         </div>
         <ConnectionStatus />
       </div>

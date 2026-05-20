@@ -28,9 +28,11 @@ vi.mock('@/lib/prisma', () => ({
     factura: {
       create: mockFacturaCreate,
     },
-    $transaction: vi.fn((cb: (tx: unknown) => Promise<unknown>) => cb({
-      factura: { create: mockFacturaCreate },
-    })),
+    $transaction: vi.fn((cb: (tx: unknown) => Promise<unknown>) =>
+      cb({
+        factura: { create: mockFacturaCreate },
+      }),
+    ),
   },
 }));
 
