@@ -71,7 +71,8 @@ export async function POST(req: NextRequest) {
     const existe = await prisma.piezaJoya.findUnique({
       where: { empresaId_codigo: { empresaId, codigo: parsed.data.codigo } },
     });
-    if (existe) return err('DUPLICATE', `Ya existe una pieza con el código ${parsed.data.codigo}.`, 409);
+    if (existe)
+      return err('DUPLICATE', `Ya existe una pieza con el código ${parsed.data.codigo}.`, 409);
 
     const pieza = await prisma.piezaJoya.create({
       data: { ...parsed.data, empresaId, creadoPor: userId },

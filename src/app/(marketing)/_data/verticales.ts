@@ -1,14 +1,18 @@
 export type VerticalSlug =
   | 'restaurante'
   | 'colmado'
+  | 'carwash'
+  | 'repuestos'
   | 'taller'
-  | 'salon'
-  | 'farmacia'
   | 'ferreteria'
+  | 'salon'
   | 'clinica'
-  | 'super'
   | 'inmobiliaria'
-  | 'joyeria';
+  | 'farmacia'
+  | 'tienda_ropa'
+  | 'tienda_online'
+  | 'joyeria'
+  | 'supermercado';
 
 export interface VerticalData {
   slug: VerticalSlug;
@@ -16,7 +20,6 @@ export interface VerticalData {
   emoji: string;
   tagline: string;
   descripcionCorta: string;
-  descripcionLarga: string;
   color: { bg: string; text: string; ring: string; badge: string };
   funciones: string[];
   funccionesDetalladas: { titulo: string; desc: string }[];
@@ -28,12 +31,11 @@ export interface VerticalData {
 export const VERTICALES: Record<VerticalSlug, VerticalData> = {
   restaurante: {
     slug: 'restaurante',
-    nombre: 'Restaurante',
+    nombre: 'Restaurante / Bar / Comedor',
     emoji: '🍽️',
-    tagline: 'De la comanda a la factura, sin papeles',
-    descripcionCorta: 'Gestiona mesas, pedidos y facturación en un solo lugar.',
-    descripcionLarga:
-      'Órbita transforma la operación de tu restaurante digitalizando todo el flujo: desde que el cliente se sienta hasta que paga la cuenta. Tus meseros toman pedidos en el sistema, la cocina los ve en tiempo real, y la factura sale en segundos.',
+    tagline: 'De la comanda a la factura, sin papeles ni confusiones',
+    descripcionCorta:
+      'Gestiona mesas, comandas y cocina en tiempo real. Factura directo desde la mesa.',
     color: {
       bg: 'bg-orange-50',
       text: 'text-orange-600',
@@ -42,93 +44,58 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
     },
     funciones: [
       'Control de mesas con estados en tiempo real',
-      'Comandas digitales para meseros',
-      'Vista de cocina tipo kanban',
-      'Facturación directa desde la mesa',
+      'Comandas digitales por mesa para meseros',
+      'Pantalla de cocina tipo kanban (KDS)',
+      'Facturación directa desde la mesa con propina',
     ],
     funccionesDetalladas: [
       {
         titulo: 'Mesas en tiempo real',
-        desc: 'Visualiza el estado de todas las mesas: disponible, ocupada o reservada. Actualización instantánea sin recargar la página.',
+        desc: 'Visualiza el estado de todas las mesas: disponible, ocupada o reservada. Actualización instantánea sin recargar la página. Ideal para el maître o el encargado.',
       },
       {
         titulo: 'Comandas digitales',
-        desc: 'Tus meseros toman los pedidos directamente en el sistema. No más papeles perdidos ni malos entendidos con la cocina.',
+        desc: 'Tus meseros toman los pedidos directamente en el sistema. No más papeles perdidos ni malos entendidos con la cocina. Cada comanda va directo a la pantalla de cocina.',
       },
       {
-        titulo: 'Vista de cocina',
-        desc: 'La cocina tiene su propia pantalla con los pedidos organizados por estado. Kanban estilo restaurante profesional.',
+        titulo: 'Pantalla de cocina (KDS)',
+        desc: 'La cocina tiene su propia pantalla con los pedidos organizados por estado. Kanban estilo restaurante profesional: Pendiente → En preparación → Listo.',
+      },
+      {
+        titulo: 'Modificadores de productos',
+        desc: 'Agrega instrucciones por ítem directamente en la comanda: sin cebolla, extra queso, término medio. Todo llega claro a la cocina.',
+      },
+      {
+        titulo: 'División de cuenta y propina',
+        desc: 'Divide la cuenta entre varios clientes con un clic. Aplica propina automática del 10% o el porcentaje que decidas.',
       },
       {
         titulo: 'Facturación directa',
         desc: 'Al cerrar la comanda, genera la factura en segundos. Acepta efectivo, tarjeta o crédito. Imprime o envía por WhatsApp.',
       },
     ],
-    paraQuien: ['Restaurantes familiares', 'Cafeterías', 'Food courts', 'Comedores corporativos'],
+    paraQuien: [
+      'Restaurantes familiares',
+      'Bares y cafeterías',
+      'Food courts',
+      'Comedores corporativos',
+      'Food trucks',
+    ],
     ejemplos: [
       'El mesero toma el pedido en su tablet, la cocina lo ve en 2 segundos',
-      'El cliente pide la cuenta, el cajero la genera en el sistema sin buscar papeles',
+      'El cliente pide la cuenta, el cajero la genera sin buscar papeles',
       'El dueño ve las ventas del día desde su celular aunque no esté en el local',
     ],
-    ctaLabel: '¿Tienes un restaurante?',
+    ctaLabel: '¿Tienes un restaurante o bar?',
   },
 
   colmado: {
     slug: 'colmado',
-    nombre: 'Colmado / Tienda',
-    emoji: '🏪',
-    tagline: 'POS rápido y fiado controlado',
-    descripcionCorta: 'Vende rápido, controla el inventario y lleva el fiado sin errores.',
-    descripcionLarga:
-      'Órbita para colmados y tiendas te da un punto de venta ultra rápido, control de inventario en tiempo real y el módulo de fiado para llevar las cuentas de tus clientes habituales sin libretas ni confusiones.',
-    color: {
-      bg: 'bg-emerald-50',
-      text: 'text-emerald-600',
-      ring: 'ring-emerald-200',
-      badge: 'bg-emerald-100 text-emerald-700',
-    },
-    funciones: [
-      'POS rápido con búsqueda por nombre',
-      'Fiado con límite de crédito por cliente',
-      'Control de inventario en tiempo real',
-      'Cierre de caja con resumen del turno',
-    ],
-    funccionesDetalladas: [
-      {
-        titulo: 'POS ultrarrápido',
-        desc: 'Busca productos por nombre o código de barras. Vende en segundos sin complicaciones. Diseñado para el ritmo de un colmado.',
-      },
-      {
-        titulo: 'Control de fiado',
-        desc: 'Lleva el fiado de cada cliente con límite de crédito e historial de movimientos. Nunca más perder el rastro de quién te debe.',
-      },
-      {
-        titulo: 'Inventario automático',
-        desc: 'Cada venta descuenta del inventario automáticamente. Alertas cuando un producto baja del mínimo.',
-      },
-      {
-        titulo: 'Cierre de caja',
-        desc: 'Al final del turno, el cajero declara el efectivo. El sistema calcula la diferencia y genera el reporte del día.',
-      },
-    ],
-    paraQuien: ['Colmados', 'Tiendas de barrio', 'Abarroterías', 'Tiendas de conveniencia'],
-    ejemplos: [
-      'El cajero vende 50 productos en 15 minutos sin equivocarse',
-      'El cliente regular pide fiado y el sistema ya sabe su límite de crédito',
-      'El dueño ve el inventario actualizado desde su celular',
-    ],
-    ctaLabel: '¿Tienes un colmado o tienda?',
-  },
-
-  taller: {
-    slug: 'taller',
-    nombre: 'Taller Mecánico',
-    emoji: '🔧',
-    tagline: 'Órdenes de trabajo digitales, sin papeles',
+    nombre: 'Colmado / Minimarket',
+    emoji: '🛒',
+    tagline: 'POS rápido, fiado digital y control de inventario para tu negocio',
     descripcionCorta:
-      'Controla las órdenes de trabajo, el historial de vehículos y factura al instante.',
-    descripcionLarga:
-      'Órbita para talleres mecánicos digitaliza todo el proceso: desde que el cliente trae el vehículo hasta que sale con la factura. Historial completo por placa, control de repuestos y servicios, y facturación en un click.',
+      'Todo lo que necesita un colmado o minimarket en un solo sistema. POS, fiado, inventario y cierres de caja.',
     color: {
       bg: 'bg-blue-50',
       text: 'text-blue-600',
@@ -136,145 +103,218 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
       badge: 'bg-blue-100 text-blue-700',
     },
     funciones: [
-      'Órdenes de trabajo por vehículo',
-      'Historial completo por placa',
-      'Control de repuestos y servicios',
-      'Facturación al cerrar la orden',
+      'POS ultra rápido — búsqueda por nombre',
+      'Fiado digital con límite de crédito por cliente',
+      'Precio por mayor y por menor',
+      'Control de vencimientos e inventario',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'POS ultra rápido',
+        desc: 'Busca productos por nombre, SKU o código de barras. El sistema es tan rápido que no interrumpe el flujo de ventas en horas pico.',
+      },
+      {
+        titulo: 'Fiado con control',
+        desc: 'El fiado deja de ser un cuaderno. Cada cliente tiene su cuenta con límite de crédito, historial de cargos y abonos, y saldo siempre visible.',
+      },
+      {
+        titulo: 'Precio mayor y menor',
+        desc: 'Define precios por unidad y por bulto o caja. El sistema aplica el precio correcto según la cantidad que el cliente está comprando.',
+      },
+      {
+        titulo: 'Control de vencimientos',
+        desc: 'Registra la fecha de vencimiento de tus productos perecederos. El sistema te alerta antes de que venzan para que los puedas rotar o retirar.',
+      },
+      {
+        titulo: 'Inventario por unidad y bulto',
+        desc: 'Lleva el inventario en la unidad que uses — botellas, cajas, sacos. El stock se descuenta automáticamente con cada venta.',
+      },
+      {
+        titulo: 'Cierre de turno',
+        desc: 'Al cerrar el turno, el sistema genera un resumen completo: efectivo, tarjeta, fiado y total vendido. Sin sorpresas al cuadrar la caja.',
+      },
+    ],
+    paraQuien: ['Colmados de barrio', 'Minimarkets', 'Bodegas', 'Tiendas de abarrotes'],
+    ejemplos: [
+      'El cajero busca el producto por nombre y aparece en medio segundo',
+      'El cliente de fiado llega y el cajero ve su saldo al instante',
+      'Al cerrar el turno, el resumen aparece automáticamente sin calcular nada a mano',
+    ],
+    ctaLabel: '¿Tienes un colmado o minimarket?',
+  },
+
+  carwash: {
+    slug: 'carwash',
+    nombre: 'Carwash / Lavado de Vehículos',
+    emoji: '🚗',
+    tagline: 'Cola de vehículos, tiempos por servicio e historial por placa',
+    descripcionCorta:
+      'Organiza tu carwash con órdenes digitales, cola en tiempo real e historial de cada vehículo.',
+    color: {
+      bg: 'bg-sky-50',
+      text: 'text-sky-600',
+      ring: 'ring-sky-200',
+      badge: 'bg-sky-100 text-sky-700',
+    },
+    funciones: [
+      'Orden por vehículo con placa, color y modelo',
+      'Cola de vehículos en tiempo real',
+      'Tiempo estimado por tipo de servicio',
+      'Historial completo de servicios por placa',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Orden por vehículo',
+        desc: 'Crea una orden para cada vehículo con placa, color, modelo y tipo de servicio. Todo queda registrado desde que el cliente llega hasta que sale.',
+      },
+      {
+        titulo: 'Cola en tiempo real',
+        desc: 'Ve todos los vehículos en proceso en una sola pantalla. Asigna empleados, cambia estados y gestiona la cola sin salir del sistema.',
+      },
+      {
+        titulo: 'Tiempo estimado',
+        desc: 'Cada tipo de lavado tiene un tiempo estimado. El sistema calcula cuándo estará listo el vehículo para que el cliente sepa cuánto esperar.',
+      },
+      {
+        titulo: 'Historial por placa',
+        desc: 'Busca cualquier placa y ve todos los servicios anteriores de ese vehículo, con fecha, tipo de lavado y monto. Ideal para clientes frecuentes.',
+      },
+      {
+        titulo: 'Facturación rápida',
+        desc: 'Al terminar, genera la factura en segundos. Acepta efectivo o tarjeta. Los reportes del día muestran cuántos vehículos atendiste y cuánto ingresó.',
+      },
+    ],
+    paraQuien: [
+      'Carwash independientes',
+      'Detailing centers',
+      'Talleres con servicio de lavado',
+      'Gasolineras con lavado',
+    ],
+    ejemplos: [
+      'El cliente llega, se registra la placa y entra a la cola automáticamente',
+      "El empleado actualiza el estado a 'Listo' y el cajero genera la factura",
+      'El dueño ve cuántos carros lavaron hoy y cuánto dinero entró',
+    ],
+    ctaLabel: '¿Tienes un carwash?',
+  },
+
+  repuestos: {
+    slug: 'repuestos',
+    nombre: 'Repuestos de Vehículos',
+    emoji: '🔩',
+    tagline: 'Catálogo de piezas, cotizaciones y control de inventario por referencia',
+    descripcionCorta:
+      'Gestiona tu inventario de repuestos con búsqueda por marca y modelo, cotizaciones y control de stock.',
+    color: {
+      bg: 'bg-zinc-50',
+      text: 'text-zinc-600',
+      ring: 'ring-zinc-200',
+      badge: 'bg-zinc-100 text-zinc-700',
+    },
+    funciones: [
+      'Búsqueda de pieza por marca, modelo y año',
+      'Cotizaciones profesionales en segundos',
+      'Inventario por referencia y código de pieza',
+      'Reserva de piezas con control de disponibilidad',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Búsqueda inteligente',
+        desc: 'Busca piezas por marca del vehículo, modelo y año de fabricación. El sistema filtra tu inventario y muestra las piezas disponibles.',
+      },
+      {
+        titulo: 'Cotizaciones',
+        desc: 'Genera cotizaciones profesionales en segundos con los precios actualizados. El cliente las recibe por WhatsApp y puede aprobarlas directamente.',
+      },
+      {
+        titulo: 'Inventario por referencia',
+        desc: 'Cada pieza tiene su referencia, código OEM y ubicación en el almacén. El stock se actualiza automáticamente con cada venta o entrada de mercancía.',
+      },
+      {
+        titulo: 'Reserva de piezas',
+        desc: 'Reserva piezas para un cliente mientras llega o mientras se pide al proveedor. El sistema controla qué está reservado y qué está disponible.',
+      },
+      {
+        titulo: 'Órdenes de compra',
+        desc: 'Cuando una pieza se agota, crea la orden de compra al proveedor desde el mismo sistema. El inventario se actualiza cuando llega la mercancía.',
+      },
+    ],
+    paraQuien: [
+      'Tiendas de repuestos',
+      'Almacenes de autopartes',
+      'Talleres con venta de piezas',
+      'Distribuidores de repuestos',
+    ],
+    ejemplos: [
+      'El cliente pregunta por un filtro para un Corolla 2019 — el vendedor lo encuentra en 5 segundos',
+      'Se genera la cotización y el cliente la aprueba por WhatsApp',
+      'Al facturar la pieza, el inventario se descuenta automáticamente',
+    ],
+    ctaLabel: '¿Vendes repuestos de vehículos?',
+  },
+
+  taller: {
+    slug: 'taller',
+    nombre: 'Taller Mecánico',
+    emoji: '🔧',
+    tagline: 'Órdenes de trabajo, historial por placa y facturación al cerrar',
+    descripcionCorta:
+      'Digitaliza las órdenes de trabajo de tu taller. Del diagnóstico a la factura, todo en un sistema.',
+    color: {
+      bg: 'bg-slate-50',
+      text: 'text-slate-600',
+      ring: 'ring-slate-200',
+      badge: 'bg-slate-100 text-slate-700',
+    },
+    funciones: [
+      'Órdenes de trabajo por vehículo con diagnóstico',
+      'Historial mecánico completo por placa',
+      'Mano de obra y repuestos en una sola factura',
+      'Estados: recibido → diagnóstico → reparación → listo',
     ],
     funccionesDetalladas: [
       {
         titulo: 'Órdenes de trabajo',
-        desc: 'Crea una orden cuando entra el vehículo. Registra la falla, el diagnóstico, el técnico asignado y la fecha prometida.',
+        desc: 'Crea una orden por cada vehículo con placa, cliente, descripción de la falla y técnico asignado. Todo queda registrado y trazable.',
+      },
+      {
+        titulo: 'Diagnóstico y seguimiento',
+        desc: 'El técnico registra el diagnóstico y el trabajo realizado directamente en la orden. El cliente puede ver el progreso en tiempo real.',
+      },
+      {
+        titulo: 'Mano de obra + repuestos',
+        desc: 'Agrega los servicios realizados y los repuestos usados en la misma orden. La factura se genera con todo incluido en un solo documento.',
       },
       {
         titulo: 'Historial por placa',
-        desc: 'Busca cualquier placa y ve todo el historial: qué le hicieron, cuándo vino, cuánto costó. Información al instante.',
+        desc: 'Busca cualquier placa y ve todo el historial de servicios: fechas, diagnósticos, repuestos y montos. Información valiosa para el técnico y el cliente.',
       },
       {
-        titulo: 'Control de repuestos',
-        desc: 'Agrega repuestos y servicios a la orden con precio y cantidad. El sistema calcula el total con o sin ITBIS.',
-      },
-      {
-        titulo: 'Facturación directa',
-        desc: 'Al cerrar la orden, genera la factura en segundos. El vehículo entregado, el cliente pagando. Así de simple.',
+        titulo: 'Facturación al cerrar',
+        desc: 'Cuando el vehículo está listo, genera la factura con un clic. Acepta efectivo, tarjeta o crédito. El inventario de repuestos se descuenta automáticamente.',
       },
     ],
     paraQuien: [
       'Talleres mecánicos',
-      'Carwash con servicios',
-      'Tiendas de repuestos',
-      'Servitecas',
+      'Talleres de colisión',
+      'Talleres de frenos y suspensión',
+      'Mecánicos independientes',
     ],
     ejemplos: [
-      'El mecánico ve la lista de órdenes pendientes y cuáles están listas para entregar',
-      'El cliente pregunta por su carro y el recepcionista busca la placa en segundos',
-      'Al entregar el vehículo, la factura ya está lista con todos los servicios',
+      'El cliente llega, se registra la placa y se crea la orden de trabajo en 1 minuto',
+      'El técnico actualiza el diagnóstico y el cliente recibe una notificación por WhatsApp',
+      'Al entregar el vehículo, la factura sale con mano de obra y repuestos incluidos',
     ],
     ctaLabel: '¿Tienes un taller mecánico?',
   },
 
-  salon: {
-    slug: 'salon',
-    nombre: 'Salón de Belleza',
-    emoji: '✂️',
-    tagline: 'Agenda digital, sin blocs de papel',
-    descripcionCorta: 'Gestiona citas, estilistas y servicios con una agenda visual clara.',
-    descripcionLarga:
-      'Órbita para salones de belleza y barberías te da una agenda visual por hora, gestión de citas por estilista, y facturación al completar el servicio. Nunca más perder una cita por no tener el bloc a mano.',
-    color: {
-      bg: 'bg-pink-50',
-      text: 'text-pink-600',
-      ring: 'ring-pink-200',
-      badge: 'bg-pink-100 text-pink-700',
-    },
-    funciones: [
-      'Agenda visual de citas por hora',
-      'Gestión de estilistas y servicios',
-      'Estados de cita en tiempo real',
-      'Facturación al completar el servicio',
-    ],
-    funccionesDetalladas: [
-      {
-        titulo: 'Agenda visual',
-        desc: 'Vista de todas las citas del día ordenadas por hora. Sabe de un vistazo quién viene, a qué hora y con quién.',
-      },
-      {
-        titulo: 'Gestión de citas',
-        desc: 'Crea, modifica y cancela citas fácilmente. Asigna el servicio, el estilista y el precio. Estados en tiempo real.',
-      },
-      {
-        titulo: 'Servicios y estilistas',
-        desc: 'Define tus servicios con precio y duración. Asigna las citas al estilista disponible. Seguimiento individual.',
-      },
-      {
-        titulo: 'Cobro al finalizar',
-        desc: 'Al marcar la cita como completada, genera la factura en segundos. El cliente paga y sale. Sin papeleo.',
-      },
-    ],
-    paraQuien: ['Salones de belleza', 'Barberías', 'Spas', 'Centros de estética'],
-    ejemplos: [
-      'La recepcionista ve todas las citas del día y asigna la próxima en segundos',
-      'El cliente llega, se le marca como "en proceso" y el estilista lo sabe al instante',
-      'Al terminar el servicio, la factura sale en un click',
-    ],
-    ctaLabel: '¿Tienes un salón o barbería?',
-  },
-
-  farmacia: {
-    slug: 'farmacia',
-    nombre: 'Farmacia / Botica',
-    emoji: '💊',
-    tagline: 'Lotes, vencimientos y stock bajo control',
-    descripcionCorta: 'Controla los lotes de medicamentos, los vencimientos y el inventario.',
-    descripcionLarga:
-      'Órbita para farmacias te da control completo de los lotes de medicamentos: número de lote, fecha de vencimiento, cantidad disponible y alertas automáticas antes de que venzan.',
-    color: {
-      bg: 'bg-teal-50',
-      text: 'text-teal-600',
-      ring: 'ring-teal-200',
-      badge: 'bg-teal-100 text-teal-700',
-    },
-    funciones: [
-      'Control de lotes por medicamento',
-      'Alertas de productos por vencer',
-      'Gestión de vencimientos automática',
-      'Control de stock por lote y producto',
-    ],
-    funccionesDetalladas: [
-      {
-        titulo: 'Control de lotes',
-        desc: 'Registra cada lote con número, fecha de vencimiento, cantidad y proveedor. Trazabilidad completa del medicamento.',
-      },
-      {
-        titulo: 'Alertas de vencimiento',
-        desc: 'Órbita te avisa automáticamente cuando un lote está próximo a vencer (30, 60 o 90 días). Nunca venderás un medicamento vencido.',
-      },
-      {
-        titulo: 'Inventario por producto',
-        desc: 'Ve el stock de cada medicamento agrupado por lotes. Sabe exactamente cuánto tienes y cuándo vence cada uno.',
-      },
-      {
-        titulo: 'Gestión de entradas',
-        desc: 'Al recibir un pedido, registra el nuevo lote con toda su información. El inventario se actualiza automáticamente.',
-      },
-    ],
-    paraQuien: ['Farmacias', 'Boticas', 'Droguerías', 'Farmacias de hospital'],
-    ejemplos: [
-      'El farmacéutico busca un medicamento y ve todos los lotes disponibles con sus fechas',
-      'El sistema avisa que el Paracetamol lote L2024-001 vence en 15 días',
-      'El comprador ve cuándo vence el próximo lote antes de hacer el pedido',
-    ],
-    ctaLabel: '¿Tienes una farmacia?',
-  },
-
   ferreteria: {
     slug: 'ferreteria',
-    nombre: 'Ferretería',
+    nombre: 'Ferretería / Materiales de Construcción',
     emoji: '🔨',
-    tagline: 'Pedidos a proveedores y stock controlado',
-    descripcionCorta: 'Gestiona pedidos a proveedores con unidades de medida de ferretería.',
-    descripcionLarga:
-      'Órbita para ferreterías te da un sistema de pedidos a proveedores con soporte para todas las unidades del sector: sacos, galones, metros cuadrados, varillas y más. Control de stock y seguimiento de órdenes de compra.',
+    tagline: 'Unidades complejas, precios por volumen y crédito a constructores',
+    descripcionCorta:
+      'El sistema de inventario y ventas diseñado para las unidades y dinámicas de una ferretería.',
     color: {
       bg: 'bg-amber-50',
       text: 'text-amber-600',
@@ -282,52 +322,114 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
       badge: 'bg-amber-100 text-amber-700',
     },
     funciones: [
-      'Pedidos a proveedores digitales',
-      'Múltiples unidades de medida',
-      'Control de stock por producto',
-      'Seguimiento del estado del pedido',
+      'Múltiples unidades de medida: metros, pies, libras, sacos',
+      'Descuentos automáticos por volumen',
+      'Cotizaciones de obra completas',
+      'Crédito y cuenta corriente para constructores',
     ],
     funccionesDetalladas: [
       {
-        titulo: 'Pedidos a proveedores',
-        desc: 'Crea pedidos de compra a tus proveedores con detalle de productos, cantidades y precios. Seguimiento desde Borrador hasta Recibido.',
+        titulo: 'Unidades complejas',
+        desc: 'Vende por metros, pies cuadrados, libras, sacos, rollos o lo que uses. El sistema maneja la conversión y el inventario en la unidad que elijas.',
       },
       {
-        titulo: 'Unidades de ferretería',
-        desc: 'Trabaja con sacos, galones, m², m³, kg, varillas, rollos y más. El sistema soporta todas las unidades del sector.',
+        titulo: 'Precios por volumen',
+        desc: 'Define precios escalonados: si lleva 10 bolsas paga X, si lleva 50 paga Y. El descuento se aplica automáticamente sin necesidad de ajuste manual.',
       },
       {
-        titulo: 'Control de inventario',
-        desc: 'Ve el stock actualizado de cada producto. Sabe cuándo pedir más antes de que se agote. Historial de movimientos.',
+        titulo: 'Cotizaciones de obra',
+        desc: 'El cliente describe el proyecto, tú agregas los materiales y el sistema genera la cotización completa en PDF. Profesional y rápido.',
       },
       {
-        titulo: 'Estados de pedido',
-        desc: 'Borrador → Enviado → Confirmado → Recibido. Control total del proceso de compra con tu proveedor.',
+        titulo: 'Crédito a constructores',
+        desc: 'Los clientes frecuentes tienen cuenta corriente con límite de crédito. Llevan materiales y pagan al completar la obra. El historial siempre visible.',
+      },
+      {
+        titulo: 'Lista de precios por cliente',
+        desc: 'Define listas de precios diferentes: precio detalle, precio contratista, precio distribuidor. El sistema aplica el precio correcto según el cliente.',
       },
     ],
     paraQuien: [
       'Ferreterías',
       'Distribuidoras de materiales',
-      'Tiendas de pinturas',
-      'Constructores',
+      'Depósitos de construcción',
+      'Pinturas y acabados',
     ],
     ejemplos: [
-      'El encargado crea un pedido de 200 sacos de cemento al proveedor desde el sistema',
-      'Al llegar el pedido, lo marca como recibido y el inventario se actualiza',
-      'El vendedor sabe exactamente cuántos galones de pintura quedan en almacén',
+      'El contratista pide 200 bloques — el sistema aplica el precio por volumen automáticamente',
+      'Se genera la cotización de la obra y el cliente la aprueba por WhatsApp',
+      'Al mes, el constructor paga su cuenta corriente con un solo pago',
     ],
     ctaLabel: '¿Tienes una ferretería?',
+  },
+
+  salon: {
+    slug: 'salon',
+    nombre: 'Salón de Belleza / Barbería',
+    emoji: '✂️',
+    tagline: 'Agenda de citas, comisiones por estilista y programa de fidelización',
+    descripcionCorta:
+      'Gestiona tu salón o barbería con agenda digital, comisiones automáticas y recordatorios por WhatsApp.',
+    color: {
+      bg: 'bg-pink-50',
+      text: 'text-pink-600',
+      ring: 'ring-pink-200',
+      badge: 'bg-pink-100 text-pink-700',
+    },
+    funciones: [
+      'Agenda de citas por estilista o barbero',
+      'Comisiones automáticas por servicio realizado',
+      'Lista de espera para clientes sin cita',
+      'Recordatorios automáticos por WhatsApp',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Agenda por estilista',
+        desc: 'Cada estilista o barbero tiene su propia agenda. Las citas se asignan a quien corresponde sin conflictos de horario. Vista diaria, semanal o por empleado.',
+      },
+      {
+        titulo: 'Comisiones automáticas',
+        desc: 'Define el porcentaje de comisión por servicio y por estilista. El sistema calcula automáticamente cuánto le corresponde a cada uno sin hacer cuentas.',
+      },
+      {
+        titulo: 'Lista de espera (walk-ins)',
+        desc: 'Los clientes sin cita entran a la lista de espera. El sistema notifica cuando es su turno y registra el tiempo de espera real.',
+      },
+      {
+        titulo: 'Servicios con precio propio',
+        desc: 'Cada estilista puede tener sus propios precios por servicio. La factura refleja exactamente lo que se realizó y quién lo hizo.',
+      },
+      {
+        titulo: 'Recordatorios por WhatsApp',
+        desc: 'El sistema envía recordatorios automáticos 24 horas antes de cada cita. Menos no-shows, más ingresos.',
+      },
+      {
+        titulo: 'Programa de fidelización',
+        desc: 'Lleva el historial de visitas de cada cliente. Identifica a tus clientes más frecuentes y ofréceles beneficios especiales.',
+      },
+    ],
+    paraQuien: [
+      'Salones de belleza',
+      'Barberías',
+      'Spas',
+      'Centros de estética',
+      'Nail studios',
+    ],
+    ejemplos: [
+      'La cliente llama, se busca su historial y se le asigna cita con su estilista preferida en 30 segundos',
+      'Al terminar el servicio, la comisión de la estilista se calcula sola',
+      'El día anterior, el sistema envía recordatorio a todas las citas del día siguiente',
+    ],
+    ctaLabel: '¿Tienes un salón o barbería?',
   },
 
   clinica: {
     slug: 'clinica',
     nombre: 'Clínica / Consultorio',
     emoji: '🏥',
-    tagline: 'Expedientes digitales, sin papeles perdidos',
+    tagline: 'Expedientes digitales, agenda y facturación a seguros',
     descripcionCorta:
-      'Gestiona expedientes de pacientes, consultas y agenda médica en un solo lugar.',
-    descripcionLarga:
-      'Órbita para clínicas y consultorios digitaliza todo el flujo médico: desde que el paciente llega hasta que sale con su receta. Expedientes completos, historial de consultas, signos vitales y facturación integrada para que te concentres en lo que importa: la salud de tus pacientes.',
+      'Del expediente del paciente a la factura al seguro médico, todo en un sistema seguro y confidencial.',
     color: {
       bg: 'bg-cyan-50',
       text: 'text-cyan-600',
@@ -335,129 +437,91 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
       badge: 'bg-cyan-100 text-cyan-700',
     },
     funciones: [
-      'Expedientes médicos digitales',
-      'Historial completo de consultas',
-      'Agenda con vista de timeline',
-      'Facturación al completar la consulta',
+      'Expediente médico digital por paciente',
+      'Agenda por doctor con vista de día',
+      'Recetas médicas registradas en el sistema',
+      'Facturación a ARS y pagos mixtos seguro+paciente',
     ],
     funccionesDetalladas: [
       {
-        titulo: 'Expedientes digitales',
-        desc: 'Cada paciente tiene su expediente con datos personales, tipo de sangre, alergias y antecedentes médicos. Busca por nombre, cédula o número de expediente en segundos.',
+        titulo: 'Expediente del paciente',
+        desc: 'Cada paciente tiene su expediente con datos personales, tipo de sangre, alergias, antecedentes y seguro médico. Busca por nombre, cédula o número de expediente.',
       },
       {
         titulo: 'Historial de consultas',
-        desc: 'Registro completo de cada consulta: diagnóstico, tratamiento, receta, signos vitales y notas del médico. El historial siempre disponible, nunca un papel perdido.',
+        desc: 'Cada consulta queda registrada con diagnóstico, síntomas, tratamiento, receta y signos vitales. El médico tiene el historial completo en segundos.',
       },
       {
-        titulo: 'Agenda médica visual',
-        desc: 'Vista de todas las consultas del día ordenadas por hora, de 7am a 8pm. Navega entre días y programa nuevas consultas directamente desde la agenda.',
+        titulo: 'Agenda médica',
+        desc: 'Vista de día con todas las consultas ordenadas por hora. Navega entre fechas, asigna citas a médicos específicos y gestiona cancelaciones.',
       },
       {
-        titulo: 'Facturación integrada',
-        desc: 'Al completar la consulta, genera la factura en un click. El precio de la consulta ya está registrado. Acepta efectivo, tarjeta o crédito.',
+        titulo: 'Recetas médicas',
+        desc: 'El médico registra la receta directamente en la consulta. Queda registrada y puede imprimirse o enviarse por WhatsApp.',
+      },
+      {
+        titulo: 'Signos vitales',
+        desc: 'Registra presión arterial, peso, talla, temperatura y frecuencia cardíaca en cada consulta. El historial de signos vitales queda visible para el médico.',
+      },
+      {
+        titulo: 'Facturación a seguros',
+        desc: 'Factura al ARS con los códigos correctos. Registra el copago del paciente y el monto a cobrar al seguro por separado. Control total de cobros.',
       },
     ],
     paraQuien: [
       'Médicos generales',
       'Especialistas',
-      'Odontólogos',
-      'Veterinarios',
-      'Clínicas pequeñas',
+      'Clínicas privadas',
+      'Consultorios dentales',
+      'Veterinarias',
     ],
     ejemplos: [
       'El recepcionista busca al paciente por cédula y ve todo su historial en segundos',
       'El médico registra el diagnóstico, la receta y los signos vitales en la misma consulta',
-      'Al completar la consulta, la factura se genera automáticamente con el precio correcto',
+      'La factura se genera con el copago del paciente y el monto al seguro separados',
     ],
     ctaLabel: '¿Tienes una clínica o consultorio?',
-  },
-
-  super: {
-    slug: 'super',
-    nombre: 'Supermercado',
-    emoji: '🛒',
-    tagline: 'Inventario, ofertas y precios por volumen en un solo sistema',
-    descripcionCorta:
-      'Gestiona departamentos, lanza ofertas con vigencia automática y define precios mayoristas.',
-    descripcionLarga:
-      'Órbita potencia la operación de tu supermercado o minimarket con herramientas diseñadas para el volumen y la velocidad. Organiza tu catálogo por departamentos, lanza ofertas que se activan y vencen solas, y configura precios especiales por cantidad para clientes mayoristas.',
-    color: {
-      bg: 'bg-emerald-50',
-      text: 'text-emerald-600',
-      ring: 'ring-emerald-200',
-      badge: 'bg-emerald-100 text-emerald-700',
-    },
-    funciones: [
-      'Departamentos y categorías organizados',
-      'Ofertas con vigencia automática',
-      'Precios por volumen (mayorista)',
-      'Control de inventario multi-producto',
-    ],
-    funccionesDetalladas: [
-      {
-        titulo: 'Departamentos y categorías',
-        desc: 'Organiza tu catálogo por secciones (Lácteos, Carnes, Bebidas…) con categorías anidadas. Facilita la navegación del inventario y los reportes por departamento.',
-      },
-      {
-        titulo: 'Ofertas automáticas',
-        desc: 'Programa ofertas con fecha de inicio y fin. El sistema las activa y vence solo — sin tener que recordar hacerlo manualmente. Las activas se muestran en el POS automáticamente.',
-      },
-      {
-        titulo: 'Precios por volumen',
-        desc: 'Define precios escalonados: si el cliente lleva 6 unidades paga X, si lleva 12 paga Y. Ideal para mayoristas y clientes frecuentes sin crear facturas especiales.',
-      },
-      {
-        titulo: 'Inventario de alto volumen',
-        desc: 'Maneja cientos de productos con SKU, código de barras y múltiples unidades de medida. El inventario se descuenta automáticamente con cada venta.',
-      },
-    ],
-    paraQuien: [
-      'Supermercados medianos y grandes',
-      'Minimarkets',
-      'Colmados grandes',
-      'Distribuidoras',
-    ],
-    ejemplos: [
-      'El cajero escanea el código de barras y el sistema aplica el precio de oferta vigente automáticamente',
-      'Un cliente mayorista compra 24 unidades y el sistema aplica el precio por volumen sin necesidad de ajuste manual',
-      'El gerente programa las ofertas del fin de semana el lunes — el sistema las activa y desactiva solo',
-    ],
-    ctaLabel: '¿Tienes un supermercado o minimarket?',
   },
 
   inmobiliaria: {
     slug: 'inmobiliaria',
     nombre: 'Inmobiliaria',
     emoji: '🏠',
-    tagline: 'Propiedades, contratos y cobros de renta digitalizados',
+    tagline: 'Contratos de alquiler y cobros de renta digitalizados',
     descripcionCorta:
       'Administra tu cartera de propiedades, contratos de alquiler y cobros mensuales desde un solo lugar.',
-    descripcionLarga:
-      'Órbita Inmobiliaria te da control total sobre tus propiedades. Registra cada inmueble, crea contratos con fechas y montos, y lleva el historial de pagos mes a mes. Recibe alertas cuando un contrato está por vencer y factura cobros de renta directamente desde el sistema.',
-    color: { bg: 'bg-emerald-50', text: 'text-emerald-700', ring: 'ring-emerald-200', badge: 'bg-emerald-100 text-emerald-800' },
+    color: {
+      bg: 'bg-emerald-50',
+      text: 'text-emerald-700',
+      ring: 'ring-emerald-200',
+      badge: 'bg-emerald-100 text-emerald-800',
+    },
     funciones: [
-      'Gestión de propiedades',
-      'Contratos de alquiler',
-      'Cobros mensuales',
-      'Alertas de vencimiento',
+      'Catálogo de propiedades con tipo y estado',
+      'Contratos de alquiler con fecha y monto',
+      'Cobro recurrente mensual con historial',
+      'Alertas de contratos por vencer',
     ],
     funccionesDetalladas: [
       {
-        titulo: 'Cartera de propiedades',
-        desc: 'Registra cada propiedad con código, tipo, ubicación, habitaciones, metros cuadrados y precio. Filtra por estado — disponible, alquilada, en venta — con una vista clara de toda tu cartera.',
+        titulo: 'Catálogo de propiedades',
+        desc: 'Registra cada inmueble con código, tipo (apartamento, local, casa), dirección, habitaciones, metros cuadrados y precio. Filtra por estado: disponible, alquilada, en venta.',
       },
       {
-        titulo: 'Contratos de alquiler digitales',
-        desc: 'Crea contratos con datos del inquilino, fecha de inicio y fin, monto mensual y depósito. El sistema actualiza automáticamente el estado de la propiedad al crear el contrato.',
+        titulo: 'Contratos de alquiler',
+        desc: "Crea contratos con datos del inquilino, fecha de inicio y fin, monto mensual y depósito. Al crear el contrato, la propiedad cambia automáticamente a estado 'Alquilada'.",
       },
       {
         titulo: 'Control de pagos mensuales',
-        desc: 'Registra los pagos por mes con un clic. El sistema detecta si un mes ya fue pagado para evitar duplicados. Ve el total cobrado por período en segundos.',
+        desc: 'Registra los pagos por mes con un clic. El sistema detecta si un mes ya fue pagado para evitar duplicados. Ve el total cobrado por período.',
       },
       {
         titulo: 'Alertas de vencimiento',
-        desc: 'El dashboard muestra los contratos que vencen en los próximos 30 días para que puedas contactar al inquilino a tiempo y renovar o liberar la propiedad.',
+        desc: 'El sistema alerta los contratos que vencen en los próximos 30 días para que puedas renovar o liberar la propiedad a tiempo.',
+      },
+      {
+        titulo: 'Gestión de propietarios e inquilinos',
+        desc: 'Lleva el historial completo de cada inquilino: pagos, atrasos, contratos anteriores. Información siempre disponible para tomar decisiones.',
       },
     ],
     paraQuien: [
@@ -467,60 +531,295 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
       'Agentes de bienes raíces',
     ],
     ejemplos: [
-      'El administrador crea el contrato del Apto 2B y la propiedad automáticamente pasa a estado "Alquilada"',
-      'A fin de mes, registra los pagos de todos los inquilinos en minutos desde la vista de pagos',
-      'El sistema alerta que 3 contratos vencen este mes — tiempo suficiente para renovar o buscar nuevos inquilinos',
+      "El administrador crea el contrato del Apto 2B y la propiedad pasa automáticamente a 'Alquilada'",
+      'A fin de mes, registra todos los pagos de renta en minutos',
+      'El sistema alerta que 3 contratos vencen este mes con tiempo para renovar',
     ],
     ctaLabel: '¿Administras propiedades?',
+  },
+
+  farmacia: {
+    slug: 'farmacia',
+    nombre: 'Farmacia',
+    emoji: '💊',
+    tagline: 'Control de vencimientos, lotes y medicamentos controlados',
+    descripcionCorta:
+      'Sistema especializado para farmacias, con control de vencimientos crítico, lotes y facturación a ARS.',
+    color: {
+      bg: 'bg-green-50',
+      text: 'text-green-600',
+      ring: 'ring-green-200',
+      badge: 'bg-green-100 text-green-700',
+    },
+    funciones: [
+      'Control de vencimientos con alertas automáticas',
+      'Número de lote y registro sanitario por medicamento',
+      'Medicamentos controlados con receta obligatoria',
+      'Facturación a ARS y genéricos vs marca',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Control de vencimientos',
+        desc: 'Cada medicamento tiene su fecha de vencimiento registrada. El sistema genera alertas 30, 60 y 90 días antes para que puedas rotarlos o devolverlos al proveedor.',
+      },
+      {
+        titulo: 'Control por lote',
+        desc: 'Registra el número de lote y registro sanitario de cada medicamento. Si hay una alerta sanitaria, puedes identificar exactamente qué lotes tienes en inventario.',
+      },
+      {
+        titulo: 'Medicamentos controlados',
+        desc: 'Los medicamentos que requieren receta médica están marcados en el sistema. El dispensador debe registrar el número de receta antes de procesar la venta.',
+      },
+      {
+        titulo: 'Genéricos vs marca',
+        desc: 'Identifica fácilmente cuáles productos son genéricos y cuáles son de marca. Ayuda al dispensador a ofrecer alternativas cuando el médico lo permite.',
+      },
+      {
+        titulo: 'Facturación a ARS',
+        desc: 'Registra las ventas cubiertas por seguro médico con el código del ARS correspondiente. Control de copagos y reclamaciones al seguro.',
+      },
+    ],
+    paraQuien: [
+      'Farmacias independientes',
+      'Cadenas de farmacias',
+      'Boticas comunitarias',
+      'Farmacias hospitalarias',
+    ],
+    ejemplos: [
+      'El sistema alerta que la amoxicilina del lote L-2024 vence en 45 días',
+      'El cliente presenta su tarjeta del seguro y la venta se factura al ARS automáticamente',
+      'Se busca un medicamento controlado y el sistema pide el número de receta antes de vender',
+    ],
+    ctaLabel: '¿Tienes una farmacia?',
+  },
+
+  tienda_ropa: {
+    slug: 'tienda_ropa',
+    nombre: 'Tienda de Ropa / Variedades',
+    emoji: '👗',
+    tagline: 'Variantes por talla y color, promociones y control de devoluciones',
+    descripcionCorta:
+      'Sistema de inventario y ventas para tiendas de ropa con variantes, etiquetas de precio y promociones.',
+    color: {
+      bg: 'bg-purple-50',
+      text: 'text-purple-600',
+      ring: 'ring-purple-200',
+      badge: 'bg-purple-100 text-purple-700',
+    },
+    funciones: [
+      'Variantes por talla y color por producto',
+      'Promociones: 2x1, porcentaje, monto fijo',
+      'Gestión de devoluciones e intercambios',
+      'Impresión de etiquetas de precio con SKU',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Variantes por talla y color',
+        desc: 'Cada prenda tiene sus variantes configuradas: S/M/L/XL en rojo, azul y negro. El inventario se lleva por variante y el POS muestra cuáles están disponibles.',
+      },
+      {
+        titulo: 'SKU por variante',
+        desc: 'Cada combinación talla-color tiene su propio SKU. Facilita el conteo físico, la recepción de mercancía y la búsqueda rápida en el POS.',
+      },
+      {
+        titulo: 'Promociones automáticas',
+        desc: 'Configura promociones de 2x1, descuento por porcentaje o precio especial por temporada. El sistema las aplica automáticamente en el POS durante las fechas configuradas.',
+      },
+      {
+        titulo: 'Devoluciones e intercambios',
+        desc: 'Registra devoluciones con motivo y devuelve el monto al cliente o genera un crédito para una próxima compra. El inventario se actualiza automáticamente.',
+      },
+      {
+        titulo: 'Etiquetas de precio',
+        desc: 'Imprime etiquetas con código de barras, talla, color, SKU y precio. Conecta con impresoras de etiquetas térmicas estándar.',
+      },
+    ],
+    paraQuien: ['Tiendas de ropa', 'Boutiques', 'Zapaterías', 'Tiendas de variedades', 'Multimarcas'],
+    ejemplos: [
+      'El cliente quiere la camisa azul talla M — el sistema muestra al instante si hay disponibilidad',
+      'Se activa la promoción de fin de semana y el POS aplica el 20% automáticamente',
+      'El cliente devuelve una prenda y se le genera un crédito para su próxima compra',
+    ],
+    ctaLabel: '¿Tienes una tienda de ropa?',
+  },
+
+  tienda_online: {
+    slug: 'tienda_online',
+    nombre: 'Tienda Online / Ventas por DM',
+    emoji: '📱',
+    tagline: 'Pedidos por DM, link de pago por WhatsApp y catálogo compartible',
+    descripcionCorta:
+      'Gestiona tus pedidos de redes sociales con un sistema ordenado. Del DM a la entrega, todo registrado.',
+    color: {
+      bg: 'bg-indigo-50',
+      text: 'text-indigo-600',
+      ring: 'ring-indigo-200',
+      badge: 'bg-indigo-100 text-indigo-700',
+    },
+    funciones: [
+      'Registro de pedidos recibidos por DM o WhatsApp',
+      'Link de pago compartible por WhatsApp',
+      'Seguimiento de pedido hasta la entrega',
+      'Catálogo público compartible con clientes',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Gestión de pedidos por DM',
+        desc: 'Registra cada pedido que llega por Instagram, Facebook o WhatsApp. Asigna cliente, productos, monto y forma de pago. Todo ordenado en un solo lugar.',
+      },
+      {
+        titulo: 'Link de pago por WhatsApp',
+        desc: 'Genera un link de pago que puedes compartir directamente por WhatsApp. El cliente paga en línea y el sistema actualiza el estado del pedido automáticamente.',
+      },
+      {
+        titulo: 'Estados de pedido',
+        desc: 'Cada pedido pasa por estados: Pendiente → Confirmado → Preparando → Enviado → Entregado. El cliente siempre sabe dónde está su pedido.',
+      },
+      {
+        titulo: 'Número de tracking',
+        desc: 'Cuando el pedido sale con mensajería, registra el número de tracking. El cliente puede consultarlo desde el sistema.',
+      },
+      {
+        titulo: 'Catálogo compartible',
+        desc: 'Crea un catálogo digital de tus productos con fotos, descripción y precios. Comparte el link por WhatsApp e Instagram. Los clientes ven lo disponible antes de escribirte.',
+      },
+    ],
+    paraQuien: [
+      'Tiendas en redes sociales',
+      'Negocios por WhatsApp',
+      'Emprendedores digitales',
+      'Revendedores',
+    ],
+    ejemplos: [
+      'El cliente escribe por Instagram, se registra el pedido y se le envía el link de pago en 1 minuto',
+      'El pedido pasa a "Enviado" y el cliente recibe el número de tracking automáticamente',
+      'El dueño ve todas las órdenes del día en un solo panel sin revisar cada chat',
+    ],
+    ctaLabel: '¿Vendes por redes sociales o WhatsApp?',
   },
 
   joyeria: {
     slug: 'joyeria',
     nombre: 'Joyería',
     emoji: '💍',
-    tagline: 'Inventario de joyas, reparaciones y facturación en un solo sistema',
+    tagline: 'Inventario por pieza única, reparaciones y apartado con depósito',
     descripcionCorta:
-      'Controla tu inventario de piezas por material, lleva el seguimiento de reparaciones y factura al momento de la entrega.',
-    descripcionLarga:
-      'Órbita Joyería está diseñado para el ritmo de una joyería dominicana. Registra cada pieza con código, material, quilates y precio. Cuando un cliente deja una joya a reparar, créale un expediente con descripción, presupuesto y fecha promesa. Al terminar el trabajo, factura directamente desde la reparación.',
-    color: { bg: 'bg-yellow-50', text: 'text-yellow-700', ring: 'ring-yellow-200', badge: 'bg-yellow-100 text-yellow-800' },
+      'Sistema especializado para joyerías con inventario por número de serie, reparaciones y apartados.',
+    color: {
+      bg: 'bg-yellow-50',
+      text: 'text-yellow-700',
+      ring: 'ring-yellow-200',
+      badge: 'bg-yellow-100 text-yellow-800',
+    },
     funciones: [
-      'Catálogo de joyas por material',
-      'Control de reparaciones',
-      'Facturación al entregar',
-      'Historial por cliente',
+      'Inventario por pieza única con número de serie',
+      'Descripción de material, quilates y peso',
+      'Sistema de apartado con depósito',
+      'Gestión de reparaciones por cliente',
     ],
     funccionesDetalladas: [
       {
-        titulo: 'Inventario por material',
-        desc: 'Registra piezas en oro 18K, 14K, 10K, plata 925 o platino. Cada pieza tiene código único, peso en gramos, quilates (para diamantes) y precio de venta. Filtra por material o estado: en vitrina, reservada, en reparación.',
+        titulo: 'Inventario por pieza única',
+        desc: 'Cada joya tiene su número de serie único con descripción de material, quilates, peso en gramos y precio. Nunca pierdes el rastro de ninguna pieza.',
       },
       {
-        titulo: 'Expediente de reparaciones',
-        desc: 'Crea un expediente por cada joya que entra a reparación con descripción del trabajo, diagnóstico, presupuesto y fecha promesa. El cliente puede consultar el estado de su pieza.',
+        titulo: 'Apartado con depósito',
+        desc: 'El cliente aparta una joya dejando un depósito. El sistema registra el monto, la fecha límite y descuenta automáticamente al completar la compra.',
       },
       {
-        titulo: 'Flujo de trabajo claro',
-        desc: 'Cada reparación pasa por estados: Recibida → En proceso → Lista → Entregada. Cuando está lista, el sistema te permite registrar el costo final y facturar con un clic.',
+        titulo: 'Reparaciones',
+        desc: 'Crea un expediente por cada joya que entra a reparación. Registra descripción del trabajo, presupuesto, fecha promesa y costo final. La factura sale al entregar.',
       },
       {
-        titulo: 'Facturación al entregar',
-        desc: 'Al marcar una reparación como lista, genera la factura del servicio directamente. El ITBIS se calcula automáticamente y el registro queda en el historial del cliente.',
+        titulo: 'Precio referenciado al oro',
+        desc: 'Marca el precio base según el tipo de material. Cuando el precio del oro cambia, puedes actualizar los precios de las piezas en lote.',
+      },
+      {
+        titulo: 'Historial por cliente',
+        desc: 'Ve todas las compras, apartados y reparaciones de un cliente en un solo lugar. Información valiosa para ofrecer un servicio personalizado.',
       },
     ],
     paraQuien: [
       'Joyerías y orfebres',
-      'Relojeros con servicio de reparación',
+      'Relojeros con reparación',
+      'Vendedores de joyas',
       'Ópticas con joyería',
-      'Vendedores de joyas al detalle',
     ],
     ejemplos: [
-      'Una cliente deja su anillo de compromiso a reducir el tamaño — el sistema crea el expediente con fecha promesa y presupuesto de RD$800',
-      'El joyero marca la pieza como "Lista" y con un clic genera la factura por el servicio',
-      'El dueño busca el historial del cliente y ve todas las reparaciones y compras anteriores',
+      'Una cliente aparta un anillo dejando el depósito — queda registrado con fecha límite',
+      'El joyero marca la reparación como "Lista" y genera la factura con un clic',
+      'Se busca la historia de una clienta y aparecen todas sus compras y reparaciones anteriores',
     ],
     ctaLabel: '¿Tienes una joyería?',
   },
+
+  supermercado: {
+    slug: 'supermercado',
+    nombre: 'Supermercado / Minimarket Grande',
+    emoji: '🏪',
+    tagline: 'Departamentos, ofertas automáticas y precios por volumen',
+    descripcionCorta:
+      'Para operaciones de mayor escala: departamentos organizados, ofertas con vigencia automática y precios mayoristas.',
+    color: {
+      bg: 'bg-teal-50',
+      text: 'text-teal-600',
+      ring: 'ring-teal-200',
+      badge: 'bg-teal-100 text-teal-700',
+    },
+    funciones: [
+      'Departamentos y categorías organizadas',
+      'Ofertas con fecha de inicio y fin automáticas',
+      'Precios por volumen para mayoristas',
+      'Control de inventario multi-producto',
+    ],
+    funccionesDetalladas: [
+      {
+        titulo: 'Departamentos y categorías',
+        desc: 'Organiza tu catálogo por secciones: Lácteos, Carnes, Bebidas, Limpieza. Con categorías anidadas para una vista clara del inventario.',
+      },
+      {
+        titulo: 'Ofertas automáticas',
+        desc: 'Programa ofertas con fecha de inicio y fin. El sistema las activa y vence solo, sin intervención manual. Las activas se aplican automáticamente en el POS.',
+      },
+      {
+        titulo: 'Precios por volumen',
+        desc: 'Define precios escalonados para mayoristas: si lleva 6 unidades paga X, si lleva 12 paga Y. El precio correcto se aplica automáticamente.',
+      },
+      {
+        titulo: 'Inventario de alto volumen',
+        desc: 'Maneja cientos de productos con SKU, código de barras y múltiples unidades de medida. El stock se descuenta automáticamente con cada venta.',
+      },
+    ],
+    paraQuien: [
+      'Supermercados medianos',
+      'Minimarkets grandes',
+      'Distribuidoras',
+      'Colmados grandes',
+    ],
+    ejemplos: [
+      'El cajero escanea el código y el sistema aplica el precio de oferta vigente automáticamente',
+      'Un mayorista compra 24 unidades y el precio por volumen se aplica sin ajuste manual',
+      'El gerente programa las ofertas del fin de semana el lunes — el sistema las activa solo',
+    ],
+    ctaLabel: '¿Tienes un supermercado o minimarket?',
+  },
 };
 
-export const VERTICALES_LIST = Object.values(VERTICALES);
+export const VERTICALES_LIST = (
+  [
+    'restaurante',
+    'colmado',
+    'carwash',
+    'repuestos',
+    'taller',
+    'ferreteria',
+    'salon',
+    'clinica',
+    'inmobiliaria',
+    'farmacia',
+    'tienda_ropa',
+    'tienda_online',
+    'joyeria',
+    'supermercado',
+  ] as VerticalSlug[]
+).map((s) => VERTICALES[s]);

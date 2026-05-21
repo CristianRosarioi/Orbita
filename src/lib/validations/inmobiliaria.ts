@@ -40,9 +40,7 @@ export const CrearContratoSchema = z
   });
 
 export const RegistrarPagoSchema = z.object({
-  mes: z
-    .string()
-    .regex(/^\d{4}-\d{2}$/, 'Formato de mes inválido. Use YYYY-MM'),
+  mes: z.string().regex(/^\d{4}-\d{2}$/, 'Formato de mes inválido. Use YYYY-MM'),
   monto: z.coerce.number().positive('El monto debe ser mayor que 0'),
   notas: z.string().optional(),
 });

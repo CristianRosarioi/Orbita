@@ -31,7 +31,14 @@ describe('CrearPropiedadSchema', () => {
   });
 
   it('acepta todos los tipos válidos', () => {
-    const tipos = ['APARTAMENTO', 'CASA', 'LOCAL_COMERCIAL', 'OFICINA', 'TERRENO', 'NAVE_INDUSTRIAL'];
+    const tipos = [
+      'APARTAMENTO',
+      'CASA',
+      'LOCAL_COMERCIAL',
+      'OFICINA',
+      'TERRENO',
+      'NAVE_INDUSTRIAL',
+    ];
     for (const tipo of tipos) {
       expect(CrearPropiedadSchema.safeParse({ ...base, tipo }).success).toBe(true);
     }
@@ -43,7 +50,11 @@ describe('CrearPropiedadSchema', () => {
   });
 
   it('acepta precios positivos opcionales', () => {
-    const result = CrearPropiedadSchema.safeParse({ ...base, precioAlquiler: 25000, precioVenta: 4500000 });
+    const result = CrearPropiedadSchema.safeParse({
+      ...base,
+      precioAlquiler: 25000,
+      precioVenta: 4500000,
+    });
     expect(result.success).toBe(true);
   });
 });

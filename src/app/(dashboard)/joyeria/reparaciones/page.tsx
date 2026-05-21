@@ -33,11 +33,15 @@ export default function ReparacionesPage() {
     if (estadoFiltro) params.set('estado', estadoFiltro);
     fetch(`/api/joyeria/reparaciones?${params}`)
       .then((r) => r.json())
-      .then((d) => { if (d.success) setReparaciones(d.data); })
+      .then((d) => {
+        if (d.success) setReparaciones(d.data);
+      })
       .finally(() => setCargando(false));
   }, [estadoFiltro]);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
   const formatFecha = (s: string) => new Date(s).toLocaleDateString('es-DO');
 
@@ -65,13 +69,19 @@ export default function ReparacionesPage() {
         >
           <option value="">Todos los estados</option>
           {Object.entries(ESTADO_CONFIG).map(([v, { label }]) => (
-            <option key={v} value={v}>{label}</option>
+            <option key={v} value={v}>
+              {label}
+            </option>
           ))}
         </select>
       </div>
 
       {cargando ? (
-        <div className="space-y-2">{[...Array(5)].map((_, i) => <div key={i} className="h-16 animate-pulse rounded-xl bg-slate-100" />)}</div>
+        <div className="space-y-2">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-16 animate-pulse rounded-xl bg-slate-100" />
+          ))}
+        </div>
       ) : reparaciones.length === 0 ? (
         <div className="rounded-xl border-2 border-dashed border-slate-200 py-16 text-center">
           <Wrench className="mx-auto mb-3 h-10 w-10 text-slate-300" />
@@ -93,11 +103,17 @@ export default function ReparacionesPage() {
             <tbody className="divide-y divide-slate-100">
               {reparaciones.map((r) => {
                 const estadoCfg = ESTADO_CONFIG[r.estado] ?? ESTADO_CONFIG.RECIBIDA;
-                const vencida = r.fechaPromesa && r.estado !== 'ENTREGADA' && new Date(r.fechaPromesa) < new Date();
+                const vencida =
+                  r.fechaPromesa &&
+                  r.estado !== 'ENTREGADA' &&
+                  new Date(r.fechaPromesa) < new Date();
                 return (
                   <tr key={r.id} className="hover:bg-slate-50">
                     <td className="px-4 py-3 font-medium text-slate-900">
-                      <Link href={`/joyeria/reparaciones/${r.id}`} className="hover:text-indigo-700">
+                      <Link
+                        href={`/joyeria/reparaciones/${r.id}`}
+                        className="hover:text-indigo-700"
+                      >
                         {r.clienteNombre}
                       </Link>
                     </td>
@@ -106,20 +122,28 @@ export default function ReparacionesPage() {
                       {r.pieza ? `${r.pieza.codigo}` : '—'}
                     </td>
                     <td className="px-4 py-3 text-right font-semibold text-slate-900">
-                      {r.presupuesto != null ? `RD$ ${Number(r.presupuesto).toLocaleString('es-DO')}` : '—'}
+                      {r.presupuesto != null
+                        ? `RD$ ${Number(r.presupuesto).toLocaleString('es-DO')}`
+                        : '—'}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${estadoCfg.clase}`}>
+                      <span
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${estadoCfg.clase}`}
+                      >
                         {estadoCfg.label}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       {r.fechaPromesa ? (
-                        <span className={`flex items-center gap-1 text-xs ${vencida ? 'text-red-600 font-medium' : 'text-slate-500'}`}>
+                        <span
+                          className={`flex items-center gap-1 text-xs ${vencida ? 'text-red-600 font-medium' : 'text-slate-500'}`}
+                        >
                           {vencida && <Clock className="h-3 w-3" />}
                           {formatFecha(r.fechaPromesa)}
                         </span>
-                      ) : '—'}
+                      ) : (
+                        '—'
+                      )}
                     </td>
                   </tr>
                 );

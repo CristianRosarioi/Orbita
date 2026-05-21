@@ -38,11 +38,15 @@ export default function DetalleContratoPage() {
   const cargar = useCallback(() => {
     fetch(`/api/inmobiliaria/contratos/${id}`)
       .then((r) => r.json())
-      .then((d) => { if (d.success) setContrato(d.data); })
+      .then((d) => {
+        if (d.success) setContrato(d.data);
+      })
       .finally(() => setCargando(false));
   }, [id]);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
   async function registrarPago(mes: string) {
     if (!contrato) return;
@@ -55,7 +59,10 @@ export default function DetalleContratoPage() {
         body: JSON.stringify({ mes, monto: contrato.montoMensual }),
       });
       const data = await res.json();
-      if (!res.ok) { setErrorPago(data.error?.message ?? 'Error'); return; }
+      if (!res.ok) {
+        setErrorPago(data.error?.message ?? 'Error');
+        return;
+      }
       cargar();
     } finally {
       setRegistrandoPago(false);
@@ -73,19 +80,30 @@ export default function DetalleContratoPage() {
   return (
     <div className="p-6 max-w-3xl">
       <div className="mb-6">
-        <button onClick={() => router.back()} className="mb-3 text-sm text-slate-500 hover:text-slate-700">← Volver</button>
+        <button
+          onClick={() => router.back()}
+          className="mb-3 text-sm text-slate-500 hover:text-slate-700"
+        >
+          ← Volver
+        </button>
         <h1 className="text-2xl font-bold text-slate-900">{contrato.inquilinoNombre}</h1>
-        <p className="text-sm text-slate-500">{contrato.propiedad.codigo} — {contrato.propiedad.nombre}</p>
+        <p className="text-sm text-slate-500">
+          {contrato.propiedad.codigo} — {contrato.propiedad.nombre}
+        </p>
       </div>
 
       <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
         <div className="rounded-xl border border-slate-200 bg-white p-4">
           <p className="text-xs text-slate-500 mb-1">Monto mensual</p>
-          <p className="font-bold text-slate-900">RD$ {Number(contrato.montoMensual).toLocaleString('es-DO')}</p>
+          <p className="font-bold text-slate-900">
+            RD$ {Number(contrato.montoMensual).toLocaleString('es-DO')}
+          </p>
         </div>
         <div className="rounded-xl border border-slate-200 bg-white p-4">
           <p className="text-xs text-slate-500 mb-1">Depósito</p>
-          <p className="font-bold text-slate-900">RD$ {Number(contrato.deposito).toLocaleString('es-DO')}</p>
+          <p className="font-bold text-slate-900">
+            RD$ {Number(contrato.deposito).toLocaleString('es-DO')}
+          </p>
         </div>
         <div className="rounded-xl border border-slate-200 bg-white p-4">
           <p className="text-xs text-slate-500 mb-1">Inicio</p>
@@ -119,7 +137,9 @@ export default function DetalleContratoPage() {
               disabled={registrandoPago}
               className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
             >
-              {registrandoPago ? 'Registrando...' : `Registrar pago RD$ ${Number(contrato.montoMensual).toLocaleString('es-DO')}`}
+              {registrandoPago
+                ? 'Registrando...'
+                : `Registrar pago RD$ ${Number(contrato.montoMensual).toLocaleString('es-DO')}`}
             </button>
           </div>
         )}
@@ -145,13 +165,19 @@ export default function DetalleContratoPage() {
                 {contrato.pagos.map((p) => (
                   <tr key={p.id} className="hover:bg-slate-50">
                     <td className="px-4 py-3 font-medium text-slate-900">{p.mes}</td>
-                    <td className="px-4 py-3 text-right text-slate-700">RD$ {Number(p.monto).toLocaleString('es-DO')}</td>
+                    <td className="px-4 py-3 text-right text-slate-700">
+                      RD$ {Number(p.monto).toLocaleString('es-DO')}
+                    </td>
                     <td className="px-4 py-3">
-                      <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        p.estado === 'PAGADO' ? 'bg-emerald-100 text-emerald-800' :
-                        p.estado === 'ATRASADO' ? 'bg-red-100 text-red-700' :
-                        'bg-yellow-100 text-yellow-800'
-                      }`}>
+                      <span
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                          p.estado === 'PAGADO'
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : p.estado === 'ATRASADO'
+                              ? 'bg-red-100 text-red-700'
+                              : 'bg-yellow-100 text-yellow-800'
+                        }`}
+                      >
                         {p.estado}
                       </span>
                     </td>

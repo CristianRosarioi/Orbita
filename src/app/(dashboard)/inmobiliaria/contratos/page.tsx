@@ -28,17 +28,20 @@ export default function ContratosPage() {
   const [cargando, setCargando] = useState(true);
   const [estadoFiltro, setEstadoFiltro] = useState('');
 
-
   const cargar = useCallback(() => {
     const params = new URLSearchParams({ limit: '50' });
     if (estadoFiltro) params.set('estado', estadoFiltro);
     fetch(`/api/inmobiliaria/contratos?${params}`)
       .then((r) => r.json())
-      .then((d) => { if (d.success) setContratos(d.data); })
+      .then((d) => {
+        if (d.success) setContratos(d.data);
+      })
       .finally(() => setCargando(false));
   }, [estadoFiltro]);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
   const porVencer = contratos.filter((c) => {
     if (c.estado !== 'ACTIVO') return false;
@@ -68,7 +71,10 @@ export default function ContratosPage() {
         <div className="mb-5 flex items-start gap-3 rounded-xl border border-yellow-200 bg-yellow-50 px-4 py-3">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-yellow-600" />
           <p className="text-sm text-yellow-800">
-            <strong>{porVencer.length} contrato{porVencer.length > 1 ? 's' : ''}</strong> vence{porVencer.length > 1 ? 'n' : ''} en los próximos 30 días.
+            <strong>
+              {porVencer.length} contrato{porVencer.length > 1 ? 's' : ''}
+            </strong>{' '}
+            vence{porVencer.length > 1 ? 'n' : ''} en los próximos 30 días.
           </p>
         </div>
       )}
@@ -89,7 +95,9 @@ export default function ContratosPage() {
 
       {cargando ? (
         <div className="space-y-2">
-          {[...Array(5)].map((_, i) => <div key={i} className="h-16 animate-pulse rounded-xl bg-slate-100" />)}
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-16 animate-pulse rounded-xl bg-slate-100" />
+          ))}
         </div>
       ) : contratos.length === 0 ? (
         <div className="rounded-xl border-2 border-dashed border-slate-200 py-16 text-center">
@@ -111,11 +119,18 @@ export default function ContratosPage() {
             <tbody className="divide-y divide-slate-100">
               {contratos.map((c) => {
                 const diasRestantes = (new Date(c.fechaFin).getTime() - AHORA) / 86400000;
-                const porVencerEste = c.estado === 'ACTIVO' && diasRestantes <= 30 && diasRestantes >= 0;
+                const porVencerEste =
+                  c.estado === 'ACTIVO' && diasRestantes <= 30 && diasRestantes >= 0;
                 return (
-                  <tr key={c.id} className={`hover:bg-slate-50 transition-colors ${porVencerEste ? 'bg-yellow-50/50' : ''}`}>
+                  <tr
+                    key={c.id}
+                    className={`hover:bg-slate-50 transition-colors ${porVencerEste ? 'bg-yellow-50/50' : ''}`}
+                  >
                     <td className="px-4 py-3">
-                      <Link href={`/inmobiliaria/contratos/${c.id}`} className="font-medium text-indigo-700 hover:underline">
+                      <Link
+                        href={`/inmobiliaria/contratos/${c.id}`}
+                        className="font-medium text-indigo-700 hover:underline"
+                      >
                         {c.propiedad.codigo}
                       </Link>
                       <p className="text-xs text-slate-400">{c.propiedad.nombre}</p>
@@ -123,16 +138,24 @@ export default function ContratosPage() {
                     <td className="px-4 py-3 text-slate-700">{c.inquilinoNombre}</td>
                     <td className="px-4 py-3 text-slate-500">{formatFecha(c.fechaInicio)}</td>
                     <td className="px-4 py-3">
-                      <span className={porVencerEste ? 'font-medium text-yellow-700' : 'text-slate-500'}>
+                      <span
+                        className={porVencerEste ? 'font-medium text-yellow-700' : 'text-slate-500'}
+                      >
                         {formatFecha(c.fechaFin)}
                       </span>
-                      {porVencerEste && <span className="ml-1 text-xs text-yellow-600">({Math.ceil(diasRestantes)}d)</span>}
+                      {porVencerEste && (
+                        <span className="ml-1 text-xs text-yellow-600">
+                          ({Math.ceil(diasRestantes)}d)
+                        </span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-right font-semibold text-slate-900">
                       RD$ {Number(c.montoMensual).toLocaleString('es-DO')}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${ESTADO_CLASE[c.estado] ?? ''}`}>
+                      <span
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${ESTADO_CLASE[c.estado] ?? ''}`}
+                      >
                         {c.estado}
                       </span>
                     </td>

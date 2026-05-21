@@ -105,7 +105,9 @@ export default function PropiedadesPage() {
         >
           <option value="">Todos los tipos</option>
           {Object.entries(TIPO_LABEL).map(([v, l]) => (
-            <option key={v} value={v}>{l}</option>
+            <option key={v} value={v}>
+              {l}
+            </option>
           ))}
         </select>
         <select
@@ -115,7 +117,9 @@ export default function PropiedadesPage() {
         >
           <option value="">Todos los estados</option>
           {Object.entries(ESTADO_CONFIG).map(([v, { label }]) => (
-            <option key={v} value={v}>{label}</option>
+            <option key={v} value={v}>
+              {label}
+            </option>
           ))}
         </select>
       </div>
@@ -130,7 +134,10 @@ export default function PropiedadesPage() {
         <div className="rounded-xl border-2 border-dashed border-slate-200 py-16 text-center">
           <Building className="mx-auto mb-3 h-10 w-10 text-slate-300" />
           <p className="font-medium text-slate-500">No hay propiedades registradas</p>
-          <Link href="/inmobiliaria/propiedades/nueva" className="mt-3 inline-block text-sm text-indigo-600 hover:underline">
+          <Link
+            href="/inmobiliaria/propiedades/nueva"
+            className="mt-3 inline-block text-sm text-indigo-600 hover:underline"
+          >
             Agregar primera propiedad
           </Link>
         </div>
@@ -150,7 +157,9 @@ export default function PropiedadesPage() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50">
                     <TipoIcon className="h-5 w-5 text-indigo-600" />
                   </div>
-                  <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${estadoCfg.clase}`}>
+                  <span
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${estadoCfg.clase}`}
+                  >
                     <EstadoIcon className="h-3 w-3" />
                     {estadoCfg.label}
                   </span>
@@ -158,7 +167,10 @@ export default function PropiedadesPage() {
                 <p className="text-xs font-mono text-slate-400">{p.codigo}</p>
                 <p className="mt-0.5 font-semibold text-slate-900 leading-tight">{p.nombre}</p>
                 <p className="mt-1 text-xs text-slate-500">{TIPO_LABEL[p.tipo]}</p>
-                <p className="text-xs text-slate-400">{p.sector ? `${p.sector}, ` : ''}{p.ciudad}</p>
+                <p className="text-xs text-slate-400">
+                  {p.sector ? `${p.sector}, ` : ''}
+                  {p.ciudad}
+                </p>
 
                 <div className="mt-3 flex gap-3 text-xs text-slate-500">
                   {p.habitaciones != null && <span>{p.habitaciones} hab.</span>}

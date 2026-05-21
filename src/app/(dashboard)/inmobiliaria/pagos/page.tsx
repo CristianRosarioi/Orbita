@@ -2,8 +2,21 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
-const MESES = ['01','02','03','04','05','06','07','08','09','10','11','12'];
-const MESES_LABEL = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const MESES = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+const MESES_LABEL = [
+  'Ene',
+  'Feb',
+  'Mar',
+  'Abr',
+  'May',
+  'Jun',
+  'Jul',
+  'Ago',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dic',
+];
 
 interface Pago {
   id: string;
@@ -41,7 +54,9 @@ export default function PagosPage() {
       .finally(() => setCargando(false));
   }, [anio, mes, estadoFiltro]);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
   const formatFecha = (s: string) => new Date(s).toLocaleDateString('es-DO');
 
@@ -50,7 +65,8 @@ export default function PagosPage() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-900">Pagos de renta</h1>
         <p className="text-sm text-slate-500">
-          Total cobrado: <strong className="text-emerald-700">RD$ {totalCobrado.toLocaleString('es-DO')}</strong>
+          Total cobrado:{' '}
+          <strong className="text-emerald-700">RD$ {totalCobrado.toLocaleString('es-DO')}</strong>
         </p>
       </div>
 
@@ -62,7 +78,9 @@ export default function PagosPage() {
           className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm"
         >
           {MESES.map((m, i) => (
-            <option key={m} value={m}>{MESES_LABEL[i]}</option>
+            <option key={m} value={m}>
+              {MESES_LABEL[i]}
+            </option>
           ))}
         </select>
         <select
@@ -71,7 +89,9 @@ export default function PagosPage() {
           className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm"
         >
           {[2024, 2025, 2026, 2027].map((a) => (
-            <option key={a} value={a}>{a}</option>
+            <option key={a} value={a}>
+              {a}
+            </option>
           ))}
         </select>
         <select
@@ -87,7 +107,11 @@ export default function PagosPage() {
       </div>
 
       {cargando ? (
-        <div className="space-y-2">{[...Array(5)].map((_, i) => <div key={i} className="h-14 animate-pulse rounded-xl bg-slate-100" />)}</div>
+        <div className="space-y-2">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-14 animate-pulse rounded-xl bg-slate-100" />
+          ))}
+        </div>
       ) : pagos.length === 0 ? (
         <div className="rounded-xl border-2 border-dashed border-slate-200 py-16 text-center">
           <p className="text-slate-400">No hay pagos para este período</p>
@@ -118,11 +142,15 @@ export default function PagosPage() {
                     RD$ {Number(p.monto).toLocaleString('es-DO')}
                   </td>
                   <td className="px-4 py-3">
-                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                      p.estado === 'PAGADO' ? 'bg-emerald-100 text-emerald-800' :
-                      p.estado === 'ATRASADO' ? 'bg-red-100 text-red-700' :
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
+                    <span
+                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        p.estado === 'PAGADO'
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : p.estado === 'ATRASADO'
+                            ? 'bg-red-100 text-red-700'
+                            : 'bg-yellow-100 text-yellow-800'
+                      }`}
+                    >
                       {p.estado}
                     </span>
                   </td>

@@ -14,10 +14,10 @@ export function Navbar() {
   }, []);
 
   const links = [
-    { href: '#caracteristicas', label: 'Características' },
-    { href: '#verticales', label: 'Verticales' },
-    { href: '#precios', label: 'Precios' },
-    { href: '#contacto', label: 'Contacto' },
+    { href: '/#caracteristicas', label: 'Características' },
+    { href: '/#verticales', label: 'Verticales' },
+    { href: '/#precios', label: 'Precios' },
+    { href: '/#contacto', label: 'Contacto' },
   ];
 
   return (

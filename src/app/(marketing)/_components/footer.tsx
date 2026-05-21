@@ -1,21 +1,27 @@
 import Link from 'next/link';
 
 const VERTICALES_LINKS = [
-  { href: '/vertical/restaurante', label: 'Restaurante' },
-  { href: '/vertical/colmado', label: 'Colmado' },
+  { href: '/vertical/restaurante', label: 'Restaurante / Bar' },
+  { href: '/vertical/colmado', label: 'Colmado / Minimarket' },
+  { href: '/vertical/carwash', label: 'Carwash' },
+  { href: '/vertical/repuestos', label: 'Repuestos de Vehículos' },
   { href: '/vertical/taller', label: 'Taller Mecánico' },
-  { href: '/vertical/salon', label: 'Salón de Belleza' },
-  { href: '/vertical/farmacia', label: 'Farmacia' },
   { href: '/vertical/ferreteria', label: 'Ferretería' },
+  { href: '/vertical/salon', label: 'Salón / Barbería' },
   { href: '/vertical/clinica', label: 'Clínica / Consultorio' },
-  { href: '/vertical/super', label: 'Supermercado / Minimarket' },
+  { href: '/vertical/inmobiliaria', label: 'Inmobiliaria' },
+  { href: '/vertical/farmacia', label: 'Farmacia' },
+  { href: '/vertical/tienda_ropa', label: 'Tienda de Ropa' },
+  { href: '/vertical/tienda_online', label: 'Tienda Online / DMs' },
+  { href: '/vertical/joyeria', label: 'Joyería' },
+  { href: '/vertical/supermercado', label: 'Supermercado' },
 ];
 
 const PRODUCTO_LINKS = [
-  { href: '#caracteristicas', label: 'Características' },
-  { href: '#verticales', label: 'Verticales' },
-  { href: '#precios', label: 'Precios' },
-  { href: '/demo', label: 'Ver demo' },
+  { href: '/#caracteristicas', label: 'Características' },
+  { href: '/#verticales', label: 'Verticales' },
+  { href: '/#precios', label: 'Precios' },
+  { href: '/#faq', label: 'Preguntas frecuentes' },
 ];
 
 const LEGAL_LINKS = [
@@ -25,7 +31,7 @@ const LEGAL_LINKS = [
 
 export function Footer() {
   return (
-    <footer id="contacto" className="border-t border-slate-200 bg-slate-900 text-slate-400">
+    <footer className="border-t border-slate-200 bg-slate-900 text-slate-400">
       <div className="mx-auto max-w-7xl px-6 py-14">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-4">
           {/* Brand */}
@@ -48,8 +54,19 @@ export function Footer() {
               </div>
               <span className="text-lg font-bold text-white">Órbita</span>
             </div>
-            <p className="text-sm leading-relaxed">
+            <p className="mb-4 text-sm leading-relaxed">
               El sistema de gestión hecho para negocios de la República Dominicana.
+            </p>
+            <p className="text-xs text-slate-500">
+              Desarrollado por{' '}
+              <a
+                href="https://orbitard.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-400 transition-colors hover:text-white"
+              >
+                OrbitaRD.com
+              </a>
             </p>
           </div>
 
@@ -70,7 +87,7 @@ export function Footer() {
           {/* Verticales */}
           <div>
             <h3 className="mb-4 text-sm font-semibold text-white">Verticales</h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2">
               {VERTICALES_LINKS.map(({ href, label }) => (
                 <li key={href}>
                   <Link href={href} className="text-sm transition-colors hover:text-white">
@@ -81,10 +98,62 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Legal y Contacto */}
+          {/* Contacto y Legal */}
           <div>
-            <h3 className="mb-4 text-sm font-semibold text-white">Legal</h3>
+            <h3 className="mb-4 text-sm font-semibold text-white">Contacto</h3>
             <ul className="mb-6 space-y-2.5">
+              <li>
+                <a
+                  href="mailto:contacto.orbitard@gmail.com"
+                  className="text-sm transition-colors hover:text-white"
+                >
+                  contacto.orbitard@gmail.com
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/18298179643"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm transition-colors hover:text-white"
+                >
+                  WhatsApp
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.instagram.com/orbita_rd/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm transition-colors hover:text-white"
+                >
+                  Instagram: @orbita_rd
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.facebook.com/OrbitaRD/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm transition-colors hover:text-white"
+                >
+                  Facebook: OrbitaRD
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.tiktok.com/@orbita.rd"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm transition-colors hover:text-white"
+                >
+                  TikTok: @orbita.rd
+                </a>
+              </li>
+            </ul>
+
+            <h3 className="mb-4 text-sm font-semibold text-white">Legal</h3>
+            <ul className="space-y-2.5">
               {LEGAL_LINKS.map(({ href, label }) => (
                 <li key={href}>
                   <Link href={href} className="text-sm transition-colors hover:text-white">
@@ -93,30 +162,11 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            <h3 className="mb-4 text-sm font-semibold text-white">Contacto</h3>
-            <ul className="space-y-2.5">
-              <li>
-                <a
-                  href="mailto:hola@orbitard.com"
-                  className="text-sm transition-colors hover:text-white"
-                >
-                  hola@orbitard.com
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://wa.me/18091234567"
-                  className="text-sm transition-colors hover:text-white"
-                >
-                  WhatsApp: 809-123-4567
-                </a>
-              </li>
-            </ul>
           </div>
         </div>
 
         <div className="mt-12 border-t border-slate-800 pt-8 text-center text-sm">
-          © 2026 Órbita RD. Todos los derechos reservados. Hecho con ❤️ en República Dominicana.
+          © 2026 Órbita RD. Todos los derechos reservados.
         </div>
       </div>
     </footer>

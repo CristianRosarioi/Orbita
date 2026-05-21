@@ -49,7 +49,9 @@ export default function DetalleReparacionPage() {
       .finally(() => setCargando(false));
   }, [id]);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
   async function cambiarEstado(nuevoEstado: string) {
     setError('');
@@ -63,7 +65,10 @@ export default function DetalleReparacionPage() {
         body: JSON.stringify(body),
       });
       const data = await res.json();
-      if (!res.ok) { setError(data.error?.message ?? 'Error'); return; }
+      if (!res.ok) {
+        setError(data.error?.message ?? 'Error');
+        return;
+      }
       cargar();
     } finally {
       setActualizando(false);
@@ -76,7 +81,10 @@ export default function DetalleReparacionPage() {
     try {
       const res = await fetch(`/api/joyeria/reparaciones/${id}/facturar`, { method: 'POST' });
       const data = await res.json();
-      if (!res.ok) { setError(data.error?.message ?? 'Error al facturar'); return; }
+      if (!res.ok) {
+        setError(data.error?.message ?? 'Error al facturar');
+        return;
+      }
       cargar();
     } finally {
       setFacturando(false);
@@ -92,13 +100,20 @@ export default function DetalleReparacionPage() {
 
   return (
     <div className="p-6 max-w-2xl">
-      <button onClick={() => router.back()} className="mb-4 text-sm text-slate-500 hover:text-slate-700">← Volver</button>
+      <button
+        onClick={() => router.back()}
+        className="mb-4 text-sm text-slate-500 hover:text-slate-700"
+      >
+        ← Volver
+      </button>
 
       <div className="mb-6 flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">{reparacion.clienteNombre}</h1>
           {reparacion.pieza && (
-            <p className="text-sm text-slate-500">{reparacion.pieza.codigo} — {reparacion.pieza.nombre}</p>
+            <p className="text-sm text-slate-500">
+              {reparacion.pieza.codigo} — {reparacion.pieza.nombre}
+            </p>
           )}
         </div>
         <span className={`rounded-full px-3 py-1 text-sm font-medium ${estadoCfg.clase}`}>
@@ -106,16 +121,24 @@ export default function DetalleReparacionPage() {
         </span>
       </div>
 
-      {error && <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
+      {error && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
 
       {/* Progreso */}
       <div className="mb-6 flex items-center gap-2">
         {ESTADOS.map((est, i) => (
           <div key={est} className="flex items-center gap-2">
-            <div className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${i <= idxEstado ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500'}`}>
+            <div
+              className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${i <= idxEstado ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-500'}`}
+            >
               {i < idxEstado ? <CheckCircle className="h-4 w-4" /> : i + 1}
             </div>
-            {i < ESTADOS.length - 1 && <div className={`h-0.5 w-10 ${i < idxEstado ? 'bg-indigo-600' : 'bg-slate-200'}`} />}
+            {i < ESTADOS.length - 1 && (
+              <div className={`h-0.5 w-10 ${i < idxEstado ? 'bg-indigo-600' : 'bg-slate-200'}`} />
+            )}
           </div>
         ))}
       </div>
@@ -136,13 +159,17 @@ export default function DetalleReparacionPage() {
           <div>
             <p className="text-xs font-medium text-slate-500 uppercase">Presupuesto</p>
             <p className="mt-1 font-semibold text-slate-900">
-              {reparacion.presupuesto != null ? `RD$ ${Number(reparacion.presupuesto).toLocaleString('es-DO')}` : '—'}
+              {reparacion.presupuesto != null
+                ? `RD$ ${Number(reparacion.presupuesto).toLocaleString('es-DO')}`
+                : '—'}
             </p>
           </div>
           <div>
             <p className="text-xs font-medium text-slate-500 uppercase">Costo final</p>
             <p className="mt-1 font-semibold text-slate-900">
-              {reparacion.costoFinal != null ? `RD$ ${Number(reparacion.costoFinal).toLocaleString('es-DO')}` : '—'}
+              {reparacion.costoFinal != null
+                ? `RD$ ${Number(reparacion.costoFinal).toLocaleString('es-DO')}`
+                : '—'}
             </p>
           </div>
           {reparacion.fechaPromesa && (
@@ -164,15 +191,20 @@ export default function DetalleReparacionPage() {
       {reparacion.estado !== 'ENTREGADA' && (
         <div className="space-y-3">
           {reparacion.estado === 'RECIBIDA' && (
-            <button onClick={() => cambiarEstado('EN_PROCESO')} disabled={actualizando}
-              className="w-full rounded-lg bg-blue-600 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+            <button
+              onClick={() => cambiarEstado('EN_PROCESO')}
+              disabled={actualizando}
+              className="w-full rounded-lg bg-blue-600 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            >
               {actualizando ? 'Actualizando...' : 'Marcar como En proceso'}
             </button>
           )}
           {reparacion.estado === 'EN_PROCESO' && (
             <div className="space-y-2">
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">Costo final (RD$) *</label>
+                <label className="mb-1 block text-sm font-medium text-slate-700">
+                  Costo final (RD$) *
+                </label>
                 <input
                   type="number"
                   min="0"
@@ -183,8 +215,11 @@ export default function DetalleReparacionPage() {
                   className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-indigo-400 focus:outline-none"
                 />
               </div>
-              <button onClick={() => cambiarEstado('LISTA')} disabled={actualizando || !costoFinal}
-                className="w-full rounded-lg bg-emerald-600 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50">
+              <button
+                onClick={() => cambiarEstado('LISTA')}
+                disabled={actualizando || !costoFinal}
+                className="w-full rounded-lg bg-emerald-600 py-2.5 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
+              >
                 {actualizando ? 'Actualizando...' : 'Marcar como Lista'}
               </button>
             </div>
@@ -192,8 +227,11 @@ export default function DetalleReparacionPage() {
           {reparacion.estado === 'LISTA' && (
             <div className="space-y-2">
               {!reparacion.facturaId ? (
-                <button onClick={facturar} disabled={facturando}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50">
+                <button
+                  onClick={facturar}
+                  disabled={facturando}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+                >
                   <FileText className="h-4 w-4" />
                   {facturando ? 'Generando factura...' : 'Facturar y marcar como entregada'}
                 </button>

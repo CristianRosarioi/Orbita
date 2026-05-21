@@ -48,7 +48,9 @@ export default function DetallePropiedadPage() {
   useEffect(() => {
     fetch(`/api/inmobiliaria/propiedades/${id}`)
       .then((r) => r.json())
-      .then((d) => { if (d.success) setPropiedad(d.data); })
+      .then((d) => {
+        if (d.success) setPropiedad(d.data);
+      })
       .finally(() => setCargando(false));
   }, [id]);
 
@@ -63,7 +65,10 @@ export default function DetallePropiedadPage() {
         <div>
           <p className="text-xs font-mono text-slate-400">{propiedad.codigo}</p>
           <h1 className="text-2xl font-bold text-slate-900">{propiedad.nombre}</h1>
-          <p className="text-sm text-slate-500">{propiedad.tipo} · {propiedad.sector ? `${propiedad.sector}, ` : ''}{propiedad.ciudad}</p>
+          <p className="text-sm text-slate-500">
+            {propiedad.tipo} · {propiedad.sector ? `${propiedad.sector}, ` : ''}
+            {propiedad.ciudad}
+          </p>
         </div>
         <Link
           href={`/inmobiliaria/contratos/nuevo?propiedadId=${propiedad.id}`}
@@ -132,8 +137,12 @@ export default function DetallePropiedadPage() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-semibold text-slate-900">RD$ {Number(c.montoMensual).toLocaleString('es-DO')}/mes</p>
-                  <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-medium ${ESTADO_CLASE[c.estado] ?? ''}`}>
+                  <p className="font-semibold text-slate-900">
+                    RD$ {Number(c.montoMensual).toLocaleString('es-DO')}/mes
+                  </p>
+                  <span
+                    className={`mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-medium ${ESTADO_CLASE[c.estado] ?? ''}`}
+                  >
                     {c.estado}
                   </span>
                 </div>
@@ -144,7 +153,10 @@ export default function DetallePropiedadPage() {
       </div>
 
       <div className="mt-6">
-        <button onClick={() => router.back()} className="text-sm text-slate-500 hover:text-slate-700">
+        <button
+          onClick={() => router.back()}
+          className="text-sm text-slate-500 hover:text-slate-700"
+        >
           ← Volver
         </button>
       </div>

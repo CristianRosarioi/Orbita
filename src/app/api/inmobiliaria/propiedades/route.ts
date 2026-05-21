@@ -80,7 +80,8 @@ export async function POST(req: NextRequest) {
     const existe = await prisma.propiedad.findUnique({
       where: { empresaId_codigo: { empresaId, codigo: data.codigo } },
     });
-    if (existe) return err('DUPLICATE', `Ya existe una propiedad con el código ${data.codigo}.`, 409);
+    if (existe)
+      return err('DUPLICATE', `Ya existe una propiedad con el código ${data.codigo}.`, 409);
 
     const propiedad = await prisma.propiedad.create({
       data: { ...data, empresaId, creadoPor: userId },

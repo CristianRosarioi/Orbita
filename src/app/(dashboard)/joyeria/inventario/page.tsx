@@ -47,11 +47,15 @@ export default function InventarioJoyeriaPage() {
     if (busqueda) params.set('q', busqueda);
     fetch(`/api/joyeria/inventario?${params}`)
       .then((r) => r.json())
-      .then((d) => { if (d.success) setPiezas(d.data); })
+      .then((d) => {
+        if (d.success) setPiezas(d.data);
+      })
       .finally(() => setCargando(false));
   }, [materialFiltro, estadoFiltro, busqueda]);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
   return (
     <div className="p-6">
@@ -84,7 +88,9 @@ export default function InventarioJoyeriaPage() {
         >
           <option value="">Todos los materiales</option>
           {Object.entries(MATERIAL_LABEL).map(([v, l]) => (
-            <option key={v} value={v}>{l}</option>
+            <option key={v} value={v}>
+              {l}
+            </option>
           ))}
         </select>
         <select
@@ -94,20 +100,27 @@ export default function InventarioJoyeriaPage() {
         >
           <option value="">Todos los estados</option>
           {Object.entries(ESTADO_CONFIG).map(([v, { label }]) => (
-            <option key={v} value={v}>{label}</option>
+            <option key={v} value={v}>
+              {label}
+            </option>
           ))}
         </select>
       </div>
 
       {cargando ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {[...Array(8)].map((_, i) => <div key={i} className="h-40 animate-pulse rounded-xl bg-slate-100" />)}
+          {[...Array(8)].map((_, i) => (
+            <div key={i} className="h-40 animate-pulse rounded-xl bg-slate-100" />
+          ))}
         </div>
       ) : piezas.length === 0 ? (
         <div className="rounded-xl border-2 border-dashed border-slate-200 py-16 text-center">
           <Gem className="mx-auto mb-3 h-10 w-10 text-slate-300" />
           <p className="text-slate-400">No hay piezas registradas</p>
-          <Link href="/joyeria/inventario/nueva" className="mt-2 inline-block text-sm text-indigo-600 hover:underline">
+          <Link
+            href="/joyeria/inventario/nueva"
+            className="mt-2 inline-block text-sm text-indigo-600 hover:underline"
+          >
             Agregar primera pieza
           </Link>
         </div>
@@ -125,14 +138,20 @@ export default function InventarioJoyeriaPage() {
                   <Gem className="h-6 w-6 text-yellow-600" />
                 </div>
                 <p className="text-center text-xs font-mono text-slate-400">{p.codigo}</p>
-                <p className="mt-0.5 text-center text-sm font-semibold text-slate-900 leading-tight">{p.nombre}</p>
-                <p className="mt-1 text-center text-xs text-slate-500">{p.tipo} · {MATERIAL_LABEL[p.material]}</p>
+                <p className="mt-0.5 text-center text-sm font-semibold text-slate-900 leading-tight">
+                  {p.nombre}
+                </p>
+                <p className="mt-1 text-center text-xs text-slate-500">
+                  {p.tipo} · {MATERIAL_LABEL[p.material]}
+                </p>
                 <div className="mt-2 flex justify-center gap-1 text-xs text-slate-400">
                   {p.pesoGramos != null && <span>{Number(p.pesoGramos)}g</span>}
                   {p.quilates != null && <span>· {Number(p.quilates)}ct</span>}
                 </div>
                 <div className="mt-3 flex items-center justify-between">
-                  <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${estadoCfg.clase}`}>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${estadoCfg.clase}`}
+                  >
                     {estadoCfg.label}
                   </span>
                   <p className="text-sm font-bold text-slate-900">

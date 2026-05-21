@@ -33,6 +33,11 @@ const FAQS = [
     respuesta:
       'Sí, todo el sistema está en español dominicano. El soporte es por WhatsApp en horario extendido (8am–8pm de lunes a sábado) y por email los domingos.',
   },
+  {
+    pregunta: '¿Cuánto tiempo dura la prueba gratis?',
+    respuesta:
+      '15 días completos, sin necesidad de tarjeta de crédito. Accedes a todas las funciones del plan que elijas durante ese período. Al terminar, decides si continúas o no.',
+  },
 ];
 
 export function FAQSection() {

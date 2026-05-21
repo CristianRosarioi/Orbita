@@ -53,7 +53,15 @@ describe('GET /api/inmobiliaria/propiedades', () => {
 
   it('devuelve lista paginada', async () => {
     mockPrisma.propiedad.findMany.mockResolvedValue([
-      { id: 'p1', codigo: 'REF-001', nombre: 'Apto 2B', tipo: 'APARTAMENTO', estado: 'DISPONIBLE', ciudad: 'Santo Domingo', _count: { contratos: 0 } },
+      {
+        id: 'p1',
+        codigo: 'REF-001',
+        nombre: 'Apto 2B',
+        tipo: 'APARTAMENTO',
+        estado: 'DISPONIBLE',
+        ciudad: 'Santo Domingo',
+        _count: { contratos: 0 },
+      },
     ]);
     mockPrisma.propiedad.count.mockResolvedValue(1);
 
@@ -100,7 +108,9 @@ describe('POST /api/inmobiliaria/propiedades', () => {
 
   it('rechaza tipo inválido con 422', async () => {
     const { POST } = await import('@/app/api/inmobiliaria/propiedades/route');
-    const res = await POST(makeReq('/api/inmobiliaria/propiedades', { ...propiedadValida, tipo: 'IGLESIA' }));
+    const res = await POST(
+      makeReq('/api/inmobiliaria/propiedades', { ...propiedadValida, tipo: 'IGLESIA' }),
+    );
     expect(res.status).toBe(422);
   });
 });
@@ -138,10 +148,22 @@ describe('POST /api/inmobiliaria/contratos', () => {
       estado: 'DISPONIBLE',
       deletedAt: null,
     });
-    const mockTxContrato = { contratoAlquiler: { create: vi.fn().mockResolvedValue({ id: 'c1', ...contratoValido, propiedad: { codigo: 'REF-001', nombre: 'Apto' } }) } };
+    const mockTxContrato = {
+      contratoAlquiler: {
+        create: vi
+          .fn()
+          .mockResolvedValue({
+            id: 'c1',
+            ...contratoValido,
+            propiedad: { codigo: 'REF-001', nombre: 'Apto' },
+          }),
+      },
+    };
     const mockTxPropiedad = { propiedad: { update: vi.fn() } };
     const mockTx = { ...mockTxContrato, ...mockTxPropiedad };
-    mockPrisma.$transaction.mockImplementation((cb: (tx: typeof mockTx) => Promise<unknown>) => cb(mockTx));
+    mockPrisma.$transaction.mockImplementation((cb: (tx: typeof mockTx) => Promise<unknown>) =>
+      cb(mockTx),
+    );
 
     const { POST } = await import('@/app/api/inmobiliaria/contratos/route');
     const res = await POST(makeReq('/api/inmobiliaria/contratos', contratoValido));

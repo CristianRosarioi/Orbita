@@ -13,7 +13,9 @@ vi.mock('@/lib/facturacion', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/lib/facturacion')>();
   return {
     ...actual,
-    generarNumeroFactura: vi.fn().mockResolvedValue({ numero: 'FAC-2026-0001', numeroInt: 1, anio: 2026 }),
+    generarNumeroFactura: vi
+      .fn()
+      .mockResolvedValue({ numero: 'FAC-2026-0001', numeroInt: 1, anio: 2026 }),
   };
 });
 
@@ -166,7 +168,9 @@ describe('POST /api/joyeria/reparaciones/[id]/facturar', () => {
     });
 
     const { POST } = await import('@/app/api/joyeria/reparaciones/[id]/facturar/route');
-    const req = new NextRequest('http://localhost/api/joyeria/reparaciones/rep_1/facturar', { method: 'POST' });
+    const req = new NextRequest('http://localhost/api/joyeria/reparaciones/rep_1/facturar', {
+      method: 'POST',
+    });
     const res = await POST(req, { params: Promise.resolve({ id: 'rep_1' }) });
     expect(res.status).toBe(409);
     const body = await res.json();
@@ -182,7 +186,9 @@ describe('POST /api/joyeria/reparaciones/[id]/facturar', () => {
     });
 
     const { POST } = await import('@/app/api/joyeria/reparaciones/[id]/facturar/route');
-    const req = new NextRequest('http://localhost/api/joyeria/reparaciones/rep_1/facturar', { method: 'POST' });
+    const req = new NextRequest('http://localhost/api/joyeria/reparaciones/rep_1/facturar', {
+      method: 'POST',
+    });
     const res = await POST(req, { params: Promise.resolve({ id: 'rep_1' }) });
     expect(res.status).toBe(409);
   });
@@ -200,7 +206,9 @@ describe('POST /api/joyeria/reparaciones/[id]/facturar', () => {
     });
 
     const { POST } = await import('@/app/api/joyeria/reparaciones/[id]/facturar/route');
-    const req = new NextRequest('http://localhost/api/joyeria/reparaciones/rep_1/facturar', { method: 'POST' });
+    const req = new NextRequest('http://localhost/api/joyeria/reparaciones/rep_1/facturar', {
+      method: 'POST',
+    });
     const res = await POST(req, { params: Promise.resolve({ id: 'rep_1' }) });
     expect(res.status).toBe(422);
   });
@@ -220,7 +228,9 @@ describe('POST /api/joyeria/reparaciones/[id]/facturar', () => {
     });
 
     const { POST } = await import('@/app/api/joyeria/reparaciones/[id]/facturar/route');
-    const req = new NextRequest('http://localhost/api/joyeria/reparaciones/rep_1/facturar', { method: 'POST' });
+    const req = new NextRequest('http://localhost/api/joyeria/reparaciones/rep_1/facturar', {
+      method: 'POST',
+    });
     const res = await POST(req, { params: Promise.resolve({ id: 'rep_1' }) });
     expect(res.status).toBe(201);
     const body = await res.json();

@@ -162,7 +162,7 @@ function HeroSection() {
                 href="/sign-up"
                 className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-indigo-600/25 transition-all hover:bg-indigo-700 hover:shadow-indigo-600/30"
               >
-                Empieza gratis 14 días
+                Empieza gratis — 15 días
                 <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
@@ -186,7 +186,7 @@ function HeroSection() {
                 { value: '+500', label: 'negocios activos' },
                 { value: '606/607', label: 'automático' },
                 { value: 'TSS+ISR', label: 'calculado solo' },
-                { value: '6', label: 'verticales' },
+                { value: '14', label: 'verticales' },
               ].map(({ value, label }) => (
                 <div
                   key={label}
@@ -333,15 +333,7 @@ function VerticalesSection() {
                 href={`/vertical/${v.slug}`}
                 className="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 transition-colors hover:text-indigo-700"
               >
-                Ver más
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
+                Ver más →
               </Link>
             </div>
           ))}
@@ -581,8 +573,86 @@ function PreciosSection() {
         </div>
 
         <p className="mt-8 text-center text-sm text-slate-500">
-          Todos los planes incluyen 14 días de prueba gratis. No se requiere tarjeta de crédito.
+          Todos los planes incluyen 15 días de prueba gratis. No se requiere tarjeta de crédito.
         </p>
+      </div>
+    </section>
+  );
+}
+
+// ─── Contacto ────────────────────────────────────────────────
+function ContactoSection() {
+  return (
+    <section id="contacto" className="bg-slate-50 py-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-slate-900 sm:text-4xl">
+            ¿Tienes alguna pregunta?
+          </h2>
+          <p className="text-lg text-slate-600">
+            Estamos disponibles para ayudarte a configurar Órbita para tu negocio.
+          </p>
+        </div>
+
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {/* WhatsApp */}
+          <div className="flex flex-col rounded-2xl border border-green-200 bg-green-50 p-6 transition-colors hover:bg-green-100">
+            <div className="mb-3 text-3xl">💬</div>
+            <h3 className="mb-1 font-bold text-slate-900">WhatsApp</h3>
+            <p className="mb-5 flex-1 text-sm text-slate-600">Escríbenos directo</p>
+            <a
+              href="https://wa.me/18298179643"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-xl bg-green-600 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-green-700"
+            >
+              Escribir por WhatsApp
+            </a>
+          </div>
+
+          {/* Email */}
+          <div className="flex flex-col rounded-2xl border border-blue-200 bg-blue-50 p-6 transition-colors hover:bg-blue-100">
+            <div className="mb-3 text-3xl">📧</div>
+            <h3 className="mb-1 font-bold text-slate-900">Email</h3>
+            <p className="mb-5 flex-1 text-sm text-slate-600">contacto.orbitard@gmail.com</p>
+            <a
+              href="mailto:contacto.orbitard@gmail.com"
+              className="block rounded-xl bg-blue-600 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+            >
+              Enviar email
+            </a>
+          </div>
+
+          {/* Instagram */}
+          <div className="flex flex-col rounded-2xl border border-pink-200 bg-pink-50 p-6 transition-colors hover:bg-pink-100">
+            <div className="mb-3 text-3xl">📸</div>
+            <h3 className="mb-1 font-bold text-slate-900">Instagram</h3>
+            <p className="mb-5 flex-1 text-sm text-slate-600">@orbita_rd</p>
+            <a
+              href="https://www.instagram.com/orbita_rd/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-xl bg-pink-600 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-pink-700"
+            >
+              Ver en Instagram
+            </a>
+          </div>
+
+          {/* Facebook */}
+          <div className="flex flex-col rounded-2xl border border-indigo-200 bg-indigo-50 p-6 transition-colors hover:bg-indigo-100">
+            <div className="mb-3 text-3xl">👍</div>
+            <h3 className="mb-1 font-bold text-slate-900">Facebook</h3>
+            <p className="mb-5 flex-1 text-sm text-slate-600">OrbitaRD</p>
+            <a
+              href="https://www.facebook.com/OrbitaRD/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-xl bg-indigo-600 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
+            >
+              Ver en Facebook
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -597,7 +667,7 @@ function CTAFinalSection() {
           Empieza a ordenar tu negocio hoy
         </h2>
         <p className="mb-8 text-lg text-indigo-200">
-          14 días gratis, sin tarjeta de crédito. Configura tu empresa en menos de 5 minutos.
+          15 días gratis, sin tarjeta de crédito. Configura tu empresa en menos de 5 minutos.
         </p>
         <Link
           href="/sign-up"
@@ -634,6 +704,7 @@ export default async function LandingPage() {
       <ModulosSection />
       <PreciosSection />
       <FAQSection />
+      <ContactoSection />
       <CTAFinalSection />
     </>
   );

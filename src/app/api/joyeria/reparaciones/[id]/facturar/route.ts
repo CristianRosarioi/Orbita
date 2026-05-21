@@ -20,8 +20,7 @@ export async function POST(_req: NextRequest, { params }: Params) {
     if (!reparacion) return err('NOT_FOUND', 'Reparación no encontrada.', 404);
     if (reparacion.estado !== 'LISTA')
       return err('CONFLICT', 'Solo se pueden facturar reparaciones en estado LISTA.', 409);
-    if (reparacion.facturaId)
-      return err('CONFLICT', 'Esta reparación ya fue facturada.', 409);
+    if (reparacion.facturaId) return err('CONFLICT', 'Esta reparación ya fue facturada.', 409);
 
     const costo = Number(reparacion.costoFinal ?? reparacion.presupuesto ?? 0);
     if (costo <= 0)
