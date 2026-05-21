@@ -39,6 +39,12 @@ const SEGMENTO_LABEL: Record<string, string> = {
   inventario: 'Inventario',
   reparaciones: 'Reparaciones',
   facturar: 'Facturar',
+  carwash: 'Carwash',
+  cola: 'Cola de servicio',
+  ordenes: 'Órdenes',
+  repuestos: 'Repuestos',
+  cotizaciones: 'Cotizaciones',
+  buscar: 'Buscar por vehículo',
 };
 
 function esId(seg: string) {

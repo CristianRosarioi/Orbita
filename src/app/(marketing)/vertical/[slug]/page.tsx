@@ -127,20 +127,50 @@ export default async function VerticalPage({ params }: Params) {
             {/* Stats */}
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-slate-500">
               <span className="flex items-center gap-1.5">
-                <svg className="h-4 w-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                <svg
+                  className="h-4 w-4 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
                 15 días gratis
               </span>
               <span className="flex items-center gap-1.5">
-                <svg className="h-4 w-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                <svg
+                  className="h-4 w-4 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
                 Sin tarjeta de crédito
               </span>
               <span className="flex items-center gap-1.5">
-                <svg className="h-4 w-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                <svg
+                  className="h-4 w-4 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
                 Cancela cuando quieras
               </span>
@@ -248,53 +278,85 @@ export default async function VerticalPage({ params }: Params) {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3">
-            {PLANES.map(({ nombre, precio, descripcion, popular, incluye, excluye, cta, ctaHref, ctaStyle }) => (
-              <div
-                key={nombre}
-                className={`relative flex flex-col rounded-2xl border p-8 transition-all${popular ? ' border-indigo-600 shadow-xl shadow-indigo-600/10 ring-2 ring-indigo-600' : ' border-slate-200 hover:border-slate-300 hover:shadow-md'}`}
-              >
-                {popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <span className="rounded-full bg-indigo-600 px-4 py-1 text-xs font-semibold text-white">
-                      ⭐ Más popular
-                    </span>
-                  </div>
-                )}
-                <div className="mb-6">
-                  <h3 className="mb-1 text-lg font-bold text-slate-900">{nombre}</h3>
-                  <p className="mb-4 text-sm text-slate-600">{descripcion}</p>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-sm font-medium text-slate-500">RD$</span>
-                    <span className="text-4xl font-extrabold text-slate-900">{precio}</span>
-                    <span className="text-sm text-slate-500">/mes</span>
-                  </div>
-                </div>
-                <ul className="mb-8 flex-1 space-y-2.5">
-                  {incluye.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700">
-                      <svg className="mt-0.5 h-4 w-4 shrink-0 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {item}
-                    </li>
-                  ))}
-                  {excluye.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5 text-sm text-slate-400">
-                      <svg className="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={ctaHref}
-                  className={`block rounded-xl px-6 py-3 text-center text-sm font-semibold transition-all ${ctaStyle}`}
+            {PLANES.map(
+              ({
+                nombre,
+                precio,
+                descripcion,
+                popular,
+                incluye,
+                excluye,
+                cta,
+                ctaHref,
+                ctaStyle,
+              }) => (
+                <div
+                  key={nombre}
+                  className={`relative flex flex-col rounded-2xl border p-8 transition-all${popular ? ' border-indigo-600 shadow-xl shadow-indigo-600/10 ring-2 ring-indigo-600' : ' border-slate-200 hover:border-slate-300 hover:shadow-md'}`}
                 >
-                  {cta}
-                </Link>
-              </div>
-            ))}
+                  {popular && (
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                      <span className="rounded-full bg-indigo-600 px-4 py-1 text-xs font-semibold text-white">
+                        ⭐ Más popular
+                      </span>
+                    </div>
+                  )}
+                  <div className="mb-6">
+                    <h3 className="mb-1 text-lg font-bold text-slate-900">{nombre}</h3>
+                    <p className="mb-4 text-sm text-slate-600">{descripcion}</p>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-sm font-medium text-slate-500">RD$</span>
+                      <span className="text-4xl font-extrabold text-slate-900">{precio}</span>
+                      <span className="text-sm text-slate-500">/mes</span>
+                    </div>
+                  </div>
+                  <ul className="mb-8 flex-1 space-y-2.5">
+                    {incluye.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm text-slate-700">
+                        <svg
+                          className="mt-0.5 h-4 w-4 shrink-0 text-green-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2.5}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                        {item}
+                      </li>
+                    ))}
+                    {excluye.map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-sm text-slate-400">
+                        <svg
+                          className="mt-0.5 h-4 w-4 shrink-0"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href={ctaHref}
+                    className={`block rounded-xl px-6 py-3 text-center text-sm font-semibold transition-all ${ctaStyle}`}
+                  >
+                    {cta}
+                  </Link>
+                </div>
+              ),
+            )}
           </div>
           <p className="mt-8 text-center text-sm text-slate-500">
             Todos los planes incluyen 15 días de prueba gratis. No se requiere tarjeta de crédito.
@@ -317,10 +379,18 @@ export default async function VerticalPage({ params }: Params) {
             >
               Crear cuenta gratis
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
               </svg>
             </Link>
-            <Link href="/#verticales" className="text-sm font-medium text-indigo-200 hover:text-white">
+            <Link
+              href="/#verticales"
+              className="text-sm font-medium text-indigo-200 hover:text-white"
+            >
               ← Ver todos los módulos
             </Link>
           </div>

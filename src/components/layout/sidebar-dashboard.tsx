@@ -47,6 +47,7 @@ import {
   Building,
   FileCheck,
   Gem,
+  Search,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -67,7 +68,9 @@ interface SidebarProps {
 
 const INDUSTRIAS_RESTAURANTE = ['RESTAURANTE'];
 const INDUSTRIAS_COLMADO = ['COLMADO', 'TIENDA_ONLINE', 'TIENDA_ROPA'];
-const INDUSTRIAS_TALLER = ['TALLER_MECANICO', 'CARWASH', 'REPUESTOS'];
+const INDUSTRIAS_TALLER = ['TALLER_MECANICO'];
+const INDUSTRIAS_CARWASH = ['CARWASH'];
+const INDUSTRIAS_REPUESTOS = ['REPUESTOS'];
 const INDUSTRIAS_SALON = ['SALON_BARBERIA'];
 const INDUSTRIAS_FARMACIA = ['FARMACIA', 'BOTICA', 'DROGUERIA'];
 const INDUSTRIAS_FERRETERIA = ['FERRETERIA', 'MATERIALES', 'PINTURAS'];
@@ -108,6 +111,17 @@ const NOMINA_ITEMS = [
 const TALLER_ITEMS = [
   { href: '/taller/ordenes', label: 'Órdenes de trabajo', icon: Wrench },
   { href: '/taller/historial', label: 'Historial por placa', icon: Car },
+];
+
+const CARWASH_ITEMS = [
+  { href: '/carwash/cola', label: 'Cola de servicio', icon: Car },
+  { href: '/carwash/ordenes', label: 'Órdenes', icon: ClipboardList },
+];
+
+const REPUESTOS_ITEMS = [
+  { href: '/repuestos/inventario', label: 'Inventario', icon: Package },
+  { href: '/repuestos/cotizaciones', label: 'Cotizaciones', icon: FileText },
+  { href: '/repuestos/buscar', label: 'Buscar por vehículo', icon: Search },
 ];
 
 const SALON_ITEMS = [
@@ -382,6 +396,26 @@ function SidebarContent({
           <>
             <SectionDivider label="Taller" />
             {TALLER_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Carwash */}
+        {INDUSTRIAS_CARWASH.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Carwash" />
+            {CARWASH_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Repuestos */}
+        {INDUSTRIAS_REPUESTOS.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Repuestos" />
+            {REPUESTOS_ITEMS.map(({ href, label, icon }) => (
               <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
             ))}
           </>

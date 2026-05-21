@@ -199,7 +199,9 @@ model Empresa {
   pagosAlquiler      PagoAlquiler[]
   piezasJoya         PiezaJoya[]
   reparacionesJoya   ReparacionJoya[]
-
+  ordenesCarwash     OrdenCarwash[]
+  repuestos          Repuesto[]
+  cotizaciones       Cotizacion[]
   @@index([rnc])
   @@index([deletedAt])
   @@map("empresas")
@@ -357,6 +359,8 @@ model Cliente {
   contratos        ContratoAlquiler[]
   piezasJoya       PiezaJoya[]
   reparacionesJoya ReparacionJoya[]
+  ordenesCarwash   OrdenCarwash[]
+  cotizaciones     Cotizacion[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, identificacion])
@@ -1983,4 +1987,155 @@ model ReparacionJoya {
 
   @@index([empresaId, estado])
   @@map("reparaciones_joya")
+}
+
+// ============================================================
+// ENUMS — Fase 20: Carwash y Repuestos
+// ============================================================
+
+enum EstadoOrdenCarwash {
+  EN_COLA
+  EN_PROCESO
+  LISTO
+  ENTREGADO
+  CANCELADO
+
+  @@map("estado_orden_carwash")
+}
+
+enum EstadoCotizacion {
+  PENDIENTE
+  APROBADA
+  RECHAZADA
+  FACTURADA
+
+  @@map("estado_cotizacion")
+}
+
+// ============================================================
+// MODELO: OrdenCarwash
+// ============================================================
+model OrdenCarwash {
+  id               String             @id @default(cuid())
+  empresaId        String             @map("empresa_id")
+  numero           Int
+  clienteId        String?            @map("cliente_id")
+  clienteNombre    String             @map("cliente_nombre")
+  clienteTelefono  String?            @map("cliente_telefono")
+  vehiculoPlaca    String             @map("vehiculo_placa")
+  vehiculoMarca    String?            @map("vehiculo_marca")
+  vehiculoModelo   String?            @map("vehiculo_modelo")
+  vehiculoColor    String?            @map("vehiculo_color")
+  tipoServicio     String             @map("tipo_servicio")
+  duracionMin      Int                @default(30) @map("duracion_min")
+  precio           Decimal
+  estado           EstadoOrdenCarwash @default(EN_COLA)
+  empleadoAsignado String?            @map("empleado_asignado")
+  notas            String?
+  facturaId        String?            @unique @map("factura_id")
+  creadoPor        String             @map("creado_por")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+  deletedAt        DateTime?          @map("deleted_at")
+
+  empresa Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente Cliente? @relation(fields: [clienteId], references: [id])
+
+  @@unique([empresaId, numero])
+  @@index([empresaId, estado])
+  @@index([empresaId, vehiculoPlaca])
+  @@index([empresaId, createdAt])
+  @@map("ordenes_carwash")
+}
+
+// ============================================================
+// MODELO: Repuesto
+// ============================================================
+model Repuesto {
+  id             String    @id @default(cuid())
+  empresaId      String    @map("empresa_id")
+  codigo         String
+  nombre         String
+  descripcion    String?
+  marca          String?
+  marcaVehiculo  String?   @map("marca_vehiculo")
+  modeloVehiculo String?   @map("modelo_vehiculo")
+  anioDesde      Int?      @map("anio_desde")
+  anioHasta      Int?      @map("anio_hasta")
+  precio         Decimal
+  precioMayor    Decimal?  @map("precio_mayor")
+  stock          Int       @default(0)
+  stockMinimo    Int       @default(2) @map("stock_minimo")
+  ubicacion      String?
+  activo         Boolean   @default(true)
+  creadoPor      String    @map("creado_por")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  empresa         Empresa          @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  itemsCotizacion ItemCotizacion[]
+
+  @@unique([empresaId, codigo])
+  @@index([empresaId, marcaVehiculo])
+  @@index([empresaId, activo])
+  @@map("repuestos")
+}
+
+// ============================================================
+// MODELO: Cotizacion
+// ============================================================
+model Cotizacion {
+  id              String           @id @default(cuid())
+  empresaId       String           @map("empresa_id")
+  numero          Int
+  clienteId       String?          @map("cliente_id")
+  clienteNombre   String           @map("cliente_nombre")
+  clienteTelefono String?          @map("cliente_telefono")
+  vehiculoMarca   String?          @map("vehiculo_marca")
+  vehiculoModelo  String?          @map("vehiculo_modelo")
+  vehiculoAnio    Int?             @map("vehiculo_anio")
+  vehiculoPlaca   String?          @map("vehiculo_placa")
+  estado          EstadoCotizacion @default(PENDIENTE)
+  subtotal        Decimal          @default(0)
+  itbis           Decimal          @default(0)
+  total           Decimal          @default(0)
+  notas           String?
+  validaHasta     DateTime?        @map("valida_hasta")
+  facturaId       String?          @unique @map("factura_id")
+  creadoPor       String           @map("creado_por")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+
+  empresa Empresa          @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente Cliente?         @relation(fields: [clienteId], references: [id])
+  items   ItemCotizacion[]
+
+  @@unique([empresaId, numero])
+  @@index([empresaId, estado])
+  @@index([empresaId, createdAt])
+  @@map("cotizaciones")
+}
+
+// ============================================================
+// MODELO: ItemCotizacion
+// ============================================================
+model ItemCotizacion {
+  id               String   @id @default(cuid())
+  cotizacionId     String   @map("cotizacion_id")
+  repuestoId       String?  @map("repuesto_id")
+  descripcion      String
+  cantidad         Int
+  precioUnitario   Decimal  @map("precio_unitario")
+  itbisPorcentaje  Decimal  @default(18) @map("itbis_porcentaje")
+  itbisMonto       Decimal  @default(0) @map("itbis_monto")
+  subtotal         Decimal
+  total            Decimal
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  cotizacion Cotizacion @relation(fields: [cotizacionId], references: [id], onDelete: Cascade)
+  repuesto   Repuesto?  @relation(fields: [repuestoId], references: [id])
+
+  @@index([cotizacionId])
+  @@map("items_cotizacion")
 }

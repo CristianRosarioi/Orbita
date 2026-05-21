@@ -150,13 +150,11 @@ describe('POST /api/inmobiliaria/contratos', () => {
     });
     const mockTxContrato = {
       contratoAlquiler: {
-        create: vi
-          .fn()
-          .mockResolvedValue({
-            id: 'c1',
-            ...contratoValido,
-            propiedad: { codigo: 'REF-001', nombre: 'Apto' },
-          }),
+        create: vi.fn().mockResolvedValue({
+          id: 'c1',
+          ...contratoValido,
+          propiedad: { codigo: 'REF-001', nombre: 'Apto' },
+        }),
       },
     };
     const mockTxPropiedad = { propiedad: { update: vi.fn() } };

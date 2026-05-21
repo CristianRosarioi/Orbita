@@ -277,6 +277,25 @@ export const EstadoPedido = {
 } as const;
 export type EstadoPedido = (typeof EstadoPedido)[keyof typeof EstadoPedido];
 
+// Fase 20 — Carwash y Repuestos
+
+export const EstadoOrdenCarwash = {
+  EN_COLA: 'EN_COLA',
+  EN_PROCESO: 'EN_PROCESO',
+  LISTO: 'LISTO',
+  ENTREGADO: 'ENTREGADO',
+  CANCELADO: 'CANCELADO',
+} as const;
+export type EstadoOrdenCarwash = (typeof EstadoOrdenCarwash)[keyof typeof EstadoOrdenCarwash];
+
+export const EstadoCotizacion = {
+  PENDIENTE: 'PENDIENTE',
+  APROBADA: 'APROBADA',
+  RECHAZADA: 'RECHAZADA',
+  FACTURADA: 'FACTURADA',
+} as const;
+export type EstadoCotizacion = (typeof EstadoCotizacion)[keyof typeof EstadoCotizacion];
+
 // Fase 14 — Clínica / Consultorio
 
 export const EstadoExpediente = {

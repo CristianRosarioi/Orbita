@@ -408,13 +408,7 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
         desc: 'Lleva el historial de visitas de cada cliente. Identifica a tus clientes más frecuentes y ofréceles beneficios especiales.',
       },
     ],
-    paraQuien: [
-      'Salones de belleza',
-      'Barberías',
-      'Spas',
-      'Centros de estética',
-      'Nail studios',
-    ],
+    paraQuien: ['Salones de belleza', 'Barberías', 'Spas', 'Centros de estética', 'Nail studios'],
     ejemplos: [
       'La cliente llama, se busca su historial y se le asigna cita con su estilista preferida en 30 segundos',
       'Al terminar el servicio, la comisión de la estilista se calcula sola',
@@ -634,7 +628,13 @@ export const VERTICALES: Record<VerticalSlug, VerticalData> = {
         desc: 'Imprime etiquetas con código de barras, talla, color, SKU y precio. Conecta con impresoras de etiquetas térmicas estándar.',
       },
     ],
-    paraQuien: ['Tiendas de ropa', 'Boutiques', 'Zapaterías', 'Tiendas de variedades', 'Multimarcas'],
+    paraQuien: [
+      'Tiendas de ropa',
+      'Boutiques',
+      'Zapaterías',
+      'Tiendas de variedades',
+      'Multimarcas',
+    ],
     ejemplos: [
       'El cliente quiere la camisa azul talla M — el sistema muestra al instante si hay disponibilidad',
       'Se activa la promoción de fin de semana y el POS aplica el 20% automáticamente',
