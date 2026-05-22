@@ -46,7 +46,8 @@ export default function NuevaOrdenCarwashPage() {
     setError(null);
     setLoading(true);
 
-    const tipoServicio = form.tipoServicio === 'otro' ? form.servicioPersonalizado : form.tipoServicio;
+    const tipoServicio =
+      form.tipoServicio === 'otro' ? form.servicioPersonalizado : form.tipoServicio;
 
     try {
       const res = await fetch('/api/carwash/ordenes', {
@@ -178,7 +179,9 @@ export default function NuevaOrdenCarwashPage() {
               >
                 <option value="">Selecciona un servicio</option>
                 {SERVICIOS_CARWASH.map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
                 ))}
                 <option value="otro">Otro (especificar)</option>
               </select>

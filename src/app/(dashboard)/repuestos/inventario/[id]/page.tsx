@@ -25,7 +25,10 @@ export default async function DetalleRepuestoPage({ params }: { params: Promise<
   return (
     <div className="p-4 space-y-4 md:p-6 md:space-y-6 max-w-3xl">
       <div className="flex items-center gap-3">
-        <Link href="/repuestos/inventario" className="rounded-md p-1 text-slate-400 hover:text-slate-600">
+        <Link
+          href="/repuestos/inventario"
+          className="rounded-md p-1 text-slate-400 hover:text-slate-600"
+        >
           <ArrowLeft className="h-5 w-5" />
         </Link>
         <div className="flex items-center gap-3">
@@ -42,7 +45,8 @@ export default async function DetalleRepuestoPage({ params }: { params: Promise<
       {stockBajo && (
         <div className="flex items-center gap-2 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-700">
           <AlertTriangle className="h-4 w-4 shrink-0" />
-          Stock bajo: {repuesto.stock} unidad{repuesto.stock !== 1 ? 'es' : ''} (mínimo: {repuesto.stockMinimo})
+          Stock bajo: {repuesto.stock} unidad{repuesto.stock !== 1 ? 'es' : ''} (mínimo:{' '}
+          {repuesto.stockMinimo})
         </div>
       )}
 
@@ -111,7 +115,8 @@ export default async function DetalleRepuestoPage({ params }: { params: Promise<
             <div>
               <p className="text-xs text-slate-400">Precio mayor</p>
               <p className="text-lg font-semibold text-slate-700">
-                RD$ {Number(repuesto.precioMayor).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                RD${' '}
+                {Number(repuesto.precioMayor).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
               </p>
             </div>
           )}

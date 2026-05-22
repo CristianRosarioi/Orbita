@@ -52,7 +52,10 @@ export default function NuevaCotizacionPage() {
   }
 
   function addItem() {
-    setItems((prev) => [...prev, { descripcion: '', cantidad: '1', precioUnitario: '', itbisPorcentaje: '18' }]);
+    setItems((prev) => [
+      ...prev,
+      { descripcion: '', cantidad: '1', precioUnitario: '', itbisPorcentaje: '18' },
+    ]);
   }
 
   function removeItem(index: number) {
@@ -62,7 +65,11 @@ export default function NuevaCotizacionPage() {
   const totales = items.reduce(
     (acc, item) => {
       const c = calcItem(item);
-      return { subtotal: acc.subtotal + c.subtotal, itbis: acc.itbis + c.itbisMonto, total: acc.total + c.total };
+      return {
+        subtotal: acc.subtotal + c.subtotal,
+        itbis: acc.itbis + c.itbisMonto,
+        total: acc.total + c.total,
+      };
     },
     { subtotal: 0, itbis: 0, total: 0 },
   );
@@ -131,11 +138,22 @@ export default function NuevaCotizacionPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="clienteNombre">Nombre *</Label>
-              <Input id="clienteNombre" value={form.clienteNombre} onChange={(e) => setField('clienteNombre', e.target.value)} placeholder="Nombre del cliente" required />
+              <Input
+                id="clienteNombre"
+                value={form.clienteNombre}
+                onChange={(e) => setField('clienteNombre', e.target.value)}
+                placeholder="Nombre del cliente"
+                required
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="clienteTelefono">Teléfono</Label>
-              <Input id="clienteTelefono" value={form.clienteTelefono} onChange={(e) => setField('clienteTelefono', e.target.value)} placeholder="809-000-0000" />
+              <Input
+                id="clienteTelefono"
+                value={form.clienteTelefono}
+                onChange={(e) => setField('clienteTelefono', e.target.value)}
+                placeholder="809-000-0000"
+              />
             </div>
           </div>
         </div>
@@ -146,19 +164,42 @@ export default function NuevaCotizacionPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="vehiculoMarca">Marca</Label>
-              <Input id="vehiculoMarca" value={form.vehiculoMarca} onChange={(e) => setField('vehiculoMarca', e.target.value)} placeholder="Toyota..." />
+              <Input
+                id="vehiculoMarca"
+                value={form.vehiculoMarca}
+                onChange={(e) => setField('vehiculoMarca', e.target.value)}
+                placeholder="Toyota..."
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="vehiculoModelo">Modelo</Label>
-              <Input id="vehiculoModelo" value={form.vehiculoModelo} onChange={(e) => setField('vehiculoModelo', e.target.value)} placeholder="Corolla..." />
+              <Input
+                id="vehiculoModelo"
+                value={form.vehiculoModelo}
+                onChange={(e) => setField('vehiculoModelo', e.target.value)}
+                placeholder="Corolla..."
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="vehiculoAnio">Año</Label>
-              <Input id="vehiculoAnio" type="number" min="1900" max="2100" value={form.vehiculoAnio} onChange={(e) => setField('vehiculoAnio', e.target.value)} placeholder="2020" />
+              <Input
+                id="vehiculoAnio"
+                type="number"
+                min="1900"
+                max="2100"
+                value={form.vehiculoAnio}
+                onChange={(e) => setField('vehiculoAnio', e.target.value)}
+                placeholder="2020"
+              />
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="vehiculoPlaca">Placa</Label>
-              <Input id="vehiculoPlaca" value={form.vehiculoPlaca} onChange={(e) => setField('vehiculoPlaca', e.target.value.toUpperCase())} placeholder="A000000" />
+              <Input
+                id="vehiculoPlaca"
+                value={form.vehiculoPlaca}
+                onChange={(e) => setField('vehiculoPlaca', e.target.value.toUpperCase())}
+                placeholder="A000000"
+              />
             </div>
           </div>
         </div>
@@ -216,10 +257,15 @@ export default function NuevaCotizacionPage() {
                   </div>
                   <div className="mt-2 flex items-center justify-between">
                     <p className="text-xs text-slate-400">
-                      Subtotal: RD$ {c.subtotal.toFixed(2)} · ITBIS: RD$ {c.itbisMonto.toFixed(2)} · Total: RD$ {c.total.toFixed(2)}
+                      Subtotal: RD$ {c.subtotal.toFixed(2)} · ITBIS: RD$ {c.itbisMonto.toFixed(2)} ·
+                      Total: RD$ {c.total.toFixed(2)}
                     </p>
                     {items.length > 1 && (
-                      <button type="button" onClick={() => removeItem(idx)} className="text-red-400 hover:text-red-600">
+                      <button
+                        type="button"
+                        onClick={() => removeItem(idx)}
+                        className="text-red-400 hover:text-red-600"
+                      >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     )}
@@ -240,7 +286,9 @@ export default function NuevaCotizacionPage() {
           <div className="mt-4 space-y-1 border-t border-slate-200 pt-4 text-right">
             <p className="text-sm text-slate-500">Subtotal: RD$ {totales.subtotal.toFixed(2)}</p>
             <p className="text-sm text-slate-500">ITBIS: RD$ {totales.itbis.toFixed(2)}</p>
-            <p className="text-base font-bold text-slate-900">Total: RD$ {totales.total.toFixed(2)}</p>
+            <p className="text-base font-bold text-slate-900">
+              Total: RD$ {totales.total.toFixed(2)}
+            </p>
           </div>
         </div>
 
@@ -250,7 +298,12 @@ export default function NuevaCotizacionPage() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="validaHasta">Válida hasta</Label>
-              <Input id="validaHasta" type="date" value={form.validaHasta} onChange={(e) => setField('validaHasta', e.target.value)} />
+              <Input
+                id="validaHasta"
+                type="date"
+                value={form.validaHasta}
+                onChange={(e) => setField('validaHasta', e.target.value)}
+              />
             </div>
             <div className="space-y-1.5 sm:col-span-2">
               <Label htmlFor="notas">Notas</Label>
@@ -266,7 +319,9 @@ export default function NuevaCotizacionPage() {
           </div>
         </div>
 
-        {error && <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
+        {error && (
+          <div className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
+        )}
 
         <div className="flex items-center gap-3">
           <Button type="submit" disabled={loading}>

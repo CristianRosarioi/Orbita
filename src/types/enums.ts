@@ -277,6 +277,34 @@ export const EstadoPedido = {
 } as const;
 export type EstadoPedido = (typeof EstadoPedido)[keyof typeof EstadoPedido];
 
+// Fase 21 — Tienda de Ropa y Tienda Online
+
+export const EstadoDevolucion = {
+  PENDIENTE: 'PENDIENTE',
+  APROBADA: 'APROBADA',
+  RECHAZADA: 'RECHAZADA',
+  COMPLETADA: 'COMPLETADA',
+} as const;
+export type EstadoDevolucion = (typeof EstadoDevolucion)[keyof typeof EstadoDevolucion];
+
+export const EstadoPedidoOnline = {
+  PENDIENTE: 'PENDIENTE',
+  CONFIRMADO: 'CONFIRMADO',
+  PREPARANDO: 'PREPARANDO',
+  ENVIADO: 'ENVIADO',
+  ENTREGADO: 'ENTREGADO',
+  CANCELADO: 'CANCELADO',
+} as const;
+export type EstadoPedidoOnline = (typeof EstadoPedidoOnline)[keyof typeof EstadoPedidoOnline];
+
+export const CanalPedidoOnline = {
+  WHATSAPP: 'WHATSAPP',
+  INSTAGRAM: 'INSTAGRAM',
+  FACEBOOK: 'FACEBOOK',
+  OTRO: 'OTRO',
+} as const;
+export type CanalPedidoOnline = (typeof CanalPedidoOnline)[keyof typeof CanalPedidoOnline];
+
 // Fase 20 — Carwash y Repuestos
 
 export const EstadoOrdenCarwash = {

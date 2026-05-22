@@ -23,7 +23,11 @@ const ESTADO_COLORS: Record<string, string> = {
   FACTURADA: 'bg-blue-100 text-blue-700',
 };
 
-export default async function DetalleCotizacionPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function DetalleCotizacionPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
   if (!INDUSTRIAS_REPUESTOS.includes(sesion.empresaActiva.industria)) redirect('/dashboard');
@@ -44,7 +48,10 @@ export default async function DetalleCotizacionPage({ params }: { params: Promis
   return (
     <div className="p-4 space-y-4 md:p-6 md:space-y-6 max-w-3xl">
       <div className="flex items-center gap-3">
-        <Link href="/repuestos/cotizaciones" className="rounded-md p-1 text-slate-400 hover:text-slate-600">
+        <Link
+          href="/repuestos/cotizaciones"
+          className="rounded-md p-1 text-slate-400 hover:text-slate-600"
+        >
           <ArrowLeft className="h-5 w-5" />
         </Link>
         <div className="flex items-center gap-3">
@@ -60,7 +67,9 @@ export default async function DetalleCotizacionPage({ params }: { params: Promis
             </div>
             <p className="text-sm text-slate-500">
               {new Date(cotizacion.createdAt).toLocaleDateString('es-DO', {
-                day: '2-digit', month: 'long', year: 'numeric',
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
               })}
             </p>
           </div>
@@ -71,13 +80,20 @@ export default async function DetalleCotizacionPage({ params }: { params: Promis
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <h2 className="mb-4 text-sm font-semibold text-slate-700">Cliente</h2>
         <p className="font-semibold text-slate-800">{cotizacion.clienteNombre}</p>
-        {cotizacion.clienteTelefono && <p className="text-sm text-slate-500">{cotizacion.clienteTelefono}</p>}
+        {cotizacion.clienteTelefono && (
+          <p className="text-sm text-slate-500">{cotizacion.clienteTelefono}</p>
+        )}
 
         {(cotizacion.vehiculoMarca || cotizacion.vehiculoPlaca) && (
           <div className="mt-3 pt-3 border-t border-slate-100">
             <p className="text-xs text-slate-400 mb-1">Vehículo</p>
             <p className="text-sm text-slate-600">
-              {[cotizacion.vehiculoMarca, cotizacion.vehiculoModelo, cotizacion.vehiculoAnio, cotizacion.vehiculoPlaca]
+              {[
+                cotizacion.vehiculoMarca,
+                cotizacion.vehiculoModelo,
+                cotizacion.vehiculoAnio,
+                cotizacion.vehiculoPlaca,
+              ]
                 .filter(Boolean)
                 .join(' · ')}
             </p>
@@ -88,14 +104,22 @@ export default async function DetalleCotizacionPage({ params }: { params: Promis
       {/* Ítems */}
       <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <div className="p-5 border-b border-slate-100">
-          <h2 className="text-sm font-semibold text-slate-700">Ítems ({cotizacion.items.length})</h2>
+          <h2 className="text-sm font-semibold text-slate-700">
+            Ítems ({cotizacion.items.length})
+          </h2>
         </div>
         <table className="w-full text-sm">
           <thead className="bg-slate-50">
             <tr>
-              <th className="px-4 py-2.5 text-left text-xs font-semibold text-slate-500">Descripción</th>
-              <th className="px-4 py-2.5 text-center text-xs font-semibold text-slate-500">Cant.</th>
-              <th className="px-4 py-2.5 text-right text-xs font-semibold text-slate-500">Precio</th>
+              <th className="px-4 py-2.5 text-left text-xs font-semibold text-slate-500">
+                Descripción
+              </th>
+              <th className="px-4 py-2.5 text-center text-xs font-semibold text-slate-500">
+                Cant.
+              </th>
+              <th className="px-4 py-2.5 text-right text-xs font-semibold text-slate-500">
+                Precio
+              </th>
               <th className="px-4 py-2.5 text-right text-xs font-semibold text-slate-500">ITBIS</th>
               <th className="px-4 py-2.5 text-right text-xs font-semibold text-slate-500">Total</th>
             </tr>
@@ -110,24 +134,47 @@ export default async function DetalleCotizacionPage({ params }: { params: Promis
                   )}
                 </td>
                 <td className="px-4 py-3 text-center text-slate-600">{item.cantidad}</td>
-                <td className="px-4 py-3 text-right text-slate-600">RD$ {Number(item.precioUnitario).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</td>
-                <td className="px-4 py-3 text-right text-slate-400">RD$ {Number(item.itbisMonto).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</td>
-                <td className="px-4 py-3 text-right font-semibold text-slate-900">RD$ {Number(item.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</td>
+                <td className="px-4 py-3 text-right text-slate-600">
+                  RD${' '}
+                  {Number(item.precioUnitario).toLocaleString('es-DO', {
+                    minimumFractionDigits: 2,
+                  })}
+                </td>
+                <td className="px-4 py-3 text-right text-slate-400">
+                  RD${' '}
+                  {Number(item.itbisMonto).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                </td>
+                <td className="px-4 py-3 text-right font-semibold text-slate-900">
+                  RD$ {Number(item.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                </td>
               </tr>
             ))}
           </tbody>
           <tfoot className="border-t border-slate-200 bg-slate-50">
             <tr>
-              <td colSpan={4} className="px-4 py-3 text-right text-sm text-slate-500">Subtotal:</td>
-              <td className="px-4 py-3 text-right font-medium text-slate-700">RD$ {Number(cotizacion.subtotal).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</td>
+              <td colSpan={4} className="px-4 py-3 text-right text-sm text-slate-500">
+                Subtotal:
+              </td>
+              <td className="px-4 py-3 text-right font-medium text-slate-700">
+                RD${' '}
+                {Number(cotizacion.subtotal).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+              </td>
             </tr>
             <tr>
-              <td colSpan={4} className="px-4 py-2 text-right text-sm text-slate-500">ITBIS 18%:</td>
-              <td className="px-4 py-2 text-right font-medium text-slate-700">RD$ {Number(cotizacion.itbis).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</td>
+              <td colSpan={4} className="px-4 py-2 text-right text-sm text-slate-500">
+                ITBIS 18%:
+              </td>
+              <td className="px-4 py-2 text-right font-medium text-slate-700">
+                RD$ {Number(cotizacion.itbis).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+              </td>
             </tr>
             <tr>
-              <td colSpan={4} className="px-4 py-3 text-right text-base font-bold text-slate-900">Total:</td>
-              <td className="px-4 py-3 text-right text-base font-bold text-slate-900">RD$ {Number(cotizacion.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</td>
+              <td colSpan={4} className="px-4 py-3 text-right text-base font-bold text-slate-900">
+                Total:
+              </td>
+              <td className="px-4 py-3 text-right text-base font-bold text-slate-900">
+                RD$ {Number(cotizacion.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+              </td>
             </tr>
           </tfoot>
         </table>

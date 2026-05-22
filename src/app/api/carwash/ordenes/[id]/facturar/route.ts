@@ -29,8 +29,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (!orden) return err('NOT_FOUND', 'Orden no encontrada.', 404);
     if (orden.estado !== 'LISTO')
       return err('VALIDATION_ERROR', 'Solo se pueden facturar órdenes con estado LISTO.', 422);
-    if (orden.facturaId)
-      return err('CONFLICT', 'Esta orden ya fue facturada.', 409);
+    if (orden.facturaId) return err('CONFLICT', 'Esta orden ya fue facturada.', 409);
 
     const body = await req.json();
     const parsed = facturarSchema.safeParse(body);

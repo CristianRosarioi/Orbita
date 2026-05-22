@@ -27,9 +27,15 @@ const ESTADO_COLORS: Record<string, string> = {
 
 const TODOS_ESTADOS = ['EN_COLA', 'EN_PROCESO', 'LISTO', 'ENTREGADO', 'CANCELADO'];
 
-interface SearchParams { estado?: string; }
+interface SearchParams {
+  estado?: string;
+}
 
-export default async function CarwashOrdenesPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+export default async function CarwashOrdenesPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
   if (!INDUSTRIAS_CARWASH.includes(sesion.empresaActiva.industria)) redirect('/dashboard');
@@ -58,7 +64,9 @@ export default async function CarwashOrdenesPage({ searchParams }: { searchParam
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900">Órdenes de Carwash</h1>
-            <p className="text-sm text-slate-500">{ordenes.length} resultado{ordenes.length !== 1 ? 's' : ''}</p>
+            <p className="text-sm text-slate-500">
+              {ordenes.length} resultado{ordenes.length !== 1 ? 's' : ''}
+            </p>
           </div>
         </div>
         <Link href="/carwash/ordenes/nueva" className={cn(buttonVariants({ size: 'sm' }), 'gap-2')}>
@@ -84,7 +92,9 @@ export default async function CarwashOrdenesPage({ searchParams }: { searchParam
             href={`/carwash/ordenes?estado=${e}`}
             className={cn(
               'rounded-full px-3 py-1 text-xs font-medium transition-colors',
-              estado === e ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+              estado === e
+                ? 'bg-indigo-600 text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
             )}
           >
             {ESTADO_LABELS[e]}
@@ -96,33 +106,52 @@ export default async function CarwashOrdenesPage({ searchParams }: { searchParam
         <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 py-16 text-center">
           <ClipboardList className="mx-auto mb-3 h-8 w-8 text-slate-400" />
           <p className="text-sm font-medium text-slate-600">Sin órdenes</p>
-          <p className="mt-1 text-xs text-slate-400">No hay órdenes con los filtros seleccionados</p>
+          <p className="mt-1 text-xs text-slate-400">
+            No hay órdenes con los filtros seleccionados
+          </p>
         </div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           <table className="w-full text-sm">
             <thead className="border-b border-slate-200 bg-slate-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">#</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Vehículo</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Cliente</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Servicio</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Estado</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Total</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  #
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Vehículo
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Cliente
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Servicio
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Estado
+                </th>
+                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Total
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {ordenes.map((orden) => (
                 <tr key={orden.id} className="group hover:bg-slate-50">
                   <td className="px-4 py-3">
-                    <Link href={`/carwash/ordenes/${orden.id}`} className="font-medium text-indigo-600 hover:text-indigo-700">
+                    <Link
+                      href={`/carwash/ordenes/${orden.id}`}
+                      className="font-medium text-indigo-600 hover:text-indigo-700"
+                    >
                       #{orden.numero}
                     </Link>
                   </td>
                   <td className="px-4 py-3">
                     <p className="font-semibold text-slate-900">{orden.vehiculoPlaca}</p>
                     {(orden.vehiculoMarca || orden.vehiculoModelo) && (
-                      <p className="text-xs text-slate-400">{[orden.vehiculoMarca, orden.vehiculoModelo].filter(Boolean).join(' ')}</p>
+                      <p className="text-xs text-slate-400">
+                        {[orden.vehiculoMarca, orden.vehiculoModelo].filter(Boolean).join(' ')}
+                      </p>
                     )}
                   </td>
                   <td className="px-4 py-3 text-slate-700">{orden.clienteNombre}</td>

@@ -52,9 +52,7 @@ export async function GET(req: NextRequest) {
       }),
     ]);
 
-    const data = soloStockBajo
-      ? repuestos.filter((r) => r.stock <= r.stockMinimo)
-      : repuestos;
+    const data = soloStockBajo ? repuestos.filter((r) => r.stock <= r.stockMinimo) : repuestos;
 
     return ok({ data, meta: { total, page, limit, totalPages: Math.ceil(total / limit) } });
   } catch (error) {
@@ -78,7 +76,8 @@ export async function POST(req: NextRequest) {
     const existe = await prisma.repuesto.findFirst({
       where: { empresaId: sesion.empresaActivaId, codigo: parsed.data.codigo, deletedAt: null },
     });
-    if (existe) return err('CONFLICT', `Ya existe un repuesto con el código ${parsed.data.codigo}.`, 409);
+    if (existe)
+      return err('CONFLICT', `Ya existe un repuesto con el código ${parsed.data.codigo}.`, 409);
 
     const repuesto = await prisma.repuesto.create({
       data: {

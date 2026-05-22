@@ -4,7 +4,11 @@ export const crearOrdenCarwashSchema = z.object({
   clienteId: z.string().cuid().optional(),
   clienteNombre: z.string().min(1, 'El nombre es requerido').max(200),
   clienteTelefono: z.string().max(20).optional(),
-  vehiculoPlaca: z.string().min(1, 'La placa es requerida').max(20).transform((v) => v.toUpperCase()),
+  vehiculoPlaca: z
+    .string()
+    .min(1, 'La placa es requerida')
+    .max(20)
+    .transform((v) => v.toUpperCase()),
   vehiculoMarca: z.string().max(100).optional(),
   vehiculoModelo: z.string().max(100).optional(),
   vehiculoColor: z.string().max(50).optional(),

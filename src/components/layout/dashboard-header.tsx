@@ -45,6 +45,11 @@ const SEGMENTO_LABEL: Record<string, string> = {
   repuestos: 'Repuestos',
   cotizaciones: 'Cotizaciones',
   buscar: 'Buscar por vehículo',
+  'tienda-ropa': 'Tienda de Ropa',
+  variantes: 'Variantes',
+  devoluciones: 'Devoluciones',
+  'tienda-online': 'Tienda Online',
+  pedidos: 'Pedidos',
 };
 
 function esId(seg: string) {

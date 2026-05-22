@@ -1,55 +1,62 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { FileText, Plus } from 'lucide-react';
+import { RotateCcw, Plus } from 'lucide-react';
 import { getCurrentEmpresa } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-const INDUSTRIAS_REPUESTOS = ['REPUESTOS'];
+const INDUSTRIAS_TIENDA_ROPA = ['TIENDA_ROPA'];
 
 const ESTADO_LABELS: Record<string, string> = {
   PENDIENTE: 'Pendiente',
   APROBADA: 'Aprobada',
   RECHAZADA: 'Rechazada',
-  FACTURADA: 'Facturada',
+  COMPLETADA: 'Completada',
 };
 
 const ESTADO_COLORS: Record<string, string> = {
   PENDIENTE: 'bg-amber-100 text-amber-700',
-  APROBADA: 'bg-emerald-100 text-emerald-700',
+  APROBADA: 'bg-blue-100 text-blue-700',
   RECHAZADA: 'bg-red-100 text-red-700',
-  FACTURADA: 'bg-blue-100 text-blue-700',
+  COMPLETADA: 'bg-emerald-100 text-emerald-700',
 };
 
-const TODOS_ESTADOS = ['PENDIENTE', 'APROBADA', 'RECHAZADA', 'FACTURADA'];
+const TIPO_LABELS: Record<string, string> = {
+  DEVOLUCION: 'Devolución',
+  INTERCAMBIO: 'Intercambio',
+};
+
+const TODOS_ESTADOS = ['PENDIENTE', 'APROBADA', 'RECHAZADA', 'COMPLETADA'];
 
 interface SearchParams {
   estado?: string;
+  tipo?: string;
 }
 
-export default async function CotizacionesPage({
+export default async function DevolucionesPage({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
-  if (!INDUSTRIAS_REPUESTOS.includes(sesion.empresaActiva.industria)) redirect('/dashboard');
+  if (!INDUSTRIAS_TIENDA_ROPA.includes(sesion.empresaActiva.industria)) redirect('/dashboard');
 
-  const { estado } = await searchParams;
+  const { estado, tipo } = await searchParams;
 
-  const cotizaciones = await prisma.cotizacion.findMany({
+  const devoluciones = await prisma.devolucion.findMany({
     where: {
       empresaId: sesion.empresaActivaId,
       ...(estado ? { estado: estado as never } : {}),
+      ...(tipo ? { tipo } : {}),
     },
     orderBy: { createdAt: 'desc' },
     take: 50,
     include: {
+      factura: { select: { id: true, numero: true } },
       cliente: { select: { id: true, nombre: true } },
-      _count: { select: { items: true } },
     },
   });
 
@@ -57,43 +64,44 @@ export default async function CotizacionesPage({
     <div className="p-4 space-y-4 md:p-6 md:space-y-6 max-w-7xl">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
-            <FileText className="h-5 w-5 text-orange-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-pink-100">
+            <RotateCcw className="h-5 w-5 text-pink-600" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900">Cotizaciones</h1>
+            <h1 className="text-xl font-bold text-slate-900">Devoluciones</h1>
             <p className="text-sm text-slate-500">
-              {cotizaciones.length} cotización{cotizaciones.length !== 1 ? 'es' : ''}
+              {devoluciones.length} resultado{devoluciones.length !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
         <Link
-          href="/repuestos/cotizaciones/nueva"
+          href="/tienda-ropa/devoluciones/nueva"
           className={cn(buttonVariants({ size: 'sm' }), 'gap-2')}
         >
           <Plus className="h-4 w-4" />
-          Nueva cotización
+          Nueva devolución
         </Link>
       </div>
 
+      {/* Filtros */}
       <div className="flex flex-wrap gap-2">
         <Link
-          href="/repuestos/cotizaciones"
+          href="/tienda-ropa/devoluciones"
           className={cn(
-            'rounded-full px-3 py-1 text-xs font-medium',
-            !estado ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
+            'rounded-full px-3 py-1 text-xs font-medium transition-colors',
+            !estado ? 'bg-pink-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
           )}
         >
-          Todas
+          Todos
         </Link>
         {TODOS_ESTADOS.map((e) => (
           <Link
             key={e}
-            href={`/repuestos/cotizaciones?estado=${e}`}
+            href={`/tienda-ropa/devoluciones?estado=${e}`}
             className={cn(
-              'rounded-full px-3 py-1 text-xs font-medium',
+              'rounded-full px-3 py-1 text-xs font-medium transition-colors',
               estado === e
-                ? 'bg-indigo-600 text-white'
+                ? 'bg-pink-600 text-white'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200',
             )}
           >
@@ -102,17 +110,11 @@ export default async function CotizacionesPage({
         ))}
       </div>
 
-      {cotizaciones.length === 0 ? (
+      {devoluciones.length === 0 ? (
         <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 py-16 text-center">
-          <FileText className="mx-auto mb-3 h-8 w-8 text-slate-400" />
-          <p className="text-sm font-medium text-slate-600">Sin cotizaciones</p>
-          <Link
-            href="/repuestos/cotizaciones/nueva"
-            className={cn(buttonVariants({ size: 'sm' }), 'mt-4 gap-2')}
-          >
-            <Plus className="h-4 w-4" />
-            Crear primera cotización
-          </Link>
+          <RotateCcw className="mx-auto mb-3 h-8 w-8 text-slate-400" />
+          <p className="text-sm font-medium text-slate-600">Sin devoluciones</p>
+          <p className="mt-1 text-xs text-slate-400">No hay registros con los filtros seleccionados</p>
         </div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -120,55 +122,61 @@ export default async function CotizacionesPage({
             <thead className="border-b border-slate-200 bg-slate-50">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                  #
+                  Factura
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                   Cliente
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                  Vehículo
+                  Tipo
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">
-                  Ítems
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Motivo
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                   Estado
                 </th>
                 <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
-                  Total
+                  Crédito
+                </th>
+                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Fecha
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {cotizaciones.map((c) => (
-                <tr key={c.id} className="hover:bg-slate-50">
+              {devoluciones.map((dev) => (
+                <tr key={dev.id} className="hover:bg-slate-50">
                   <td className="px-4 py-3">
                     <Link
-                      href={`/repuestos/cotizaciones/${c.id}`}
+                      href={`/facturas/${dev.factura.id}`}
                       className="font-medium text-indigo-600 hover:text-indigo-700"
                     >
-                      #{c.numero}
+                      {dev.factura.numero}
                     </Link>
                   </td>
-                  <td className="px-4 py-3">
-                    <p className="font-medium text-slate-800">{c.clienteNombre}</p>
-                    {c.clienteTelefono && (
-                      <p className="text-xs text-slate-400">{c.clienteTelefono}</p>
-                    )}
+                  <td className="px-4 py-3 text-slate-700">
+                    {dev.cliente?.nombre ?? '—'}
                   </td>
-                  <td className="px-4 py-3 text-slate-500 text-sm">
-                    {[c.vehiculoMarca, c.vehiculoModelo, c.vehiculoAnio, c.vehiculoPlaca]
-                      .filter(Boolean)
-                      .join(' · ')}
+                  <td className="px-4 py-3 text-slate-600">
+                    {TIPO_LABELS[dev.tipo] ?? dev.tipo}
                   </td>
-                  <td className="px-4 py-3 text-center text-slate-500">{c._count.items}</td>
+                  <td className="px-4 py-3 text-slate-600 max-w-xs truncate">{dev.motivo}</td>
                   <td className="px-4 py-3">
-                    <Badge className={cn('text-xs', ESTADO_COLORS[c.estado])}>
-                      {ESTADO_LABELS[c.estado]}
+                    <Badge className={cn('text-xs', ESTADO_COLORS[dev.estado])}>
+                      {ESTADO_LABELS[dev.estado]}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 text-right font-semibold text-slate-900">
-                    RD$ {Number(c.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+                  <td className="px-4 py-3 text-right text-slate-700">
+                    {dev.montoCredito != null
+                      ? `RD$ ${Number(dev.montoCredito).toLocaleString('es-DO')}`
+                      : '—'}
+                  </td>
+                  <td className="px-4 py-3 text-right text-xs text-slate-400">
+                    {new Date(dev.createdAt).toLocaleDateString('es-DO', {
+                      day: '2-digit',
+                      month: 'short',
+                    })}
                   </td>
                 </tr>
               ))}

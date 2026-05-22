@@ -30,8 +30,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (!cotizacion) return err('NOT_FOUND', 'Cotización no encontrada.', 404);
     if (cotizacion.estado === 'RECHAZADA')
       return err('VALIDATION_ERROR', 'No se puede facturar una cotización rechazada.', 422);
-    if (cotizacion.facturaId)
-      return err('CONFLICT', 'Esta cotización ya fue facturada.', 409);
+    if (cotizacion.facturaId) return err('CONFLICT', 'Esta cotización ya fue facturada.', 409);
     if (cotizacion.items.length === 0)
       return err('VALIDATION_ERROR', 'La cotización no tiene ítems.', 422);
 

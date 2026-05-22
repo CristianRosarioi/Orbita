@@ -48,6 +48,7 @@ import {
   FileCheck,
   Gem,
   Search,
+  RotateCcw,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { RolEmpresa } from '@/types/enums';
@@ -67,7 +68,9 @@ interface SidebarProps {
 }
 
 const INDUSTRIAS_RESTAURANTE = ['RESTAURANTE'];
-const INDUSTRIAS_COLMADO = ['COLMADO', 'TIENDA_ONLINE', 'TIENDA_ROPA'];
+const INDUSTRIAS_COLMADO = ['COLMADO'];
+const INDUSTRIAS_TIENDA_ROPA = ['TIENDA_ROPA'];
+const INDUSTRIAS_TIENDA_ONLINE = ['TIENDA_ONLINE'];
 const INDUSTRIAS_TALLER = ['TALLER_MECANICO'];
 const INDUSTRIAS_CARWASH = ['CARWASH'];
 const INDUSTRIAS_REPUESTOS = ['REPUESTOS'];
@@ -122,6 +125,15 @@ const REPUESTOS_ITEMS = [
   { href: '/repuestos/inventario', label: 'Inventario', icon: Package },
   { href: '/repuestos/cotizaciones', label: 'Cotizaciones', icon: FileText },
   { href: '/repuestos/buscar', label: 'Buscar por vehículo', icon: Search },
+];
+
+const TIENDA_ROPA_ITEMS = [
+  { href: '/tienda-ropa/variantes', label: 'Variantes', icon: Layers },
+  { href: '/tienda-ropa/devoluciones', label: 'Devoluciones', icon: RotateCcw },
+];
+
+const TIENDA_ONLINE_ITEMS = [
+  { href: '/tienda-online/pedidos', label: 'Pedidos', icon: ShoppingBag },
 ];
 
 const SALON_ITEMS = [
@@ -416,6 +428,26 @@ function SidebarContent({
           <>
             <SectionDivider label="Repuestos" />
             {REPUESTOS_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Tienda de Ropa */}
+        {INDUSTRIAS_TIENDA_ROPA.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Tienda de Ropa" />
+            {TIENDA_ROPA_ITEMS.map(({ href, label, icon }) => (
+              <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
+            ))}
+          </>
+        )}
+
+        {/* Vertical: Tienda Online */}
+        {INDUSTRIAS_TIENDA_ONLINE.includes(empresa.industria) && (
+          <>
+            <SectionDivider label="Tienda Online" />
+            {TIENDA_ONLINE_ITEMS.map(({ href, label, icon }) => (
               <NavLink key={href} href={href} label={label} icon={icon} onClick={onLinkClick} />
             ))}
           </>

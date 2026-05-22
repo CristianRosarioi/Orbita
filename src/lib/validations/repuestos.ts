@@ -1,7 +1,11 @@
 import { z } from 'zod';
 
 export const crearRepuestoSchema = z.object({
-  codigo: z.string().min(1, 'El código es requerido').max(50).transform((v) => v.toUpperCase()),
+  codigo: z
+    .string()
+    .min(1, 'El código es requerido')
+    .max(50)
+    .transform((v) => v.toUpperCase()),
   nombre: z.string().min(1, 'El nombre es requerido').max(300),
   descripcion: z.string().max(1000).optional(),
   marca: z.string().max(100).optional(),

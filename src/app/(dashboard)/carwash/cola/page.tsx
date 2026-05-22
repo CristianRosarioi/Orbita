@@ -51,7 +51,10 @@ export default async function CarwashColaPage() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900">Cola de servicio</h1>
-            <p className="text-sm text-slate-500">{cola.length} vehículo{cola.length !== 1 ? 's' : ''} activo{cola.length !== 1 ? 's' : ''}</p>
+            <p className="text-sm text-slate-500">
+              {cola.length} vehículo{cola.length !== 1 ? 's' : ''} activo
+              {cola.length !== 1 ? 's' : ''}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -115,9 +118,7 @@ export default async function CarwashColaPage() {
               <p className="text-xs text-slate-400">{orden.clienteNombre}</p>
 
               {orden.empleadoAsignado && (
-                <p className="mt-2 text-xs text-slate-500">
-                  Empleado: {orden.empleadoAsignado}
-                </p>
+                <p className="mt-2 text-xs text-slate-500">Empleado: {orden.empleadoAsignado}</p>
               )}
 
               <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-3">

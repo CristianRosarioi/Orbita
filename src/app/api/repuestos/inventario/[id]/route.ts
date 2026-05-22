@@ -59,9 +59,15 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
     if (parsed.data.codigo && parsed.data.codigo !== repuesto.codigo) {
       const duplicado = await prisma.repuesto.findFirst({
-        where: { empresaId: sesion.empresaActivaId, codigo: parsed.data.codigo, deletedAt: null, NOT: { id } },
+        where: {
+          empresaId: sesion.empresaActivaId,
+          codigo: parsed.data.codigo,
+          deletedAt: null,
+          NOT: { id },
+        },
       });
-      if (duplicado) return err('CONFLICT', `Ya existe un repuesto con el código ${parsed.data.codigo}.`, 409);
+      if (duplicado)
+        return err('CONFLICT', `Ya existe un repuesto con el código ${parsed.data.codigo}.`, 409);
     }
 
     const actualizado = await prisma.repuesto.update({ where: { id }, data: parsed.data });

@@ -202,6 +202,9 @@ model Empresa {
   ordenesCarwash     OrdenCarwash[]
   repuestos          Repuesto[]
   cotizaciones       Cotizacion[]
+  variantes          Variante[]
+  devoluciones       Devolucion[]
+  pedidosOnline      PedidoOnline[]
   @@index([rnc])
   @@index([deletedAt])
   @@map("empresas")
@@ -361,6 +364,8 @@ model Cliente {
   reparacionesJoya ReparacionJoya[]
   ordenesCarwash   OrdenCarwash[]
   cotizaciones     Cotizacion[]
+  devoluciones     Devolucion[]
+  pedidosOnline    PedidoOnline[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, identificacion])
@@ -442,6 +447,8 @@ model Producto {
   transferencias       TransferenciaInventario[]
   ofertas              Oferta[]
   preciosVolumen       PrecioVolumen[]
+  variantes            Variante[]
+  itemsPedidoOnline    ItemPedidoOnline[]
 
   @@index([empresaId, deletedAt])
   @@index([empresaId, sku])
@@ -561,6 +568,7 @@ model Factura {
   pagos       PagoFactura[]
   movimientos MovimientoInventario[]
   consulta    Consulta?
+  devoluciones Devolucion[]
 
   @@unique([empresaId, numero])
   @@index([empresaId, estado])
@@ -2138,4 +2146,129 @@ model ItemCotizacion {
 
   @@index([cotizacionId])
   @@map("items_cotizacion")
+}
+
+// ============================================================
+// Fase 21 — Tienda de Ropa y Tienda Online
+// ============================================================
+
+enum EstadoDevolucion {
+  PENDIENTE
+  APROBADA
+  RECHAZADA
+  COMPLETADA
+}
+
+enum EstadoPedidoOnline {
+  PENDIENTE
+  CONFIRMADO
+  PREPARANDO
+  ENVIADO
+  ENTREGADO
+  CANCELADO
+}
+
+// ============================================================
+// MODELO: Variante (Tienda de Ropa)
+// ============================================================
+model Variante {
+  id         String    @id @default(cuid())
+  empresaId  String    @map("empresa_id")
+  productoId String    @map("producto_id")
+  talla      String?
+  color      String?
+  sku        String?
+  stock      Int       @default(0)
+  precio     Decimal?
+  activa     Boolean   @default(true)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  empresa  Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  producto Producto @relation(fields: [productoId], references: [id], onDelete: Cascade)
+
+  @@unique([empresaId, productoId, talla, color])
+  @@index([empresaId, productoId])
+  @@map("variantes")
+}
+
+// ============================================================
+// MODELO: Devolucion (Tienda de Ropa)
+// ============================================================
+model Devolucion {
+  id           String           @id @default(cuid())
+  empresaId    String           @map("empresa_id")
+  facturaId    String           @map("factura_id")
+  clienteId    String?          @map("cliente_id")
+  motivo       String
+  tipo         String           @default("DEVOLUCION")
+  estado       EstadoDevolucion @default(PENDIENTE)
+  montoCredito Decimal?         @map("monto_credito")
+  notas        String?
+  creadoPor    String           @map("creado_por")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  empresa Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  factura Factura  @relation(fields: [facturaId], references: [id])
+  cliente Cliente? @relation(fields: [clienteId], references: [id])
+
+  @@index([empresaId, estado])
+  @@index([facturaId])
+  @@map("devoluciones")
+}
+
+// ============================================================
+// MODELO: PedidoOnline (Tienda Online)
+// ============================================================
+model PedidoOnline {
+  id               String             @id @default(cuid())
+  empresaId        String             @map("empresa_id")
+  numero           Int
+  clienteId        String?            @map("cliente_id")
+  clienteNombre    String             @map("cliente_nombre")
+  clienteTelefono  String?            @map("cliente_telefono")
+  canal            String             @default("WHATSAPP")
+  estado           EstadoPedidoOnline @default(PENDIENTE)
+  subtotal         Decimal            @default(0)
+  itbis            Decimal            @default(0)
+  total            Decimal            @default(0)
+  metodoPago       String?            @map("metodo_pago")
+  tracking         String?
+  direccionEntrega String?            @map("direccion_entrega")
+  notas            String?
+  facturaId        String?            @unique @map("factura_id")
+  creadoPor        String             @map("creado_por")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+  deletedAt        DateTime?          @map("deleted_at")
+
+  empresa Empresa            @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  cliente Cliente?           @relation(fields: [clienteId], references: [id])
+  items   ItemPedidoOnline[]
+
+  @@unique([empresaId, numero])
+  @@index([empresaId, estado])
+  @@index([empresaId, createdAt])
+  @@map("pedidos_online")
+}
+
+// ============================================================
+// MODELO: ItemPedidoOnline
+// ============================================================
+model ItemPedidoOnline {
+  id             String   @id @default(cuid())
+  pedidoId       String   @map("pedido_id")
+  productoId     String?  @map("producto_id")
+  descripcion    String
+  cantidad       Int
+  precioUnitario Decimal  @map("precio_unitario")
+  subtotal       Decimal
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  pedido   PedidoOnline @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  producto Producto?    @relation(fields: [productoId], references: [id])
+
+  @@index([pedidoId])
+  @@map("items_pedido_online")
 }

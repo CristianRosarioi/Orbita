@@ -47,7 +47,10 @@ export default async function DetalleOrdenCarwashPage({
   return (
     <div className="p-4 space-y-4 md:p-6 md:space-y-6 max-w-3xl">
       <div className="flex items-center gap-3">
-        <Link href="/carwash/ordenes" className="rounded-md p-1 text-slate-400 hover:text-slate-600">
+        <Link
+          href="/carwash/ordenes"
+          className="rounded-md p-1 text-slate-400 hover:text-slate-600"
+        >
           <ArrowLeft className="h-5 w-5" />
         </Link>
         <div className="flex items-center gap-3">
@@ -63,7 +66,9 @@ export default async function DetalleOrdenCarwashPage({
             </div>
             <p className="text-sm text-slate-500">
               {new Date(orden.createdAt).toLocaleDateString('es-DO', {
-                day: '2-digit', month: 'long', year: 'numeric',
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
               })}
             </p>
           </div>
@@ -81,7 +86,9 @@ export default async function DetalleOrdenCarwashPage({
           {orden.vehiculoMarca && (
             <div>
               <p className="text-xs text-slate-400">Marca / Modelo</p>
-              <p className="font-medium text-slate-700">{[orden.vehiculoMarca, orden.vehiculoModelo].filter(Boolean).join(' ')}</p>
+              <p className="font-medium text-slate-700">
+                {[orden.vehiculoMarca, orden.vehiculoModelo].filter(Boolean).join(' ')}
+              </p>
             </div>
           )}
           {orden.vehiculoColor && (
@@ -97,9 +104,7 @@ export default async function DetalleOrdenCarwashPage({
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <h2 className="mb-4 text-sm font-semibold text-slate-700">Cliente</h2>
         <p className="font-medium text-slate-800">{orden.clienteNombre}</p>
-        {orden.clienteTelefono && (
-          <p className="text-sm text-slate-500">{orden.clienteTelefono}</p>
-        )}
+        {orden.clienteTelefono && <p className="text-sm text-slate-500">{orden.clienteTelefono}</p>}
       </div>
 
       {/* Servicio */}

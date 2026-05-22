@@ -4,33 +4,56 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
+const SIGUIENTE_ESTADO: Record<string, string> = {
+  PENDIENTE: 'CONFIRMADO',
+  CONFIRMADO: 'PREPARANDO',
+  PREPARANDO: 'ENVIADO',
+  ENVIADO: 'ENTREGADO',
+};
+
+const BOTON_LABEL: Record<string, string> = {
+  PENDIENTE: 'Confirmar pedido',
+  CONFIRMADO: 'Marcar preparando',
+  PREPARANDO: 'Marcar enviado',
+  ENVIADO: 'Marcar entregado',
+};
+
 const METODOS_PAGO = [
   { value: 'EFECTIVO', label: 'Efectivo' },
-  { value: 'TARJETA', label: 'Tarjeta' },
   { value: 'TRANSFERENCIA', label: 'Transferencia' },
+  { value: 'TARJETA', label: 'Tarjeta' },
+  { value: 'CREDITO', label: 'Crédito' },
 ];
 
 interface Props {
-  cotizacionId: string;
+  pedidoId: string;
   estadoActual: string;
-  facturaId: string | null;
+  facturaId?: string | null;
 }
 
-export function CotizacionAcciones({ cotizacionId, estadoActual, facturaId }: Props) {
+export function PedidoOnlineAcciones({ pedidoId, estadoActual }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mostrarFacturar, setMostrarFacturar] = useState(false);
   const [metodoPago, setMetodoPago] = useState('EFECTIVO');
+  const [cancelando, setCancelando] = useState(false);
 
-  async function cambiarEstado(estado: string) {
+  const puedeAvanzar = estadoActual in SIGUIENTE_ESTADO;
+  const esEnviado = estadoActual === 'ENVIADO';
+
+  async function avanzarEstado() {
+    if (esEnviado) {
+      setMostrarFacturar(true);
+      return;
+    }
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch(`/api/repuestos/cotizaciones/${cotizacionId}`, {
+      const res = await fetch(`/api/tienda-online/pedidos/${pedidoId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ estado }),
+        body: JSON.stringify({ estado: SIGUIENTE_ESTADO[estadoActual] }),
       });
       const data = await res.json();
       if (!data.success) {
@@ -49,7 +72,7 @@ export function CotizacionAcciones({ cotizacionId, estadoActual, facturaId }: Pr
     setError(null);
     setLoading(true);
     try {
-      const res = await fetch(`/api/repuestos/cotizaciones/${cotizacionId}/facturar`, {
+      const res = await fetch(`/api/tienda-online/pedidos/${pedidoId}/facturar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ metodoPago }),
@@ -68,12 +91,30 @@ export function CotizacionAcciones({ cotizacionId, estadoActual, facturaId }: Pr
     }
   }
 
+  async function cancelar() {
+    if (!confirm('¿Cancelar este pedido?')) return;
+    setCancelando(true);
+    try {
+      const res = await fetch(`/api/tienda-online/pedidos/${pedidoId}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!data.success) {
+        setError(data.error?.message ?? 'Error al cancelar.');
+        return;
+      }
+      router.refresh();
+    } catch {
+      setError('Error de conexión.');
+    } finally {
+      setCancelando(false);
+    }
+  }
+
   if (mostrarFacturar) {
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
-        <h2 className="text-sm font-semibold text-slate-700">Convertir en factura</h2>
+        <h2 className="text-sm font-semibold text-slate-700">Facturar y entregar</h2>
         <div className="space-y-1.5">
-          <p className="text-sm text-slate-600">Método de pago</p>
+          <label className="text-sm text-slate-600">Método de pago</label>
           <div className="flex flex-wrap gap-2">
             {METODOS_PAGO.map((m) => (
               <button
@@ -106,39 +147,22 @@ export function CotizacionAcciones({ cotizacionId, estadoActual, facturaId }: Pr
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-      <h2 className="mb-4 text-sm font-semibold text-slate-700">Acciones</h2>
-      <div className="flex flex-wrap gap-3">
-        {estadoActual === 'PENDIENTE' && (
-          <>
-            <Button
-              onClick={() => cambiarEstado('APROBADA')}
-              disabled={loading}
-              className="gap-2 bg-emerald-600 hover:bg-emerald-700"
-            >
-              Aprobar
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => cambiarEstado('RECHAZADA')}
-              disabled={loading}
-              className="text-red-600 border-red-200 hover:bg-red-50"
-            >
-              Rechazar
-            </Button>
-          </>
-        )}
-        {estadoActual === 'APROBADA' && !facturaId && (
-          <Button onClick={() => setMostrarFacturar(true)} disabled={loading} className="gap-2">
-            Facturar cotización
+      <div className="flex flex-wrap items-center gap-3">
+        {puedeAvanzar && (
+          <Button onClick={avanzarEstado} disabled={loading}>
+            {loading ? 'Procesando...' : BOTON_LABEL[estadoActual]}
           </Button>
         )}
-        {estadoActual === 'RECHAZADA' && (
-          <Button variant="outline" onClick={() => cambiarEstado('PENDIENTE')} disabled={loading}>
-            Reactivar
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          onClick={cancelar}
+          disabled={cancelando}
+          className="text-red-600 hover:text-red-700 hover:border-red-300"
+        >
+          {cancelando ? 'Cancelando...' : 'Cancelar pedido'}
+        </Button>
+        {error && <p className="text-sm text-red-600">{error}</p>}
       </div>
-      {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
     </div>
   );
 }

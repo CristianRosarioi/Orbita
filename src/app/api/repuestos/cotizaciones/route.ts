@@ -51,7 +51,10 @@ export async function GET(req: NextRequest) {
       }),
     ]);
 
-    return ok({ data: cotizaciones, meta: { total, page, limit, totalPages: Math.ceil(total / limit) } });
+    return ok({
+      data: cotizaciones,
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    });
   } catch (error) {
     return handleApiError(error, 'GET /api/repuestos/cotizaciones');
   }

@@ -203,7 +203,14 @@ describe('POST /api/repuestos/cotizaciones', () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         clienteNombre: 'María García',
-        items: [{ descripcion: 'Filtro de aceite', cantidad: 2, precioUnitario: 650, itbisPorcentaje: 18 }],
+        items: [
+          {
+            descripcion: 'Filtro de aceite',
+            cantidad: 2,
+            precioUnitario: 650,
+            itbisPorcentaje: 18,
+          },
+        ],
       }),
     });
     const res = await POST(req);
@@ -246,7 +253,10 @@ describe('PATCH /api/repuestos/cotizaciones/[id]', () => {
   });
 
   it('rechaza modificar cotización FACTURADA', async () => {
-    mockPrisma.cotizacion.findFirst.mockResolvedValueOnce({ ...mockCotizacion, estado: 'FACTURADA' });
+    mockPrisma.cotizacion.findFirst.mockResolvedValueOnce({
+      ...mockCotizacion,
+      estado: 'FACTURADA',
+    });
     const { PATCH } = await import('@/app/api/repuestos/cotizaciones/[id]/route');
     const req = new NextRequest('http://localhost/api/repuestos/cotizaciones/cot_1', {
       method: 'PATCH',

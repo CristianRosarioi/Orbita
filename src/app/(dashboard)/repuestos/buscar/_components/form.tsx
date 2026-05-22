@@ -35,7 +35,10 @@ export function BuscarRepuestosForm({ defaultValues }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+    >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-1.5">
           <Label htmlFor="marca">Marca del vehículo</Label>

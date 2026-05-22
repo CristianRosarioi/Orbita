@@ -15,7 +15,11 @@ interface SearchParams {
   q?: string;
 }
 
-export default async function BuscarRepuestosPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
+export default async function BuscarRepuestosPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
   const sesion = await getCurrentEmpresa();
   if (!sesion) redirect('/onboarding');
   if (!INDUSTRIAS_REPUESTOS.includes(sesion.empresaActiva.industria)) redirect('/dashboard');
@@ -51,9 +55,16 @@ export default async function BuscarRepuestosPage({ searchParams }: { searchPara
       orderBy: [{ stock: 'desc' }, { nombre: 'asc' }],
       take: 50,
       select: {
-        id: true, codigo: true, nombre: true, marca: true,
-        marcaVehiculo: true, modeloVehiculo: true,
-        anioDesde: true, anioHasta: true, stock: true, precio: true,
+        id: true,
+        codigo: true,
+        nombre: true,
+        marca: true,
+        marcaVehiculo: true,
+        modeloVehiculo: true,
+        anioDesde: true,
+        anioHasta: true,
+        stock: true,
+        precio: true,
       },
     });
   }
@@ -66,16 +77,21 @@ export default async function BuscarRepuestosPage({ searchParams }: { searchPara
         </div>
         <div>
           <h1 className="text-xl font-bold text-slate-900">Buscar por vehículo</h1>
-          <p className="text-sm text-slate-500">Encuentra repuestos compatibles con el vehículo del cliente</p>
+          <p className="text-sm text-slate-500">
+            Encuentra repuestos compatibles con el vehículo del cliente
+          </p>
         </div>
       </div>
 
-      <BuscarRepuestosForm defaultValues={{ marca: marca ?? '', modelo: modelo ?? '', anio: anio ?? '', q: q ?? '' }} />
+      <BuscarRepuestosForm
+        defaultValues={{ marca: marca ?? '', modelo: modelo ?? '', anio: anio ?? '', q: q ?? '' }}
+      />
 
       {tieneFiltros && (
         <div>
           <p className="mb-3 text-sm text-slate-500">
-            {resultados.length} resultado{resultados.length !== 1 ? 's' : ''} encontrado{resultados.length !== 1 ? 's' : ''}
+            {resultados.length} resultado{resultados.length !== 1 ? 's' : ''} encontrado
+            {resultados.length !== 1 ? 's' : ''}
           </p>
 
           {resultados.length === 0 ? (
@@ -89,18 +105,31 @@ export default async function BuscarRepuestosPage({ searchParams }: { searchPara
               <table className="w-full text-sm">
                 <thead className="border-b border-slate-200 bg-slate-50">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Código</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Repuesto</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Compatible</th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">Stock</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Precio</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Código
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Repuesto
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Compatible
+                    </th>
+                    <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Stock
+                    </th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Precio
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {resultados.map((r) => (
                     <tr key={r.id} className="hover:bg-slate-50">
                       <td className="px-4 py-3">
-                        <Link href={`/repuestos/inventario/${r.id}`} className="font-mono text-xs font-medium text-indigo-600 hover:text-indigo-700">
+                        <Link
+                          href={`/repuestos/inventario/${r.id}`}
+                          className="font-mono text-xs font-medium text-indigo-600 hover:text-indigo-700"
+                        >
                           {r.codigo}
                         </Link>
                       </td>
@@ -109,15 +138,23 @@ export default async function BuscarRepuestosPage({ searchParams }: { searchPara
                         {r.marca && <p className="text-xs text-slate-400">{r.marca}</p>}
                       </td>
                       <td className="px-4 py-3 text-xs text-slate-500">
-                        {[r.marcaVehiculo, r.modeloVehiculo,
+                        {[
+                          r.marcaVehiculo,
+                          r.modeloVehiculo,
                           r.anioDesde && r.anioHasta ? `${r.anioDesde}–${r.anioHasta}` : null,
-                        ].filter(Boolean).join(' ')}
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className={cn(
-                          'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
-                          r.stock === 0 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700',
-                        )}>
+                        <span
+                          className={cn(
+                            'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
+                            r.stock === 0
+                              ? 'bg-red-100 text-red-700'
+                              : 'bg-green-100 text-green-700',
+                          )}
+                        >
                           {r.stock}
                         </span>
                       </td>
