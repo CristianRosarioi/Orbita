@@ -576,13 +576,21 @@ function SidebarContent({
 
       {/* Footer usuario */}
       <div className="border-t border-slate-800 p-3">
-        <div className="flex items-center gap-3">
-          <UserButton appearance={{ elements: { avatarBox: 'w-8 h-8' } }} />
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center">
+            <UserButton
+              appearance={{
+                elements: { rootBox: 'shrink-0', avatarBox: 'w-8 h-8' },
+              }}
+            />
+          </div>
           <div className="hidden min-w-0 flex-1 xl:block">
-            <p className="truncate text-sm font-medium text-white">
+            <p className="truncate text-sm font-medium leading-tight text-white">
               {[usuario.nombre, usuario.apellido].filter(Boolean).join(' ') || 'Usuario'}
             </p>
-            <p className="text-xs text-slate-500">{ROL_LABELS[rol] ?? rol}</p>
+            <p className="truncate text-xs leading-tight text-slate-500">
+              {ROL_LABELS[rol] ?? rol}
+            </p>
           </div>
         </div>
       </div>

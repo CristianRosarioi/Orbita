@@ -167,8 +167,12 @@ export function FacturaForm() {
   return (
     <div className="space-y-6 max-w-4xl">
       {/* Sección 1: Cliente */}
-      <Card className="p-5 space-y-4">
-        <h2 className="font-semibold text-slate-900">Información del cliente</h2>
+      <Card className="p-6 space-y-4 shadow-sm border border-slate-200">
+        <div className="pb-3 border-b border-slate-100">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Información del cliente
+          </h2>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <Label>Buscar cliente existente</Label>
@@ -206,13 +210,22 @@ export function FacturaForm() {
       </Card>
 
       {/* Sección 2: Items */}
-      <Card className="p-5">
+      <Card className="p-6 shadow-sm border border-slate-200">
+        <div className="pb-3 border-b border-slate-100 mb-4">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Productos y servicios
+          </h2>
+        </div>
         <ItemsFacturaTable items={items} onChange={setItems} />
       </Card>
 
       {/* Sección 3: Pago y totales */}
-      <Card className="p-5 space-y-4">
-        <h2 className="font-semibold text-slate-900">Condiciones de pago</h2>
+      <Card className="p-6 space-y-4 shadow-sm border border-slate-200">
+        <div className="pb-3 border-b border-slate-100">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Condiciones de pago
+          </h2>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <Label htmlFor="metodo-pago">Método de pago</Label>
@@ -271,7 +284,7 @@ export function FacturaForm() {
 
         {/* Resumen totales */}
         <div className="flex justify-end">
-          <div className="w-72 space-y-1.5 text-sm">
+          <div className="w-full sm:w-80 bg-slate-50 rounded-xl p-4 space-y-2 text-sm">
             <div className="flex justify-between text-slate-600">
               <span>Subtotal</span>
               <span>RD$ {totales.subtotal.toFixed(2)}</span>
@@ -286,7 +299,7 @@ export function FacturaForm() {
                 <span>- RD$ {totales.descuento.toFixed(2)}</span>
               </div>
             )}
-            <div className="flex justify-between font-bold text-base text-slate-900 border-t border-slate-200 pt-2">
+            <div className="flex justify-between text-xl font-bold text-slate-900 border-t border-slate-200 pt-3 mt-1">
               <span>Total</span>
               <span>RD$ {totales.total.toFixed(2)}</span>
             </div>
@@ -294,8 +307,8 @@ export function FacturaForm() {
         </div>
       </Card>
 
-      {/* Acciones */}
-      <div className="flex gap-3 justify-end">
+      {/* Acciones — barra fija en la parte inferior */}
+      <div className="sticky bottom-0 bg-white border-t border-slate-200 px-6 py-4 -mx-6 flex gap-3 justify-end shadow-[0_-4px_16px_rgba(0,0,0,0.05)]">
         <Button type="button" variant="outline" onClick={handleGuardarBorrador} disabled={loading}>
           {loading ? 'Guardando...' : 'Guardar borrador'}
         </Button>

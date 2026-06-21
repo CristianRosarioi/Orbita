@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { UserPlus, Users } from 'lucide-react';
+import { UserPlus, Users, Search } from 'lucide-react';
 
 import { prisma } from '@/lib/prisma';
 import { getCurrentEmpresa } from '@/lib/auth';
@@ -91,19 +91,29 @@ async function TablaClientes({
 
   if (clientes.length === 0) {
     return (
-      <div className="text-center py-16 text-slate-500">
-        <Users className="mx-auto h-10 w-10 mb-3 text-slate-300" />
-        <p className="font-medium">No hay clientes</p>
-        <p className="text-sm mt-1">
-          {search || tipo ? 'No hay resultados para estos filtros.' : 'Crea tu primer cliente.'}
+      <div className="rounded-lg border border-dashed border-slate-200 text-center py-16 text-slate-500 flex flex-col items-center">
+        <Users className="h-10 w-10 mb-3 text-slate-300" />
+        <p className="font-medium text-slate-600">
+          {search || tipo ? 'No hay clientes con estos filtros' : 'No hay clientes'}
         </p>
+        <p className="text-sm mt-1">
+          {search || tipo
+            ? 'Prueba ajustar la búsqueda o los filtros.'
+            : 'Registra tu primer cliente para empezar a facturar.'}
+        </p>
+        {!search && !tipo && (
+          <Link href="/clientes/nuevo" className={`${buttonVariants()} mt-4`}>
+            <UserPlus className="h-4 w-4 mr-2" />
+            Nuevo cliente
+          </Link>
+        )}
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <div className="rounded-md border border-slate-200 overflow-hidden bg-white">
+      <div className="rounded-md border border-slate-200 overflow-x-auto bg-white">
         <Table>
           <TableHeader>
             <TableRow className="bg-slate-50">
@@ -224,48 +234,51 @@ export default async function ClientesPage({
       {/* Filtros */}
       <div className="flex flex-wrap items-center gap-3">
         <form method="GET" className="flex items-center gap-2">
-          <input
-            name="search"
-            defaultValue={search}
-            placeholder="Buscar por nombre, ID..."
-            className="border border-slate-200 rounded-md px-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-slate-900"
-          />
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+            <input
+              name="search"
+              defaultValue={search}
+              placeholder="Buscar por nombre, ID..."
+              className="border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-slate-900"
+            />
+          </div>
           {tipo && <input type="hidden" name="tipo" value={tipo} />}
           <button
             type="submit"
-            className="px-3 py-1.5 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700"
+            className="px-3 py-1.5 text-sm bg-slate-900 text-white rounded-full hover:bg-slate-700"
           >
             Buscar
           </button>
         </form>
 
-        <div className="flex gap-1">
+        <div className="flex gap-1 overflow-x-auto flex-nowrap">
           <Link
             href={`?search=${search}&tipo=`}
-            className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
+            className={`px-4 py-1.5 text-sm rounded-full whitespace-nowrap transition-colors ${
               !tipo
-                ? 'bg-slate-900 text-white border-slate-900'
-                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-slate-900 text-white'
+                : 'border border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
             Todos
           </Link>
           <Link
             href={`?search=${search}&tipo=PERSONA`}
-            className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
+            className={`px-4 py-1.5 text-sm rounded-full whitespace-nowrap transition-colors ${
               tipo === 'PERSONA'
-                ? 'bg-slate-900 text-white border-slate-900'
-                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-slate-900 text-white'
+                : 'border border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
             Personas
           </Link>
           <Link
             href={`?search=${search}&tipo=EMPRESA`}
-            className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
+            className={`px-4 py-1.5 text-sm rounded-full whitespace-nowrap transition-colors ${
               tipo === 'EMPRESA'
-                ? 'bg-slate-900 text-white border-slate-900'
-                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-slate-900 text-white'
+                : 'border border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
             Empresas

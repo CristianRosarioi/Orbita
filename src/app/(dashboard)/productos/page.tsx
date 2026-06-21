@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { PackagePlus, Package } from 'lucide-react';
+import { PackagePlus, Package, Search } from 'lucide-react';
 
 import { prisma } from '@/lib/prisma';
 import { getCurrentEmpresa } from '@/lib/auth';
@@ -81,22 +81,31 @@ async function TablaProductos({
   const totalPages = Math.ceil(total / LIMIT);
 
   if (productos.length === 0) {
+    const hayFiltros = Boolean(search || tipo || categoriaId);
     return (
-      <div className="text-center py-16 text-slate-500">
-        <Package className="mx-auto h-10 w-10 mb-3 text-slate-300" />
-        <p className="font-medium">No hay productos</p>
-        <p className="text-sm mt-1">
-          {search || tipo || categoriaId
-            ? 'No hay resultados para estos filtros.'
-            : 'Crea tu primer producto.'}
+      <div className="rounded-lg border border-dashed border-slate-200 text-center py-16 text-slate-500 flex flex-col items-center">
+        <Package className="h-10 w-10 mb-3 text-slate-300" />
+        <p className="font-medium text-slate-600">
+          {hayFiltros ? 'No hay productos con estos filtros' : 'No hay productos'}
         </p>
+        <p className="text-sm mt-1">
+          {hayFiltros
+            ? 'Prueba ajustar la búsqueda o los filtros.'
+            : 'Agrega tu primer producto o servicio al catálogo.'}
+        </p>
+        {!hayFiltros && (
+          <Link href="/productos/nuevo" className={`${buttonVariants()} mt-4`}>
+            <PackagePlus className="h-4 w-4 mr-2" />
+            Nuevo producto
+          </Link>
+        )}
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <div className="rounded-md border border-slate-200 overflow-hidden bg-white">
+      <div className="rounded-md border border-slate-200 overflow-x-auto bg-white">
         <Table>
           <TableHeader>
             <TableRow className="bg-slate-50">
@@ -221,49 +230,52 @@ export default async function ProductosPage({
       {/* Filtros */}
       <div className="flex flex-wrap items-center gap-3">
         <form method="GET" className="flex items-center gap-2">
-          <input
-            name="search"
-            defaultValue={search}
-            placeholder="Buscar por nombre, SKU..."
-            className="border border-slate-200 rounded-md px-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-slate-900"
-          />
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+            <input
+              name="search"
+              defaultValue={search}
+              placeholder="Buscar por nombre, SKU..."
+              className="border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-slate-900"
+            />
+          </div>
           {tipo && <input type="hidden" name="tipo" value={tipo} />}
           {categoriaId && <input type="hidden" name="categoriaId" value={categoriaId} />}
           <button
             type="submit"
-            className="px-3 py-1.5 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700"
+            className="px-3 py-1.5 text-sm bg-slate-900 text-white rounded-full hover:bg-slate-700"
           >
             Buscar
           </button>
         </form>
 
-        <div className="flex gap-1">
+        <div className="flex gap-1 overflow-x-auto flex-nowrap">
           <Link
             href={`?search=${search}&tipo=&categoriaId=${categoriaId}`}
-            className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
+            className={`px-4 py-1.5 text-sm rounded-full whitespace-nowrap transition-colors ${
               !tipo
-                ? 'bg-slate-900 text-white border-slate-900'
-                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-slate-900 text-white'
+                : 'border border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
             Todos
           </Link>
           <Link
             href={`?search=${search}&tipo=BIEN&categoriaId=${categoriaId}`}
-            className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
+            className={`px-4 py-1.5 text-sm rounded-full whitespace-nowrap transition-colors ${
               tipo === 'BIEN'
-                ? 'bg-slate-900 text-white border-slate-900'
-                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-slate-900 text-white'
+                : 'border border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
             Bienes
           </Link>
           <Link
             href={`?search=${search}&tipo=SERVICIO&categoriaId=${categoriaId}`}
-            className={`px-3 py-1.5 text-sm rounded-md border transition-colors ${
+            className={`px-4 py-1.5 text-sm rounded-full whitespace-nowrap transition-colors ${
               tipo === 'SERVICIO'
-                ? 'bg-slate-900 text-white border-slate-900'
-                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-slate-900 text-white'
+                : 'border border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
             Servicios
@@ -271,15 +283,15 @@ export default async function ProductosPage({
         </div>
 
         {categorias.length > 0 && (
-          <div className="flex gap-1 flex-wrap">
+          <div className="flex gap-1 flex-wrap overflow-x-auto">
             {categorias.map((c) => (
               <Link
                 key={c.id}
                 href={`?search=${search}&tipo=${tipo}&categoriaId=${categoriaId === c.id ? '' : c.id}`}
-                className={`px-2 py-1 text-xs rounded border transition-colors ${
+                className={`px-3 py-1 text-xs rounded-full whitespace-nowrap transition-colors ${
                   categoriaId === c.id
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                    ? 'bg-blue-600 text-white'
+                    : 'border border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
                 {c.nombre}

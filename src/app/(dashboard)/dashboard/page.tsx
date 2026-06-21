@@ -14,8 +14,8 @@ import {
   Banknote,
   BarChart2,
 } from 'lucide-react';
-import { Card } from '@/components/ui/card';
 import { MoneyDisplay } from '@/components/shared/money-display';
+import { OnboardingPasos } from './_components/onboarding-pasos';
 
 function diasRestantes(fecha: Date | null): number | null {
   if (!fecha) return null;
@@ -45,6 +45,7 @@ export default async function DashboardPage() {
           estadoSusc: true,
           trialFinaliza: true,
           planSuscripcion: true,
+          onboardingOculto: true,
         },
       },
     },
@@ -70,6 +71,9 @@ export default async function DashboardPage() {
     pagosMes,
     facturasVencidas,
     productosStockBajoRaw,
+    onboardingProductos,
+    onboardingClientes,
+    onboardingFacturas,
   ] = await Promise.all([
     prisma.factura
       .findMany({
@@ -112,6 +116,12 @@ export default async function DashboardPage() {
         select: { nombre: true, stockActual: true, stockMinimo: true },
       })
       .catch(() => []),
+    // Onboarding: estado real de cada paso (independiente de filtros activo/fecha)
+    prisma.producto.count({ where: { empresaId, deletedAt: null } }).catch(() => 0),
+    prisma.cliente.count({ where: { empresaId, deletedAt: null } }).catch(() => 0),
+    prisma.factura
+      .count({ where: { empresaId, deletedAt: null, estado: { in: ['EMITIDA', 'PAGADA'] } } })
+      .catch(() => 0),
   ]);
 
   const ventasHoy = facturasHoyData.reduce((s, f) => s + Number(f.total), 0);
@@ -128,34 +138,57 @@ export default async function DashboardPage() {
   const trial = diasRestantes(empresa.trialFinaliza);
   const hayAlertas = facturasVencidas > 0 || productosStockBajo.length > 0;
 
+  // Fecha de hoy en formato YYYY-MM-DD para preseleccionar el filtro de Facturas
+  const hoyStr = `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, '0')}-${String(
+    ahora.getDate(),
+  ).padStart(2, '0')}`;
+  const facturasHoyHref = `/facturas?desde=${hoyStr}&hasta=${hoyStr}`;
+
   const mesNombre = ahora.toLocaleDateString('es-DO', { month: 'long' });
   const horaActual = ahora.getHours();
   const saludo =
     horaActual < 12 ? 'Buenos días' : horaActual < 19 ? 'Buenas tardes' : 'Buenas noches';
+  const fechaFormateada = ahora.toLocaleDateString('es-DO', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 
   return (
     <div className="p-6 lg:p-8 space-y-8 max-w-6xl">
       {/* Encabezado */}
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
           {saludo}
           {usuario.nombre ? `, ${usuario.nombre}` : ''}
         </h1>
-        <div className="flex items-center gap-2 mt-1 flex-wrap">
+        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
           <p className="text-sm text-slate-500">{empresa.nombreComercial ?? empresa.nombre}</p>
           <span className="text-slate-300 text-xs">·</span>
           <span className="text-xs text-slate-400">
             Modo {empresa.modoFiscal === 'FISCAL' ? 'Fiscal' : 'Simple'}
           </span>
           {empresa.estadoSusc === 'TRIAL' && trial !== null && trial > 0 && (
-            <span className="text-xs text-amber-500">· Trial: {trial} días</span>
+            <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+              ⏳ Trial: {trial} días restantes
+            </span>
+          )}
+          {empresa.estadoSusc === 'ACTIVA' && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
+              ✓ Plan activo
+            </span>
           )}
         </div>
+        <p className="text-sm text-slate-400 mt-1 capitalize">{fechaFormateada}</p>
       </div>
 
       {/* Cards de métricas hoy */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-5 space-y-3">
+        <Link
+          href={facturasHoyHref}
+          className="block rounded-xl bg-emerald-50 border border-emerald-100 border-l-4 border-l-emerald-400 p-5 space-y-3 cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-emerald-400"
+        >
           <div className="flex items-center justify-between">
             <p className="text-sm text-slate-500">Ventas del día</p>
             <div className="h-8 w-8 rounded-lg bg-white/70 flex items-center justify-center">
@@ -166,9 +199,12 @@ export default async function DashboardPage() {
             <MoneyDisplay amount={ventasHoy} currency="RD$" />
           </p>
           <p className="text-xs text-slate-400">Facturas emitidas y pagadas hoy</p>
-        </div>
+        </Link>
 
-        <div className="rounded-xl bg-blue-50 border border-blue-100 p-5 space-y-3">
+        <Link
+          href="/clientes"
+          className="block rounded-xl bg-blue-50 border border-blue-100 border-l-4 border-l-blue-400 p-5 space-y-3 cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-400"
+        >
           <div className="flex items-center justify-between">
             <p className="text-sm text-slate-500">Clientes</p>
             <div className="h-8 w-8 rounded-lg bg-white/70 flex items-center justify-center">
@@ -177,9 +213,12 @@ export default async function DashboardPage() {
           </div>
           <p className="text-2xl font-bold text-slate-900">{clientesActivos}</p>
           <p className="text-xs text-slate-400">Clientes activos</p>
-        </div>
+        </Link>
 
-        <div className="rounded-xl bg-violet-50 border border-violet-100 p-5 space-y-3">
+        <Link
+          href="/productos"
+          className="block rounded-xl bg-violet-50 border border-violet-100 border-l-4 border-l-violet-400 p-5 space-y-3 cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-violet-400"
+        >
           <div className="flex items-center justify-between">
             <p className="text-sm text-slate-500">Productos</p>
             <div className="h-8 w-8 rounded-lg bg-white/70 flex items-center justify-center">
@@ -188,9 +227,12 @@ export default async function DashboardPage() {
           </div>
           <p className="text-2xl font-bold text-slate-900">{productosActivos}</p>
           <p className="text-xs text-slate-400">Productos activos</p>
-        </div>
+        </Link>
 
-        <div className="rounded-xl bg-orange-50 border border-orange-100 p-5 space-y-3">
+        <Link
+          href={facturasHoyHref}
+          className="block rounded-xl bg-orange-50 border border-orange-100 border-l-4 border-l-orange-400 p-5 space-y-3 cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-orange-400"
+        >
           <div className="flex items-center justify-between">
             <p className="text-sm text-slate-500">Facturas hoy</p>
             <div className="h-8 w-8 rounded-lg bg-white/70 flex items-center justify-center">
@@ -199,7 +241,7 @@ export default async function DashboardPage() {
           </div>
           <p className="text-2xl font-bold text-slate-900">{facturasHoyCount}</p>
           <p className="text-xs text-slate-400">Emitidas y pagadas hoy</p>
-        </div>
+        </Link>
       </div>
 
       {/* Resumen del mes */}
@@ -211,7 +253,10 @@ export default async function DashboardPage() {
           <div className="flex-1 h-px bg-slate-100" />
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="rounded-xl bg-slate-100 border border-slate-200 p-5 space-y-3">
+          <Link
+            href="/facturas"
+            className="block rounded-xl bg-slate-100 border border-slate-200 border-l-4 border-l-slate-400 p-5 space-y-3 cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-400"
+          >
             <div className="flex items-center justify-between">
               <p className="text-sm text-slate-500">Total facturado</p>
               <div className="h-8 w-8 rounded-lg bg-white/70 flex items-center justify-center">
@@ -224,9 +269,12 @@ export default async function DashboardPage() {
             <p className="text-xs text-slate-400">
               {facturasMes.length} factura{facturasMes.length !== 1 ? 's' : ''}
             </p>
-          </div>
+          </Link>
 
-          <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-5 space-y-3">
+          <Link
+            href="/facturas?estado=PAGADA"
+            className="block rounded-xl bg-emerald-50 border border-emerald-100 border-l-4 border-l-emerald-400 p-5 space-y-3 cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-emerald-400"
+          >
             <div className="flex items-center justify-between">
               <p className="text-sm text-slate-500">Total cobrado</p>
               <div className="h-8 w-8 rounded-lg bg-white/70 flex items-center justify-center">
@@ -237,9 +285,12 @@ export default async function DashboardPage() {
               <MoneyDisplay amount={totalCobradoMes} currency="RD$" />
             </p>
             <p className="text-xs text-slate-400">Pagos recibidos</p>
-          </div>
+          </Link>
 
-          <div className="rounded-xl bg-amber-50 border border-amber-100 p-5 space-y-3">
+          <Link
+            href="/facturas?estado=EMITIDA"
+            className="block rounded-xl bg-amber-50 border border-amber-100 border-l-4 border-l-amber-400 p-5 space-y-3 cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400"
+          >
             <div className="flex items-center justify-between">
               <p className="text-sm text-slate-500">Pendiente cobrar</p>
               <div className="h-8 w-8 rounded-lg bg-white/70 flex items-center justify-center">
@@ -250,9 +301,12 @@ export default async function DashboardPage() {
               <MoneyDisplay amount={pendienteCobrar} currency="RD$" />
             </p>
             <p className="text-xs text-slate-400">En crédito sin cobrar</p>
-          </div>
+          </Link>
 
-          <div className="rounded-xl bg-blue-50 border border-blue-100 p-5 space-y-3">
+          <Link
+            href="/facturas"
+            className="block rounded-xl bg-blue-50 border border-blue-100 border-l-4 border-l-blue-400 p-5 space-y-3 cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-400"
+          >
             <div className="flex items-center justify-between">
               <p className="text-sm text-slate-500">Facturas del mes</p>
               <div className="h-8 w-8 rounded-lg bg-white/70 flex items-center justify-center">
@@ -261,7 +315,7 @@ export default async function DashboardPage() {
             </div>
             <p className="text-2xl font-bold text-slate-900">{facturasMes.length}</p>
             <p className="text-xs text-slate-400">Emitidas + pagadas</p>
-          </div>
+          </Link>
         </div>
       </div>
 
@@ -274,87 +328,73 @@ export default async function DashboardPage() {
           <div className="flex-1 h-px bg-slate-100" />
         </div>
         {!hayAlertas ? (
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 flex items-center gap-3">
-            <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-              <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 flex items-center gap-3">
+            <div className="h-9 w-9 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="h-5 w-5 text-emerald-600" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-700">Todo en orden</p>
-              <p className="text-xs text-slate-400">Sin alertas pendientes hoy</p>
+              <p className="text-sm font-semibold text-emerald-800">Todo en orden</p>
+              <p className="text-xs text-emerald-600">Sin alertas pendientes hoy</p>
             </div>
           </div>
         ) : (
-          <Card className="p-5">
-            <ul className="space-y-2 text-sm">
-              {facturasVencidas > 0 && (
-                <li className="flex items-start gap-2 text-amber-700">
-                  <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
-                  <span>
-                    <strong>{facturasVencidas}</strong> factura{facturasVencidas !== 1 ? 's' : ''}{' '}
-                    vencida{facturasVencidas !== 1 ? 's' : ''} sin cobrar.{' '}
-                    <Link href="/facturas?estado=EMITIDA" className="underline hover:no-underline">
-                      Ver facturas
-                    </Link>
-                  </span>
-                </li>
-              )}
-              {productosStockBajo.slice(0, 5).map((p, i) => (
-                <li key={i} className="flex items-start gap-2 text-red-700">
-                  <Package className="h-4 w-4 mt-0.5 shrink-0" />
-                  <span>
-                    <strong>{p.nombre}</strong>: stock {Number(p.stockActual)} (mínimo{' '}
-                    {Number(p.stockMinimo)}).
-                  </span>
-                </li>
-              ))}
-              {productosStockBajo.length > 5 && (
-                <li className="text-slate-500 ml-6">
-                  Y {productosStockBajo.length - 5} producto
-                  {productosStockBajo.length - 5 !== 1 ? 's' : ''} más con stock bajo.{' '}
-                  <Link href="/productos" className="underline hover:no-underline">
-                    Ver todos
+          <div className="space-y-2">
+            {facturasVencidas > 0 && (
+              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 flex items-start gap-3">
+                <div className="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0 mt-0.5">
+                  <AlertTriangle className="h-4 w-4 text-amber-600" />
+                </div>
+                <div className="text-sm">
+                  <p className="font-semibold text-amber-800">
+                    {facturasVencidas} factura{facturasVencidas !== 1 ? 's' : ''} vencida
+                    {facturasVencidas !== 1 ? 's' : ''} sin cobrar
+                  </p>
+                  <Link
+                    href="/facturas?estado=EMITIDA"
+                    className="text-xs text-amber-700 underline hover:no-underline"
+                  >
+                    Ver facturas pendientes
                   </Link>
-                </li>
-              )}
-            </ul>
-          </Card>
+                </div>
+              </div>
+            )}
+            {productosStockBajo.slice(0, 5).map((p, i) => (
+              <div
+                key={i}
+                className="rounded-xl border border-red-200 bg-red-50 p-4 flex items-start gap-3"
+              >
+                <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center shrink-0 mt-0.5">
+                  <Package className="h-4 w-4 text-red-600" />
+                </div>
+                <div className="text-sm">
+                  <p className="font-semibold text-red-800">{p.nombre}</p>
+                  <p className="text-xs text-red-600">
+                    Stock actual: {Number(p.stockActual)} — Mínimo: {Number(p.stockMinimo)}
+                  </p>
+                </div>
+              </div>
+            ))}
+            {productosStockBajo.length > 5 && (
+              <p className="text-sm text-slate-500 pl-2">
+                Y {productosStockBajo.length - 5} producto
+                {productosStockBajo.length - 5 !== 1 ? 's' : ''} más con stock bajo.{' '}
+                <Link href="/productos" className="underline hover:no-underline">
+                  Ver todos
+                </Link>
+              </p>
+            )}
+          </div>
         )}
       </div>
 
-      {/* Próximos pasos */}
-      <div>
-        <div className="flex items-center gap-3 mb-4">
-          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">
-            Próximos pasos
-          </h2>
-          <div className="flex-1 h-px bg-slate-100" />
-        </div>
-        <Card className="p-5">
-          <ul className="space-y-2 text-sm text-slate-600">
-            <li className="flex items-center gap-2">
-              <span className="text-green-500 text-base">✓</span> Tu empresa fue creada
-            </li>
-            <li className="flex items-center gap-2 text-slate-400">
-              <span className="text-base">○</span>{' '}
-              <Link href="/productos" className="hover:underline">
-                Agrega tu primer producto
-              </Link>
-            </li>
-            <li className="flex items-center gap-2 text-slate-400">
-              <span className="text-base">○</span>{' '}
-              <Link href="/clientes" className="hover:underline">
-                Registra tu primer cliente
-              </Link>
-            </li>
-            <li className="flex items-center gap-2 text-slate-400">
-              <span className="text-base">○</span>{' '}
-              <Link href="/facturas/nueva" className="hover:underline">
-                Emite tu primera factura
-              </Link>
-            </li>
-          </ul>
-        </Card>
-      </div>
+      {/* Próximos pasos (onboarding) — se oculta al completar los 4 pasos o al descartarlo */}
+      {!empresa.onboardingOculto && (
+        <OnboardingPasos
+          tieneProducto={onboardingProductos > 0}
+          tieneCliente={onboardingClientes > 0}
+          tieneFactura={onboardingFacturas > 0}
+        />
+      )}
     </div>
   );
 }

@@ -79,8 +79,12 @@ export function ClienteForm({ defaultValues, clienteId }: ClienteFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Tipo de cliente */}
-      <div className="space-y-2">
-        <Label>Tipo de cliente</Label>
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+        <div className="pb-3 border-b border-slate-100">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Tipo de cliente
+          </h2>
+        </div>
         <RadioGroup
           value={tipo}
           onValueChange={(val) => setValue('tipo', val as TipoCliente)}
@@ -101,125 +105,142 @@ export function ClienteForm({ defaultValues, clienteId }: ClienteFormProps) {
         </RadioGroup>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Tipo de identificación */}
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="tipoIdentificacion">Tipo de identificación</Label>
-          <select
-            id="tipoIdentificacion"
-            {...register('tipoIdentificacion')}
-            className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <option value={TipoIdentificacion.CEDULA}>Cédula</option>
-            <option value={TipoIdentificacion.RNC}>RNC</option>
-            <option value={TipoIdentificacion.PASAPORTE}>Pasaporte</option>
-            <option value={TipoIdentificacion.SIN_IDENTIFICACION}>Sin identificación</option>
-          </select>
-          {errors.tipoIdentificacion && (
-            <p className="text-xs text-red-500">{errors.tipoIdentificacion.message}</p>
-          )}
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+        <div className="pb-3 border-b border-slate-100">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+            Información de contacto
+          </h2>
         </div>
-
-        {/* Identificación */}
-        <div className="space-y-2">
-          <Label htmlFor="identificacion">Número de identificación</Label>
-          <Input id="identificacion" {...register('identificacion')} placeholder="000-0000000-0" />
-          {errors.identificacion && (
-            <p className="text-sm text-red-600">{errors.identificacion.message}</p>
-          )}
-        </div>
-
-        {/* Nombre / Razón Social */}
-        <div className="space-y-2">
-          <Label htmlFor="nombre">
-            {tipo === TipoCliente.EMPRESA ? 'Razón social' : 'Nombre'}
-            <span className="text-red-500 ml-1">*</span>
-          </Label>
-          <Input
-            id="nombre"
-            {...register('nombre')}
-            placeholder={tipo === TipoCliente.EMPRESA ? 'Empresa S.R.L.' : 'Juan Pérez'}
-          />
-          {errors.nombre && <p className="text-sm text-red-600">{errors.nombre.message}</p>}
-        </div>
-
-        {/* Nombre comercial — solo empresas */}
-        {tipo === TipoCliente.EMPRESA && (
-          <div className="space-y-2">
-            <Label htmlFor="nombreComercial">Nombre comercial</Label>
-            <Input
-              id="nombreComercial"
-              {...register('nombreComercial')}
-              placeholder="Nombre que usa en el mercado"
-            />
-            {errors.nombreComercial && (
-              <p className="text-sm text-red-600">{errors.nombreComercial.message}</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Tipo de identificación */}
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="tipoIdentificacion">Tipo de identificación</Label>
+            <select
+              id="tipoIdentificacion"
+              {...register('tipoIdentificacion')}
+              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <option value={TipoIdentificacion.CEDULA}>Cédula</option>
+              <option value={TipoIdentificacion.RNC}>RNC</option>
+              <option value={TipoIdentificacion.PASAPORTE}>Pasaporte</option>
+              <option value={TipoIdentificacion.SIN_IDENTIFICACION}>Sin identificación</option>
+            </select>
+            {errors.tipoIdentificacion && (
+              <p className="text-xs text-red-500">{errors.tipoIdentificacion.message}</p>
             )}
           </div>
-        )}
 
-        {/* Email */}
-        <div className="space-y-2">
-          <Label htmlFor="email">Correo electrónico</Label>
-          <Input id="email" type="email" {...register('email')} placeholder="correo@ejemplo.com" />
-          {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
+          {/* Identificación */}
+          <div className="space-y-2">
+            <Label htmlFor="identificacion">Número de identificación</Label>
+            <Input
+              id="identificacion"
+              {...register('identificacion')}
+              placeholder="000-0000000-0"
+            />
+            {errors.identificacion && (
+              <p className="text-sm text-red-600">{errors.identificacion.message}</p>
+            )}
+          </div>
+
+          {/* Nombre / Razón Social */}
+          <div className="space-y-2">
+            <Label htmlFor="nombre">
+              {tipo === TipoCliente.EMPRESA ? 'Razón social' : 'Nombre'}
+              <span className="text-red-500 ml-1">*</span>
+            </Label>
+            <Input
+              id="nombre"
+              {...register('nombre')}
+              placeholder={tipo === TipoCliente.EMPRESA ? 'Empresa S.R.L.' : 'Juan Pérez'}
+            />
+            {errors.nombre && <p className="text-sm text-red-600">{errors.nombre.message}</p>}
+          </div>
+
+          {/* Nombre comercial — solo empresas */}
+          {tipo === TipoCliente.EMPRESA && (
+            <div className="space-y-2">
+              <Label htmlFor="nombreComercial">Nombre comercial</Label>
+              <Input
+                id="nombreComercial"
+                {...register('nombreComercial')}
+                placeholder="Nombre que usa en el mercado"
+              />
+              {errors.nombreComercial && (
+                <p className="text-sm text-red-600">{errors.nombreComercial.message}</p>
+              )}
+            </div>
+          )}
+
+          {/* Email */}
+          <div className="space-y-2">
+            <Label htmlFor="email">Correo electrónico</Label>
+            <Input
+              id="email"
+              type="email"
+              {...register('email')}
+              placeholder="correo@ejemplo.com"
+            />
+            {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
+          </div>
+
+          {/* Teléfono */}
+          <div className="space-y-2">
+            <Label htmlFor="telefono">Teléfono</Label>
+            <Input id="telefono" {...register('telefono')} placeholder="809-000-0000" />
+            {errors.telefono && <p className="text-sm text-red-600">{errors.telefono.message}</p>}
+          </div>
+
+          {/* Celular */}
+          <div className="space-y-2">
+            <Label htmlFor="celular">Celular</Label>
+            <Input id="celular" {...register('celular')} placeholder="829-000-0000" />
+            {errors.celular && <p className="text-sm text-red-600">{errors.celular.message}</p>}
+          </div>
+
+          {/* Ciudad */}
+          <div className="space-y-2">
+            <Label htmlFor="ciudad">Ciudad</Label>
+            <Input id="ciudad" {...register('ciudad')} placeholder="Santo Domingo" />
+            {errors.ciudad && <p className="text-sm text-red-600">{errors.ciudad.message}</p>}
+          </div>
+
+          {/* Provincia */}
+          <div className="space-y-2">
+            <Label htmlFor="provincia">Provincia</Label>
+            <Input id="provincia" {...register('provincia')} placeholder="Distrito Nacional" />
+            {errors.provincia && <p className="text-sm text-red-600">{errors.provincia.message}</p>}
+          </div>
         </div>
 
-        {/* Teléfono */}
+        {/* Dirección */}
         <div className="space-y-2">
-          <Label htmlFor="telefono">Teléfono</Label>
-          <Input id="telefono" {...register('telefono')} placeholder="809-000-0000" />
-          {errors.telefono && <p className="text-sm text-red-600">{errors.telefono.message}</p>}
+          <Label htmlFor="direccion">Dirección</Label>
+          <Textarea
+            id="direccion"
+            {...register('direccion')}
+            placeholder="Calle, número, sector..."
+            rows={2}
+          />
+          {errors.direccion && <p className="text-sm text-red-600">{errors.direccion.message}</p>}
         </div>
 
-        {/* Celular */}
+        {/* Notas */}
         <div className="space-y-2">
-          <Label htmlFor="celular">Celular</Label>
-          <Input id="celular" {...register('celular')} placeholder="829-000-0000" />
-          {errors.celular && <p className="text-sm text-red-600">{errors.celular.message}</p>}
-        </div>
-
-        {/* Ciudad */}
-        <div className="space-y-2">
-          <Label htmlFor="ciudad">Ciudad</Label>
-          <Input id="ciudad" {...register('ciudad')} placeholder="Santo Domingo" />
-          {errors.ciudad && <p className="text-sm text-red-600">{errors.ciudad.message}</p>}
-        </div>
-
-        {/* Provincia */}
-        <div className="space-y-2">
-          <Label htmlFor="provincia">Provincia</Label>
-          <Input id="provincia" {...register('provincia')} placeholder="Distrito Nacional" />
-          {errors.provincia && <p className="text-sm text-red-600">{errors.provincia.message}</p>}
+          <Label htmlFor="notas">Notas internas</Label>
+          <Textarea
+            id="notas"
+            {...register('notas')}
+            placeholder="Cualquier información adicional..."
+            rows={3}
+          />
+          {errors.notas && <p className="text-sm text-red-600">{errors.notas.message}</p>}
         </div>
       </div>
-
-      {/* Dirección */}
-      <div className="space-y-2">
-        <Label htmlFor="direccion">Dirección</Label>
-        <Textarea
-          id="direccion"
-          {...register('direccion')}
-          placeholder="Calle, número, sector..."
-          rows={2}
-        />
-        {errors.direccion && <p className="text-sm text-red-600">{errors.direccion.message}</p>}
-      </div>
-
-      {/* Notas */}
-      <div className="space-y-2">
-        <Label htmlFor="notas">Notas internas</Label>
-        <Textarea
-          id="notas"
-          {...register('notas')}
-          placeholder="Cualquier información adicional..."
-          rows={3}
-        />
-        {errors.notas && <p className="text-sm text-red-600">{errors.notas.message}</p>}
-      </div>
+      {/* end Información de contacto card */}
 
       {/* Límite de crédito — colapsable */}
-      <div className="border border-slate-200 rounded-lg overflow-hidden">
+      <div className="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
         <button
           type="button"
           onClick={() => setCreditoAbierto((v) => !v)}
@@ -266,10 +287,8 @@ export function ClienteForm({ defaultValues, clienteId }: ClienteFormProps) {
         )}
       </div>
 
-      <Separator />
-
-      {/* Botones */}
-      <div className="flex items-center gap-3">
+      {/* Botones — barra fija en la parte inferior */}
+      <div className="sticky bottom-0 bg-white border-t border-slate-200 px-6 py-4 -mx-6 flex items-center gap-3 shadow-[0_-4px_16px_rgba(0,0,0,0.05)]">
         <Button type="submit" disabled={loading}>
           {loading ? 'Guardando...' : clienteId ? 'Actualizar cliente' : 'Crear cliente'}
         </Button>

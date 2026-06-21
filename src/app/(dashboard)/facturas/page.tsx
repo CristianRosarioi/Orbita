@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Plus, FileText } from 'lucide-react';
+import { Plus, FileText, Search, ExternalLink } from 'lucide-react';
 import { getCurrentEmpresa } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import type { Prisma } from '@/generated/prisma/client';
@@ -104,9 +104,25 @@ async function FacturasList({
         <div className="rounded-lg border border-dashed border-slate-200 py-16 text-center text-sm text-slate-400 flex flex-col items-center gap-3">
           <FileText className="h-10 w-10 text-slate-300" />
           <div>
-            <p className="font-medium text-slate-500">No hay facturas</p>
-            <p className="mt-1">Crea tu primera factura con el botón de arriba</p>
+            <p className="font-medium text-slate-500">
+              {estado || search || desde || hasta
+                ? 'No hay facturas con estos filtros'
+                : 'No hay facturas'}
+            </p>
+            <p className="mt-1">
+              {estado || search || desde || hasta
+                ? 'Prueba ajustar la búsqueda o los filtros.'
+                : 'Emite tu primera factura para empezar a cobrar.'}
+            </p>
           </div>
+          {!estado && !search && !desde && !hasta && (
+            <Link href="/facturas/nueva" className="mt-1">
+              <Button>
+                <Plus className="h-4 w-4 mr-1.5" />
+                Nueva factura
+              </Button>
+            </Link>
+          )}
         </div>
       ) : (
         <>
@@ -161,9 +177,9 @@ async function FacturasList({
                     <td className="px-4 py-3 text-right">
                       <Link
                         href={`/facturas/${f.id}`}
-                        className="text-xs font-medium text-blue-600 hover:text-blue-700 hover:underline"
+                        className="inline-flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700"
                       >
-                        Ver
+                        Ver <ExternalLink className="h-3 w-3" />
                       </Link>
                     </td>
                   </tr>
@@ -233,7 +249,7 @@ export default async function FacturasPage({
                 ...(desde ? { desde } : {}),
                 ...(hasta ? { hasta } : {}),
               }).toString()}`}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                 estado === tab.value
                   ? 'bg-slate-900 text-white'
                   : 'text-slate-600 hover:bg-slate-100'
@@ -248,13 +264,16 @@ export default async function FacturasPage({
         <div className="flex gap-3 flex-wrap">
           <form method="GET" action="/facturas" className="flex gap-3 flex-wrap flex-1">
             {estado && <input type="hidden" name="estado" value={estado} />}
-            <input
-              type="text"
-              name="search"
-              defaultValue={search}
-              placeholder="Buscar por número o cliente..."
-              className="flex-1 min-w-48 h-8 rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-            />
+            <div className="relative flex-1 min-w-48">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                name="search"
+                defaultValue={search}
+                placeholder="Buscar por número o cliente..."
+                className="h-8 w-full rounded-lg border border-input bg-transparent pl-8 pr-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+              />
+            </div>
             <input
               type="date"
               name="desde"

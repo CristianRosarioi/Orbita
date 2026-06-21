@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Truck, UserPlus } from 'lucide-react';
+import { Truck, UserPlus, Search } from 'lucide-react';
 
 import { prisma } from '@/lib/prisma';
 import { getCurrentEmpresa } from '@/lib/auth';
@@ -76,19 +76,29 @@ async function TablaProveedores({
 
   if (proveedores.length === 0) {
     return (
-      <div className="text-center py-16 text-slate-500">
-        <Truck className="mx-auto h-10 w-10 mb-3 text-slate-300" />
-        <p className="font-medium">No hay proveedores</p>
-        <p className="text-sm mt-1">
-          {search ? 'No hay resultados para esta búsqueda.' : 'Agrega tu primer proveedor.'}
+      <div className="rounded-lg border border-dashed border-slate-200 text-center py-16 text-slate-500 flex flex-col items-center">
+        <Truck className="h-10 w-10 mb-3 text-slate-300" />
+        <p className="font-medium text-slate-600">
+          {search ? 'No hay proveedores con esta búsqueda' : 'No hay proveedores'}
         </p>
+        <p className="text-sm mt-1">
+          {search
+            ? 'Prueba ajustar la búsqueda.'
+            : 'Agrega tu primer proveedor para registrar tus compras.'}
+        </p>
+        {!search && (
+          <Link href="/proveedores/nuevo" className={`${buttonVariants()} mt-4`}>
+            <UserPlus className="h-4 w-4 mr-2" />
+            Nuevo proveedor
+          </Link>
+        )}
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <div className="rounded-md border border-slate-200 overflow-hidden bg-white">
+      <div className="rounded-md border border-slate-200 overflow-x-auto bg-white">
         <Table>
           <TableHeader>
             <TableRow className="bg-slate-50">
@@ -207,15 +217,18 @@ export default async function ProveedoresPage({
 
       {/* Búsqueda */}
       <form method="GET" className="flex items-center gap-2">
-        <input
-          name="search"
-          defaultValue={search}
-          placeholder="Buscar por nombre, RNC, contacto..."
-          className="border border-slate-200 rounded-md px-3 py-1.5 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-slate-900"
-        />
+        <div className="relative">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+          <input
+            name="search"
+            defaultValue={search}
+            placeholder="Buscar por nombre, RNC, contacto..."
+            className="border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-sm w-72 focus:outline-none focus:ring-2 focus:ring-slate-900"
+          />
+        </div>
         <button
           type="submit"
-          className="px-3 py-1.5 text-sm bg-slate-900 text-white rounded-md hover:bg-slate-700"
+          className="px-3 py-1.5 text-sm bg-slate-900 text-white rounded-full hover:bg-slate-700"
         >
           Buscar
         </button>

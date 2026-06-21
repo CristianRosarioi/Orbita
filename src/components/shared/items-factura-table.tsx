@@ -88,13 +88,13 @@ export function ItemsFacturaTable({ items, onChange }: Props) {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <p className="text-sm font-medium text-slate-700">Productos / Servicios</p>
-        <div className="ml-auto flex gap-2">
-          <div className="w-56">
+        <div className="ml-auto flex w-full gap-2 sm:w-auto">
+          <div className="flex-1 sm:w-56">
             <BuscarProductoInput onSelect={addFromProducto} placeholder="Buscar producto..." />
           </div>
-          <Button type="button" variant="outline" size="sm" onClick={addEmpty}>
+          <Button type="button" variant="outline" size="sm" onClick={addEmpty} className="shrink-0">
             <Plus className="h-4 w-4 mr-1" />
             Agregar item
           </Button>
