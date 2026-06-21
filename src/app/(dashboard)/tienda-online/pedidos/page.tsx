@@ -34,7 +34,14 @@ const CANAL_LABELS: Record<string, string> = {
   OTRO: 'Otro',
 };
 
-const TODOS_ESTADOS = ['PENDIENTE', 'CONFIRMADO', 'PREPARANDO', 'ENVIADO', 'ENTREGADO', 'CANCELADO'];
+const TODOS_ESTADOS = [
+  'PENDIENTE',
+  'CONFIRMADO',
+  'PREPARANDO',
+  'ENVIADO',
+  'ENTREGADO',
+  'CANCELADO',
+];
 
 interface SearchParams {
   estado?: string;
@@ -75,7 +82,8 @@ export default async function PedidosOnlinePage({
   ]);
 
   const conteos = Object.fromEntries(conteosPorEstado.map((c) => [c.estado, c._count._all]));
-  const totalActivos = (conteos['PENDIENTE'] ?? 0) + (conteos['CONFIRMADO'] ?? 0) + (conteos['PREPARANDO'] ?? 0);
+  const totalActivos =
+    (conteos['PENDIENTE'] ?? 0) + (conteos['CONFIRMADO'] ?? 0) + (conteos['PREPARANDO'] ?? 0);
 
   return (
     <div className="p-4 space-y-4 md:p-6 md:space-y-6 max-w-7xl">
@@ -86,7 +94,10 @@ export default async function PedidosOnlinePage({
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-900">Pedidos Online</h1>
-            <p className="text-sm text-slate-500">{totalActivos} pedido{totalActivos !== 1 ? 's' : ''} activo{totalActivos !== 1 ? 's' : ''}</p>
+            <p className="text-sm text-slate-500">
+              {totalActivos} pedido{totalActivos !== 1 ? 's' : ''} activo
+              {totalActivos !== 1 ? 's' : ''}
+            </p>
           </div>
         </div>
         <Link
@@ -148,20 +159,36 @@ export default async function PedidosOnlinePage({
         <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 py-16 text-center">
           <ShoppingBag className="mx-auto mb-3 h-8 w-8 text-slate-400" />
           <p className="text-sm font-medium text-slate-600">Sin pedidos</p>
-          <p className="mt-1 text-xs text-slate-400">No hay pedidos con los filtros seleccionados</p>
+          <p className="mt-1 text-xs text-slate-400">
+            No hay pedidos con los filtros seleccionados
+          </p>
         </div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           <table className="w-full text-sm">
             <thead className="border-b border-slate-200 bg-slate-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">#</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Cliente</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Canal</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Ítems</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Estado</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Total</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Fecha</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  #
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Cliente
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Canal
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Ítems
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Estado
+                </th>
+                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Total
+                </th>
+                <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Fecha
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -181,7 +208,9 @@ export default async function PedidosOnlinePage({
                       <p className="text-xs text-slate-400">{pedido.clienteTelefono}</p>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{CANAL_LABELS[pedido.canal] ?? pedido.canal}</td>
+                  <td className="px-4 py-3 text-slate-600">
+                    {CANAL_LABELS[pedido.canal] ?? pedido.canal}
+                  </td>
                   <td className="px-4 py-3 text-slate-600">{pedido._count.items}</td>
                   <td className="px-4 py-3">
                     <Badge className={cn('text-xs', ESTADO_COLORS[pedido.estado])}>

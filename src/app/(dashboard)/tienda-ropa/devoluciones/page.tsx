@@ -114,7 +114,9 @@ export default async function DevolucionesPage({
         <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 py-16 text-center">
           <RotateCcw className="mx-auto mb-3 h-8 w-8 text-slate-400" />
           <p className="text-sm font-medium text-slate-600">Sin devoluciones</p>
-          <p className="mt-1 text-xs text-slate-400">No hay registros con los filtros seleccionados</p>
+          <p className="mt-1 text-xs text-slate-400">
+            No hay registros con los filtros seleccionados
+          </p>
         </div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -155,12 +157,8 @@ export default async function DevolucionesPage({
                       {dev.factura.numero}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-slate-700">
-                    {dev.cliente?.nombre ?? '—'}
-                  </td>
-                  <td className="px-4 py-3 text-slate-600">
-                    {TIPO_LABELS[dev.tipo] ?? dev.tipo}
-                  </td>
+                  <td className="px-4 py-3 text-slate-700">{dev.cliente?.nombre ?? '—'}</td>
+                  <td className="px-4 py-3 text-slate-600">{TIPO_LABELS[dev.tipo] ?? dev.tipo}</td>
                   <td className="px-4 py-3 text-slate-600 max-w-xs truncate">{dev.motivo}</td>
                   <td className="px-4 py-3">
                     <Badge className={cn('text-xs', ESTADO_COLORS[dev.estado])}>

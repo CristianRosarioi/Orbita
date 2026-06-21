@@ -105,9 +105,7 @@ describe('GET /api/tienda-ropa/variantes', () => {
   it('retorna 404 si el producto no existe', async () => {
     vi.mocked(prisma.producto.findFirst).mockResolvedValue(null);
     const { GET } = await import('@/app/api/tienda-ropa/variantes/route');
-    const res = await GET(
-      makeReq('http://localhost/api/tienda-ropa/variantes?productoId=prod_1'),
-    );
+    const res = await GET(makeReq('http://localhost/api/tienda-ropa/variantes?productoId=prod_1'));
     const data = await res.json();
     expect(data.success).toBe(false);
     expect(res.status).toBe(404);
@@ -117,9 +115,7 @@ describe('GET /api/tienda-ropa/variantes', () => {
     vi.mocked(prisma.producto.findFirst).mockResolvedValue({ id: 'prod_1' } as never);
     vi.mocked(prisma.variante.findMany).mockResolvedValue([mockVariante] as never);
     const { GET } = await import('@/app/api/tienda-ropa/variantes/route');
-    const res = await GET(
-      makeReq('http://localhost/api/tienda-ropa/variantes?productoId=prod_1'),
-    );
+    const res = await GET(makeReq('http://localhost/api/tienda-ropa/variantes?productoId=prod_1'));
     const data = await res.json();
     expect(data.success).toBe(true);
     expect(data.data).toHaveLength(1);

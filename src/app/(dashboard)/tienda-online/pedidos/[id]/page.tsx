@@ -100,7 +100,9 @@ export default async function DetallePedidoOnlinePage({
         )}
         {pedido.direccionEntrega && (
           <p className="mt-2 text-sm text-slate-500">
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Dirección: </span>
+            <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">
+              Dirección:{' '}
+            </span>
             {pedido.direccionEntrega}
           </p>
         )}
@@ -114,9 +116,7 @@ export default async function DetallePedidoOnlinePage({
             <div key={item.id} className="flex items-center justify-between py-1">
               <div>
                 <p className="text-sm font-medium text-slate-800">{item.descripcion}</p>
-                {item.producto && (
-                  <p className="text-xs text-slate-400">{item.producto.nombre}</p>
-                )}
+                {item.producto && <p className="text-xs text-slate-400">{item.producto.nombre}</p>}
               </div>
               <div className="text-right">
                 <p className="text-sm text-slate-600">
@@ -132,11 +132,15 @@ export default async function DetallePedidoOnlinePage({
         <div className="mt-4 border-t border-slate-100 pt-4 space-y-1">
           <div className="flex justify-between text-sm text-slate-500">
             <span>Subtotal</span>
-            <span>RD$ {Number(pedido.subtotal).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</span>
+            <span>
+              RD$ {Number(pedido.subtotal).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+            </span>
           </div>
           <div className="flex justify-between text-sm text-slate-500">
             <span>ITBIS (18%)</span>
-            <span>RD$ {Number(pedido.itbis).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</span>
+            <span>
+              RD$ {Number(pedido.itbis).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+            </span>
           </div>
           {pedido.metodoPago && (
             <div className="flex justify-between text-sm text-slate-500">
@@ -146,7 +150,9 @@ export default async function DetallePedidoOnlinePage({
           )}
           <div className="flex justify-between text-base font-bold text-slate-900">
             <span>Total</span>
-            <span>RD$ {Number(pedido.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}</span>
+            <span>
+              RD$ {Number(pedido.total).toLocaleString('es-DO', { minimumFractionDigits: 2 })}
+            </span>
           </div>
         </div>
       </div>

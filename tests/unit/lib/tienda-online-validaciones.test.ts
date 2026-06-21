@@ -126,7 +126,14 @@ describe('actualizarPedidoOnlineSchema', () => {
   });
 
   it('acepta todos los estados válidos', () => {
-    for (const estado of ['PENDIENTE', 'CONFIRMADO', 'PREPARANDO', 'ENVIADO', 'ENTREGADO', 'CANCELADO']) {
+    for (const estado of [
+      'PENDIENTE',
+      'CONFIRMADO',
+      'PREPARANDO',
+      'ENVIADO',
+      'ENTREGADO',
+      'CANCELADO',
+    ]) {
       const result = actualizarPedidoOnlineSchema.safeParse({ estado });
       expect(result.success).toBe(true);
     }

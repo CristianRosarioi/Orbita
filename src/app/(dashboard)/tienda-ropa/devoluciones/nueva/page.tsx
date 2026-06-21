@@ -43,7 +43,12 @@ export default function NuevaDevolucionPage() {
       const facturas = data.data?.data ?? data.data ?? [];
       if (facturas.length > 0) {
         const f = facturas[0];
-        setFacturaEncontrada({ id: f.id, numero: f.numero, total: Number(f.total), clienteNombre: f.clienteNombre });
+        setFacturaEncontrada({
+          id: f.id,
+          numero: f.numero,
+          total: Number(f.total),
+          clienteNombre: f.clienteNombre,
+        });
         setF('facturaId', f.id);
       } else {
         setError('Factura no encontrada. Verifica el número.');
@@ -126,8 +131,8 @@ export default function NuevaDevolucionPage() {
           </div>
           {facturaEncontrada && (
             <div className="mt-3 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-              <strong>{facturaEncontrada.numero}</strong> — {facturaEncontrada.clienteNombre} —
-              RD$ {facturaEncontrada.total.toLocaleString('es-DO')}
+              <strong>{facturaEncontrada.numero}</strong> — {facturaEncontrada.clienteNombre} — RD${' '}
+              {facturaEncontrada.total.toLocaleString('es-DO')}
             </div>
           )}
         </div>

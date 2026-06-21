@@ -267,8 +267,8 @@ describe('DELETE /api/tienda-online/pedidos/[id]', () => {
     } as never);
     const { DELETE } = await import('@/app/api/tienda-online/pedidos/[id]/route');
     const res = await DELETE(makeReq('http://localhost/api/tienda-online/pedidos/ped_1'), {
-      params: Promise.resolve({ id: 'ped_1' }) },
-    );
+      params: Promise.resolve({ id: 'ped_1' }),
+    });
     const data = await res.json();
     expect(data.success).toBe(false);
     expect(res.status).toBe(409);

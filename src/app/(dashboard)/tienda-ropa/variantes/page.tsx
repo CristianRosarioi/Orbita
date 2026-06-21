@@ -65,7 +65,9 @@ export default function VariantesPage() {
     if (!productoId) return;
     fetch(`/api/tienda-ropa/variantes?productoId=${productoId}`)
       .then((r) => r.json())
-      .then((d) => { if (d.success) setVariantes(d.data ?? []); })
+      .then((d) => {
+        if (d.success) setVariantes(d.data ?? []);
+      })
       .catch(() => {})
       .finally(() => setCargando(false));
   }, [productoId]);
@@ -181,7 +183,9 @@ export default function VariantesPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-slate-600">
-              {cargando ? 'Cargando...' : `${variantes.length} variante${variantes.length !== 1 ? 's' : ''}`}
+              {cargando
+                ? 'Cargando...'
+                : `${variantes.length} variante${variantes.length !== 1 ? 's' : ''}`}
             </p>
             {!mostrarForm && (
               <Button size="sm" onClick={() => setMostrarForm(true)} className="gap-2">
@@ -294,12 +298,24 @@ export default function VariantesPage() {
               <table className="w-full text-sm">
                 <thead className="border-b border-slate-200 bg-slate-50">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Talla</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Color</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">SKU</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Stock</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Precio</th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">Estado</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Talla
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Color
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      SKU
+                    </th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Stock
+                    </th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Precio
+                    </th>
+                    <th className="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">
+                      Estado
+                    </th>
                     <th className="px-4 py-3"></th>
                   </tr>
                 </thead>

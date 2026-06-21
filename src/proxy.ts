@@ -4,6 +4,9 @@ import { NextResponse } from 'next/server';
 const rutasPublicas = createRouteMatcher([
   '/',
   '/vertical/(.*)',
+  '/contacto(.*)',
+  '/terminos(.*)',
+  '/privacidad(.*)',
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/api/webhooks/clerk(.*)',

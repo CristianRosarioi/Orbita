@@ -74,7 +74,8 @@ export default function NuevoPedidoOnlinePage() {
     setError(null);
 
     const itemsValidos = items.filter(
-      (it) => it.descripcion.trim() && parseInt(it.cantidad) > 0 && parseFloat(it.precioUnitario) > 0,
+      (it) =>
+        it.descripcion.trim() && parseInt(it.cantidad) > 0 && parseFloat(it.precioUnitario) > 0,
     );
     if (itemsValidos.length === 0) {
       setError('Agrega al menos un ítem válido.');
@@ -122,7 +123,9 @@ export default function NuevoPedidoOnlinePage() {
         </div>
         <div>
           <h1 className="text-xl font-bold text-slate-900">Nuevo pedido online</h1>
-          <p className="text-sm text-slate-500">Registra un pedido recibido por WhatsApp, Instagram u otro canal</p>
+          <p className="text-sm text-slate-500">
+            Registra un pedido recibido por WhatsApp, Instagram u otro canal
+          </p>
         </div>
       </div>
 
@@ -222,7 +225,13 @@ export default function NuevoPedidoOnlinePage() {
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-slate-700">Ítems del pedido</h2>
-            <Button type="button" size="sm" variant="outline" onClick={agregarItem} className="gap-1.5">
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={agregarItem}
+              className="gap-1.5"
+            >
               <Plus className="h-3.5 w-3.5" />
               Agregar ítem
             </Button>

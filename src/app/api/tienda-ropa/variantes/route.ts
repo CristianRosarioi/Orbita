@@ -77,7 +77,11 @@ export async function POST(req: NextRequest) {
       },
     });
     if (duplicada)
-      return err('CONFLICT', 'Ya existe una variante con esa talla y color para este producto.', 409);
+      return err(
+        'CONFLICT',
+        'Ya existe una variante con esa talla y color para este producto.',
+        409,
+      );
 
     const variante = await prisma.variante.create({
       data: {
